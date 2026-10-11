@@ -1,7 +1,39 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Base dark application theme. -->
     <style name="Base.Theme.AurorahCANDigitalHub" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Dark Color Palette -->
+        <item name="colorPrimary">@color/primary_blue_light</item>
+        <item name="colorOnPrimary">@color/dark_charcoal</item>
+        <item name="colorPrimaryContainer">@color/primary_blue</item>
+        <item name="colorOnPrimaryContainer">#EFF6FF</item>
+
+        <item name="colorSecondary">@color/primary_green_light</item>
+        <item name="colorOnSecondary">@color/dark_charcoal</item>
+        <item name="colorSecondaryContainer">@color/primary_green</item>
+        <item name="colorOnSecondaryContainer">#F0FDF4</item>
+
+        <item name="android:colorBackground">#111827</item>
+        <item name="colorSurface">#1F2937</item>
+        <item name="colorOnSurface">#F9FAFB</item>
+        <item name="colorOnSurfaceVariant">#9CA3AF</item>
+
+        <item name="colorError">@color/error_red_dark</item>
+        <item name="colorOnError">@color/dark_charcoal</item>
+
+        <item name="android:statusBarColor">#111827</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="Theme.AurorahCANDigitalHub" parent="Base.Theme.AurorahCANDigitalHub" />
+
+    <style name="Widget.Aurorah.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/primary_blue_light</item>
+        <item name="hintTextColor">@color/primary_blue_light</item>
+        <item name="errorIconTint">@color/error_red_dark</item>
+        <item name="errorTextColor">@color/error_red_dark</item>
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
     </style>
 </resources>

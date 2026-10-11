@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.aurorah.can.ui.home.HomeFragment"
+        android:label="@string/nav_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_needs"
+        android:name="com.aurorah.can.ui.needs.NeedsFragment"
+        android:label="@string/nav_needs"
+        tools:layout="@layout/fragment_needs" />
+
+    <fragment
+        android:id="@+id/navigation_donation"
+        android:name="com.aurorah.can.ui.donation.DonationFragment"
+        android:label="@string/nav_donation"
+        tools:layout="@layout/fragment_donation" />
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.aurorah.can.ui.settings.SettingsFragment"
+        android:label="@string/nav_settings"
+        tools:layout="@layout/fragment_settings" />
+
+</navigation>

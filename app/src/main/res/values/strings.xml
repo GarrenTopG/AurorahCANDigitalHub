@@ -1,3 +1,71 @@
 <resources>
     <string name="app_name">Aurorah CAN Digital Hub</string>
+    <string name="slogan">Together, We Can Make a Difference.</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_needs">Needs Matching</string>
+    <string name="nav_donation">Donation Portal</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Auth -->
+    <string name="login_title">Welcome Back</string>
+    <string name="login_subtitle">Sign in to continue supporting community needs</string>
+    <string name="email_hint">Email Address</string>
+    <string name="password_hint">Password</string>
+    <string name="login_button">Sign In</string>
+    <string name="sso_google_button">Sign in with Google</string>
+    <string name="register_prompt">Don\'t have an account? Register</string>
+
+    <string name="register_title">Create Account</string>
+    <string name="full_name_hint">Full Name</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="role_hint">Select Role</string>
+    <string name="register_button">Register Account</string>
+    <string name="login_prompt">Already have an account? Sign In</string>
+
+    <!-- Validation Errors -->
+    <string name="error_invalid_email">Invalid email format (RFC 5322 requirement)</string>
+    <string name="error_invalid_password">Password must be at least 8 characters with numbers and special characters</string>
+    <string name="error_password_mismatch">Passwords do not match</string>
+    <string name="error_empty_field">This field cannot be empty</string>
+
+    <!-- Needs Fragment -->
+    <string name="offer_assistance">Offer Assistance</string>
+    <string name="filter_all">All</string>
+    <string name="filter_food">Food</string>
+    <string name="filter_clothing">Clothing</string>
+    <string name="filter_education">Education</string>
+    <string name="filter_healthcare">Healthcare</string>
+    <string name="need_id_format">Need #%1$d</string>
+
+    <!-- Bottom Sheet -->
+    <string name="bottom_sheet_title">Offer Assistance</string>
+    <string name="select_skill_hint">Your Skill / Specialty</string>
+    <string name="notes_hint">Additional Notes / Availability</string>
+    <string name="submit_offer">Submit Offer</string>
+
+    <!-- Donation Fragment -->
+    <string name="donation_title">Support Our Cause</string>
+    <string name="select_category">Select Donation Category</string>
+    <string name="select_amount">Select Amount (ZAR / R)</string>
+    <string name="custom_amount_hint">Custom Amount (R)</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="payment_card">Card Payment</string>
+    <string name="payment_eft">Direct Bank Transfer (EFT)</string>
+    <string name="submit_donation">Complete Donation</string>
+    <string name="error_invalid_amount">Amount must be greater than 0</string>
+
+    <!-- Settings Fragment -->
+    <string name="settings_profile_header">User Profile</string>
+    <string name="settings_night_mode">Night Mode / Dark Theme</string>
+    <string name="settings_notifications">Push Notifications</string>
+    <string name="settings_change_password">Change Password</string>
+    <string name="settings_sign_out">Sign Out</string>
+    <string name="old_password_hint">Current Password</string>
+    <string name="new_password_hint">New Password</string>
+    <string name="user_role_format">ROLE: %1$s</string>
+
+    <!-- Default Web Client ID for Google Sign In placeholder -->
+    <string name="default_web_client_id" translatable="false">YOUR_GOOGLE_WEB_CLIENT_ID.apps.googleusercontent.com</string>
 </resources>
