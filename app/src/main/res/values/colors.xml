@@ -1,5 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Core Standard Design Tokens -->
+    <color name="primary_blue">#1E3A8A</color>
+    <color name="primary_blue_dark">#172554</color>
+    <color name="primary_blue_light">#60A5FA</color>
+    <color name="primary_green">#16A34A</color>
+    <color name="primary_green_dark">#15803D</color>
+    <color name="primary_green_light">#4ADE80</color>
+    <color name="dark_charcoal">#1F2937</color>
+    <color name="off_white">#F9FAFB</color>
+
+    <!-- Urgency Priority Badges -->
+    <color name="priority_critical">#DC2626</color>
+    <color name="priority_high">#E11D48</color>
+    <color name="priority_medium">#D97706</color>
+    <color name="priority_low">#16A34A</color>
+
+    <!-- Standard UI Tokens -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray_100">#F3F4F6</color>
+    <color name="gray_200">#E5E7EB</color>
+    <color name="gray_300">#D1D5DB</color>
+    <color name="gray_500">#6B7280</color>
+    <color name="gray_700">#374151</color>
+    <color name="gray_900">#111827</color>
+
+    <!-- Contextual UI Colors -->
+    <color name="surface_card">#FFFFFF</color>
+    <color name="background_light">#F9FAFB</color>
+    <color name="text_main">#1F2937</color>
+    <color name="text_secondary">#4B5563</color>
+    <color name="error_red">#DC2626</color>
+    <color name="error_red_dark">#F87171</color>
 </resources>
