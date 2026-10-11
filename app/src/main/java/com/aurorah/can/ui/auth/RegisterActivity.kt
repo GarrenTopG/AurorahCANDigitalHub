@@ -11,6 +11,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.aurorah.can.MainActivity
 import com.aurorah.can.R
+import com.aurorah.can.util.InputValidator
 import com.aurorah.can.data.api.MockApiRepository
 import com.aurorah.can.data.local.SessionManager
 import com.aurorah.can.data.model.RegisterRequest
@@ -23,7 +24,6 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var sessionManager: SessionManager
     private val repository = MockApiRepository()
 
-    private val passwordPattern = Regex("^(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]).{8,}$")
     private val roles = listOf("Volunteer", "Beneficiary", "Donor")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,14 +77,14 @@ class RegisterActivity : AppCompatActivity() {
                 isValid = false
             }
 
-            // RFC 5322 regex check
-            if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            // Validation using InputValidator
+            if (!InputValidator.isValidEmail(email)) {
                 binding.tilRegEmail.error = getString(R.string.error_invalid_email)
                 isValid = false
             }
 
-            // Password check: min 8 chars, numbers and special chars
-            if (password.isEmpty() || !password.matches(passwordPattern)) {
+            // Password complexity check
+            if (!InputValidator.isSecurePassword(password)) {
                 binding.tilRegPassword.error = getString(R.string.error_invalid_password)
                 isValid = false
             }
