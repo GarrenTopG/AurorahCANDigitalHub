@@ -25,7 +25,7 @@
     <string name="login_prompt">Already have an account? Sign In</string>
 
     <!-- Validation Errors -->
-    <string name="error_invalid_email">Invalid email format (RFC 5322 requirement)</string>
+    <string name="error_invalid_email">Invalid Email Address</string>
     <string name="error_invalid_password">Password must be at least 8 characters with numbers and special characters</string>
     <string name="error_password_mismatch">Passwords do not match</string>
     <string name="error_empty_field">This field cannot be empty</string>

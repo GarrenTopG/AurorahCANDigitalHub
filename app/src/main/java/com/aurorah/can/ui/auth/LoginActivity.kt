@@ -11,6 +11,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.aurorah.can.MainActivity
 import com.aurorah.can.R
+import com.aurorah.can.util.InputValidator
 import com.aurorah.can.data.api.MockApiRepository
 import com.aurorah.can.data.local.SessionManager
 import com.aurorah.can.data.model.LoginRequest
@@ -29,8 +30,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var sessionManager: SessionManager
     private lateinit var googleSignInClient: GoogleSignInClient
     private val repository = MockApiRepository()
-
-    private val passwordPattern = Regex("^(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]).{8,}$")
 
     private val googleSignInLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -82,14 +81,14 @@ class LoginActivity : AppCompatActivity() {
 
             var isValid = true
 
-            // RFC 5322 regex email check
-            if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            // Input validation using InputValidator
+            if (!InputValidator.isValidEmail(email)) {
                 binding.tilEmail.error = getString(R.string.error_invalid_email)
                 isValid = false
             }
 
-            // Min 8 chars, numbers and special chars
-            if (password.isEmpty() || !password.matches(passwordPattern)) {
+            // Password complexity check
+            if (!InputValidator.isSecurePassword(password)) {
                 binding.tilPassword.error = getString(R.string.error_invalid_password)
                 isValid = false
             }
