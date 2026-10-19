@@ -38,7 +38,7 @@
             android:hint="@string/category_hint"
             app:boxStrokeColor="@color/md_theme_primary">
 
-            <AutoCompleteTextView
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/actvCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
             android:hint="@string/urgency_hint"
             app:boxStrokeColor="@color/md_theme_primary">
 
-            <AutoCompleteTextView
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/actvUrgency"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -1,12 +1,16 @@
 package com.aurorah.can.ui.settings
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Filter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -133,6 +137,47 @@ class SettingsFragment : Fragment() {
             val stateText = if (isChecked) "enabled" else "disabled"
             Toast.makeText(requireContext(), "Notifications $stateText", Toast.LENGTH_SHORT).show()
         }
+
+        binding.switchDataSaver.isChecked = sessionManager.isDataSaverEnabled()
+        binding.switchDataSaver.setOnCheckedChangeListener { _, isChecked ->
+            sessionManager.setDataSaverEnabled(isChecked)
+            val stateText = if (isChecked) "enabled" else "disabled"
+            Toast.makeText(requireContext(), "Data Saver $stateText", Toast.LENGTH_SHORT).show()
+        }
+
+        // Assistance Radius Dropdown Setup
+        val radiusOptions = arrayOf("5 km", "10 km", "25 km", "50 km")
+        binding.actvRadius.setAdapter(
+            NoFilterArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line, radiusOptions)
+        )
+        binding.actvRadius.setText(sessionManager.getSearchRadius(), false)
+        binding.actvRadius.setOnItemClickListener { parent, _, position, _ ->
+            val selected = parent.getItemAtPosition(position).toString()
+            sessionManager.setSearchRadius(selected)
+            Toast.makeText(requireContext(), "Search radius set to $selected", Toast.LENGTH_SHORT).show()
+        }
+
+        // Language Selector Dropdown Setup
+        val languageOptions = arrayOf("English", "isiZulu", "Afrikaans", "isiXhosa")
+        binding.actvLanguage.setAdapter(
+            NoFilterArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line, languageOptions)
+        )
+        binding.actvLanguage.setText(sessionManager.getAppLanguage(), false)
+        binding.actvLanguage.setOnItemClickListener { parent, _, position, _ ->
+            val selected = parent.getItemAtPosition(position).toString()
+            sessionManager.setAppLanguage(selected)
+            val langCode = when (selected) {
+                "isiZulu" -> "zu"
+                "Afrikaans" -> "af"
+                "isiXhosa" -> "xh"
+                else -> "en"
+            }
+            val appLocales = LocaleListCompat.forLanguageTags(langCode)
+            if (AppCompatDelegate.getApplicationLocales().toLanguageTags() != langCode) {
+                AppCompatDelegate.setApplicationLocales(appLocales)
+            }
+            Toast.makeText(requireContext(), "Language set to $selected", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun setupChangePassword() {
@@ -211,4 +256,26 @@ class SettingsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+}
+
+private class NoFilterArrayAdapter<T>(
+    context: Context,
+    resource: Int,
+    private val items: Array<T>
+) : ArrayAdapter<T>(context, resource, items) {
+
+    private val noFilter = object : Filter() {
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+            return FilterResults().apply {
+                values = items
+                count = items.size
+            }
+        }
+
+        override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+            notifyDataSetChanged()
+        }
+    }
+
+    override fun getFilter(): Filter = noFilter
 }

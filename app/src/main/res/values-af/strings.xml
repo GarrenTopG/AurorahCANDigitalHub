@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aurorah CAN Digital Hub</string>
+    <string name="slogan">Saam Kan Ons \'n Verskil Maak.</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Tuis</string>
+    <string name="nav_get_help">Kry Hulp</string>
+    <string name="nav_volunteer">Vrywilliger</string>
+    <string name="nav_donation">Skenk</string>
+    <string name="nav_settings">Profiel</string>
+    <string name="nav_needs">Behoeftes</string>
+
+    <!-- Auth -->
+    <string name="login_title">Welkom Terug</string>
+    <string name="login_subtitle">Meld aan om gemeenskapsbehoeftes te ondersteun</string>
+    <string name="email_hint">E-posadres</string>
+    <string name="password_hint">Wagwoord</string>
+    <string name="login_button">Teken In</string>
+    <string name="sso_google_button">Teken in met Google</string>
+    <string name="register_prompt">Het jy nie \'n rekening nie? Registreer</string>
+
+    <string name="register_title">Skep Rekening</string>
+    <string name="full_name_hint">Volle Naam</string>
+    <string name="confirm_password_hint">Bevestig Wagwoord</string>
+    <string name="role_hint">Kies Rol</string>
+    <string name="register_button">Registreer Rekening</string>
+    <string name="login_prompt">Het jy reeds \'n rekening? Teken in</string>
+
+    <!-- Validation Errors -->
+    <string name="error_title">Fout</string>
+    <string name="dismiss">Sluit</string>
+    <string name="error_invalid_email">Ongeldige E-posadres</string>
+    <string name="error_invalid_password">Wagwoord moet minstens 8 karakters wees met syfers en spesiale karakters</string>
+    <string name="error_password_mismatch">Wagwoorde stem nie ooreen nie</string>
+    <string name="error_empty_field">Hierdie veld mag nie leeg wees nie</string>
+
+    <!-- Needs Fragment -->
+    <string name="offer_assistance">Bied Hulp Aan</string>
+    <string name="filter_all">Alles</string>
+    <string name="filter_food">Kos</string>
+    <string name="filter_clothing">Klere</string>
+    <string name="filter_education">Onderwys</string>
+    <string name="filter_healthcare">Gesondheidsorg</string>
+    <string name="need_id_format">Behoefte #%1$d</string>
+
+    <!-- Bottom Sheet -->
+    <string name="bottom_sheet_title">Bied Hulp Aan</string>
+    <string name="select_skill_hint">Jou Vaardigheid / Spesialiteit</string>
+    <string name="notes_hint">Addisionele Notas / Beskikbaarheid</string>
+    <string name="submit_offer">Dien Aanbod In</string>
+
+    <!-- Donation Fragment -->
+    <string name="donation_title">Ondersteun Ons Saak</string>
+    <string name="tab_monetary">Monetêre Skenking</string>
+    <string name="tab_inkind">Goedere Skenking</string>
+    <string name="select_category">Kies Skenkingskategorie</string>
+    <string name="item_category_hint">Itemkategorie</string>
+    <string name="item_description_hint">Itembeskrywing &amp; Hoeveelhede</string>
+    <string name="preference_hint">Aflewerings / Optelvoorkeur</string>
+    <string name="preference_dropoff">Aflaai by Hub</string>
+    <string name="preference_collection">Versoek Afhaaldiens</string>
+    <string name="select_amount">Kies Bedrag (ZAR / R)</string>
+    <string name="custom_amount_hint">Aangepaste Bedrag (R)</string>
+    <string name="payment_method">Betalingsmetode</string>
+    <string name="payment_card">Kaartbetaling</string>
+    <string name="payment_eft">Direkte Bankoorplasing (EFT)</string>
+    <string name="submit_donation">Voltooi Skenking</string>
+    <string name="error_invalid_amount">Bedrag moet groter as 0 wees</string>
+
+    <!-- Request Assistance -->
+    <string name="request_assistance_title">Versoek Hulp</string>
+    <string name="request_assistance_button">Versoek Hulp / Kry Hulp</string>
+    <string name="category_hint">Kategorie</string>
+    <string name="urgency_hint">Dringendheidsvlak</string>
+    <string name="area_location_hint">Area / Ligging</string>
+    <string name="contact_phone_hint">Kontak Telefoonnommer</string>
+    <string name="description_hint">Gedetailleerde Beskrywing van Behoefte</string>
+    <string name="privacy_consent_text">Ek gee toestemming dat Aurorah CAN my persoonlike inligting verwerk om hierdie hulpversoek te fasiliteer.</string>
+    <string name="submit_assistance_request">Dien Hulpversoek In</string>
+    <string name="error_privacy_consent">Aanvaar asseblief die privaatheidstoestemming om voort te gaan</string>
+
+    <!-- News Article Detail Reader -->
+    <string name="news_detail_title">Nuusartikel</string>
+    <string name="author_format">Deur %1$s</string>
+
+    <!-- Settings Fragment -->
+    <string name="settings_profile_header">Gebruikersprofiel</string>
+    <string name="edit_profile">Wysig Profiel</string>
+    <string name="phone_hint">Telefoonnommer</string>
+    <string name="save_changes">Stoor Veranderinge</string>
+    <string name="settings_night_mode">Nagmaus / Donker Tema</string>
+    <string name="settings_notifications">Kennisgewings</string>
+    <string name="settings_radius">Hulp Soekradius</string>
+    <string name="settings_radius_helper">Filtreer nabygeleë hulpversoeke en gemeenskapsbehoeftes binne hierdie maksimum afstand</string>
+    <string name="settings_language">Verkose Vertoontaal</string>
+    <string name="settings_data_saver">Data-bespaarder</string>
+    <string name="settings_change_password">Verander Wagwoord</string>
+    <string name="settings_sign_out">Teken Uit</string>
+    <string name="old_password_hint">Huidige Wagwoord</string>
+    <string name="new_password_hint">Nuwe Wagwoord</string>
+    <string name="user_role_format">ROL: %1$s</string>
+
+    <!-- About Card -->
+    <string name="about_aurorah_title">Oor Aurorah CAN</string>
+    <string name="about_story">Aurorah CAN (Community Action Network) is \'n gemeenskapsorganisasie wat toegewyd is aan die mobilisering van gemeenskapsondersteuning, die verskaffing van noodsaaklike verligting, voedselsekerheid, opvoedkundige hulp en gesondheidsorgbronne aan kwesbare gesinne.</string>
+    <string name="about_contact">E-pos: info@aurorahcan.org | Tel: +27 (0) 11 555 0199</string>
+    <string name="about_hours">Ure: Ma - Vr: 08:00 - 17:00 | Sa: 09:00 - 13:00</string>
+    <string name="about_address">Adres: Hope Gemeenskapsentrum 123, Hoofweg, Johannesburg, 2000</string>
+
+    <!-- Home Screen & Compose UI -->
+    <string name="home_hero_title">Verbind Plaaslike Behoeftes Met Gemeenskapsondersteuning</string>
+    <string name="home_hero_subtitle">Aurorah CAN koördineer gemeenskapsgedrewe verligting, vrywilligers en skenkings in Kuilsrivier en omliggende gebiede.</string>
+    <string name="home_need_assistance">Het jy hulp nodig?</string>
+    <string name="home_offer_help">Bied Hulp Aan</string>
+    <string name="home_banner_network">\'n Gemeenskapsnetwerk, nie \'n regeringsdiens nie.</string>
+    <string name="home_ways_to_help_title">Maniere om naby te help</string>
+    <string name="home_loading_needs">Laai huidige gemeenskapsbehoeftes…</string>
+    <string name="home_empty_needs">Sien huidige maniere om te help, te skenk of vrywillig te wees met Aurorah CAN.</string>
+    <string name="home_explore_ways">Verken maniere om te help</string>
+    <string name="home_stories_title">Stories uit ons gemeenskap</string>
+    <string name="home_stories_subtitle">Opdaterings, mylpale en oomblikke uit ons werk in Kuilsrivier en nabygeleë gemeenskappe.</string>
+    <string name="home_loading_stories">Laai gemeenskapsopdaterings…</string>
+    <string name="home_filter_all_stories">Alle stories</string>
+    <string name="home_filter_outreaches">Gemeenskapsuitreike</string>
+    <string name="home_filter_impact">Impak-opdatering</string>
+    <string name="home_filter_announcements">Aankondigings</string>
+
+    <string name="back_to_home">Terug na Tuis</string>
+    <string name="get_help_header_subtitle">Plaaslike ondersteuningsversoeke vir Kuilsrivier en omliggende gemeenskappe</string>
+    <string name="get_help_success_title">Versoek Ingedien</string>
+    <string name="get_help_success_body">Dankie, %1$s. Jou versoek is ontvang vir hersiening. Die indiening van \'n versoek waarborg nie hulp nie; ondersteuning hang af van omstandighede en beskikbare hulpbronne.</string>
+    <string name="submit_another_request">Dien Nog \'n Versoek In</string>
+    <string name="privacy_notice_prefix">Ons gebruik jou besonderhede om jou versoek te hersien en jou te kontak. </string>
+    <string name="privacy_popia_link">Privaatheid &amp; POPIA-kennisgewing</string>
+
+    <string name="volunteer_header_tag">WORD VRYWILLIGER BY AURORAH CAN</string>
+    <string name="volunteer_header_title">Word \'n Vrywilliger</string>
+    <string name="volunteer_header_subtitle">Skenk tyd en vaardighede aan plaaslike gemeenskapswerk</string>
+    <string name="volunteer_success_title">Dankie, %1$s!</string>
+    <string name="volunteer_success_body">Jou aansoek is ontvang. Aansoek waarborg nie plasing nie; geleenthede hang af van geskiktheid, \'n onderhoud en rol-spesifieke keuring.</string>
+    <string name="submit_another_application">Dien Nog \'n Aansoek In</string>
+    <string name="volunteer_opportunities_title">Vrywilligersgeleenthede</string>
+    <string name="volunteer_callout_text">Word vrywilliger by Aurorah CAN in Kuilsrivier en nabygeleë gemeenskappe. Hierdie is voorbeelde van die soorte plaaslike rolle wat beskikbaar mag wees.</string>
+
+    <string name="tab_community_needs">Gemeenskapsbehoeftes</string>
+    <string name="tab_donate">Skenk</string>
+    <string name="tab_volunteer">Vrywilliger</string>
+    <string name="read_update">Lees opdatering  →</string>
+    <string name="read_full_story">Lees volle story  →</string>
+</resources>

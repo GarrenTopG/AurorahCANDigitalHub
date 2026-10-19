@@ -75,19 +75,31 @@ class NewsDetailBottomSheetFragment : BottomSheetDialogFragment() {
         binding.btnGetHelp.setOnClickListener {
             val navController = parentFragment?.findNavController() ?: findNavController()
             dismiss()
-            navController.navigate(R.id.navigation_get_help)
+            try {
+                navController.navigate(R.id.action_home_to_get_help)
+            } catch (_: Exception) {
+                navController.navigate(R.id.navigation_get_help)
+            }
         }
 
         binding.btnMakePledge.setOnClickListener {
             val navController = parentFragment?.findNavController() ?: findNavController()
             dismiss()
-            navController.navigate(R.id.navigation_donation)
+            try {
+                navController.navigate(R.id.action_home_to_donation)
+            } catch (_: Exception) {
+                navController.navigate(R.id.navigation_donation)
+            }
         }
 
         binding.btnVolunteer.setOnClickListener {
             val navController = parentFragment?.findNavController() ?: findNavController()
             dismiss()
-            navController.navigate(R.id.navigation_volunteer)
+            try {
+                navController.navigate(R.id.action_home_to_volunteer)
+            } catch (_: Exception) {
+                navController.navigate(R.id.navigation_volunteer)
+            }
         }
 
         binding.btnCloseNewsDetail.setOnClickListener {

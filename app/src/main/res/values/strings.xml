@@ -90,6 +90,10 @@
     <string name="save_changes">Save Changes</string>
     <string name="settings_night_mode">Night Mode / Dark Theme</string>
     <string name="settings_notifications">Push Notifications</string>
+    <string name="settings_radius">Assistance Search Radius</string>
+    <string name="settings_radius_helper">Filter nearby assistance requests &amp; community needs within this distance</string>
+    <string name="settings_language">Preferred Display Language</string>
+    <string name="settings_data_saver">Data Saver / Low Bandwidth Mode</string>
     <string name="settings_change_password">Change Password</string>
     <string name="settings_sign_out">Sign Out</string>
     <string name="old_password_hint">Current Password</string>
@@ -102,6 +106,47 @@
     <string name="about_contact">Email: info@aurorahcan.org | Phone: +27 (0) 11 555 0199</string>
     <string name="about_hours">Hours: Mon - Fri: 08:00 - 17:00 | Sat: 09:00 - 13:00</string>
     <string name="about_address">Address: 123 Hope Community Center, Main Road, Johannesburg, 2000</string>
+
+    <!-- Home Screen & Compose UI -->
+    <string name="home_hero_title">Connecting Local Needs With Community Support</string>
+    <string name="home_hero_subtitle">Aurorah CAN coordinates community-led relief, volunteers, and donations in Kuils River and surrounding areas.</string>
+    <string name="home_need_assistance">Need Assistance?</string>
+    <string name="home_offer_help">Offer Help</string>
+    <string name="home_banner_network">A community network, not a government service.</string>
+    <string name="home_ways_to_help_title">Ways to help nearby</string>
+    <string name="home_loading_needs">Loading current community needs…</string>
+    <string name="home_empty_needs">See current ways to help, donate, or volunteer with Aurorah CAN.</string>
+    <string name="home_explore_ways">Explore ways to help</string>
+    <string name="home_stories_title">Stories from our community</string>
+    <string name="home_stories_subtitle">Updates, milestones and moments from our work in Kuils River and nearby communities.</string>
+    <string name="home_loading_stories">Loading community updates…</string>
+    <string name="home_filter_all_stories">All stories</string>
+    <string name="home_filter_outreaches">Community Outreaches</string>
+    <string name="home_filter_impact">Impact Update</string>
+    <string name="home_filter_announcements">Announcements</string>
+
+    <string name="back_to_home">Back to Home</string>
+    <string name="get_help_header_subtitle">Local support requests for Kuils River and nearby communities</string>
+    <string name="get_help_success_title">Request Submitted</string>
+    <string name="get_help_success_body">Thank you, %1$s. Your request has been received for review. Submitting a request does not guarantee assistance; support depends on the circumstances and resources available.</string>
+    <string name="submit_another_request">Submit Another Request</string>
+    <string name="privacy_notice_prefix">We use your details to review your request and contact you. </string>
+    <string name="privacy_popia_link">Privacy &amp; POPIA notice</string>
+
+    <string name="volunteer_header_tag">VOLUNTEER WITH AURORAH CAN</string>
+    <string name="volunteer_header_title">Become a Volunteer</string>
+    <string name="volunteer_header_subtitle">Contribute time and skills to local community work</string>
+    <string name="volunteer_success_title">Thank You, %1$s!</string>
+    <string name="volunteer_success_body">Your application has been received. Applying does not guarantee placement; opportunities depend on suitability, an interview and any role-specific screening.</string>
+    <string name="submit_another_application">Submit Another Application</string>
+    <string name="volunteer_opportunities_title">Volunteer Opportunities</string>
+    <string name="volunteer_callout_text">Volunteer with Aurorah CAN in Kuils River and nearby communities. These are examples of the kinds of local roles currently described by the organisation; availability may vary.</string>
+
+    <string name="tab_community_needs">Community Needs</string>
+    <string name="tab_donate">Donate</string>
+    <string name="tab_volunteer">Volunteer</string>
+    <string name="read_update">Read update  →</string>
+    <string name="read_full_story">Read full story  →</string>
 
     <!-- Default Web Client ID for Google Sign In placeholder -->
     <string name="default_web_client_id" translatable="false">YOUR_GOOGLE_WEB_CLIENT_ID.apps.googleusercontent.com</string>

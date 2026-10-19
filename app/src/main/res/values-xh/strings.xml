@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aurorah CAN Digital Hub</string>
+    <string name="slogan">Sisonke, Singenza Umahluko.</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Ikhaya</string>
+    <string name="nav_get_help">Fumana Uncedo</string>
+    <string name="nav_volunteer">Zinikele</string>
+    <string name="nav_donation">Nikela</string>
+    <string name="nav_settings">Iphrofayili</string>
+    <string name="nav_needs">Izinto Ezifunekayo</string>
+
+    <!-- Auth -->
+    <string name="login_title">Wamkelekile Kwakhona</string>
+    <string name="login_subtitle">Ngena ukuze uqhubeke ukuxhasa iimfuno zomphakathi</string>
+    <string name="email_hint">Idilesi Ye-Imeyile</string>
+    <string name="password_hint">Ikhowudi Yegama</string>
+    <string name="login_button">Ngena</string>
+    <string name="sso_google_button">Ngena nge-Google</string>
+    <string name="register_prompt">Akunayo iakhawunti? Bhalisa</string>
+
+    <string name="register_title">Dala Iakhawunti</string>
+    <string name="full_name_hint">Igama Epheleleyo</string>
+    <string name="confirm_password_hint">Qinisekisa Ikhowudi Yegama</string>
+    <string name="role_hint">Khetha Indima</string>
+    <string name="register_button">Bhalisa Iakhawunti</string>
+    <string name="login_prompt">Unayo iakhawunti kakade? Ngena</string>
+
+    <!-- Validation Errors -->
+    <string name="error_title">Imposiso</string>
+    <string name="dismiss">Cima</string>
+    <string name="error_invalid_email">Idilesi ye-imeyile engasebenziyo</string>
+    <string name="error_invalid_password">Ikhowudi yegama kufuneka ibe neempawu ezingalishumi ezi-8 amanani neemfuno ezikhethekileyo</string>
+    <string name="error_password_mismatch">Iikhowudi zamagama azifani</string>
+    <string name="error_empty_field">Eli candelo kumele lingabi le litho</string>
+
+    <!-- Needs Fragment -->
+    <string name="offer_assistance">Bonelela Ngoncedo</string>
+    <string name="filter_all">Zonke</string>
+    <string name="filter_food">Ukutya</string>
+    <string name="filter_clothing">Iimpahla</string>
+    <string name="filter_education">Imfundo</string>
+    <string name="filter_healthcare">Inkxaso Yezempilo</string>
+    <string name="need_id_format">Imfuno #%1$d</string>
+
+    <!-- Bottom Sheet -->
+    <string name="bottom_sheet_title">Bonelela Ngoncedo</string>
+    <string name="select_skill_hint">Ikhono Lakho / Inkonzo</string>
+    <string name="notes_hint">Amanqaku Adlulisiweyo / Ukufumaneka</string>
+    <string name="submit_offer">Thumela Isithembiso</string>
+
+    <!-- Donation Fragment -->
+    <string name="donation_title">Xhasa Injongo Yethu</string>
+    <string name="tab_monetary">Isithembiso Lemali</string>
+    <string name="tab_inkind">Iimveliso Zenceba</string>
+    <string name="select_category">Khetha Isahluko Somnikelo</string>
+    <string name="item_category_hint">Isahluko Seemveliso</string>
+    <string name="item_description_hint">Inkcazelo Yeemveliso Bunkulu</string>
+    <string name="preference_hint">Ukukhetha Ukuthatha / Ukuyisa</string>
+    <string name="preference_dropoff">Yisa e-Hub</string>
+    <string name="preference_collection">Cela Ukuthathwa</string>
+    <string name="select_amount">Khetha Isixa (ZAR / R)</string>
+    <string name="custom_amount_hint">Isixa Esikhethiweyo (R)</string>
+    <string name="payment_method">Indlela Yokuhlawula</string>
+    <string name="payment_card">Inkxaso Yekhadi</string>
+    <string name="payment_eft">Inkxaso Yebhanki (EFT)</string>
+    <string name="submit_donation">Gqibezela Umnikelo</string>
+    <string name="error_invalid_amount">Isixa kufuneka sibe ngaphezulu kwe-0</string>
+
+    <!-- Request Assistance -->
+    <string name="request_assistance_title">Cela Uncedo</string>
+    <string name="request_assistance_button">Cela Uncedo / Fumana Uncedo</string>
+    <string name="category_hint">Isahluko</string>
+    <string name="urgency_hint">Inqlevel Yokukhawuleza</string>
+    <string name="area_location_hint">Indawo / Ubuhlanti</string>
+    <string name="contact_phone_hint">Inombolo Yefowuni</string>
+    <string name="description_hint">Inkcazelo Eneenkcukacha Yemfuno</string>
+    <string name="privacy_consent_text">Ndiyavuma ukuba i-Aurorah CAN isebenzise iinkcukacha zam ezingezo buqu ukufezekisa esi sicelo zoncedo.</string>
+    <string name="submit_assistance_request">Thumela Isicelo Zoncedo</string>
+    <string name="error_privacy_consent">Nceda wamkele imvume yakho yerfihlo ukuze uqhubeke</string>
+
+    <!-- News Article Detail Reader -->
+    <string name="news_detail_title">Inqaku Leendaba</string>
+    <string name="author_format">Ngu-%1$s</string>
+
+    <!-- Settings Fragment -->
+    <string name="settings_profile_header">Iphrofayili Yomsebenzisi</string>
+    <string name="edit_profile">Hlela Iphrofayili</string>
+    <string name="phone_hint">Inombolo Yefowuni</string>
+    <string name="save_changes">Gcina Untsintsho</string>
+    <string name="settings_night_mode">Imo Yasebusuku</string>
+    <string name="settings_notifications">Izaziso</string>
+    <string name="settings_radius">Irediyasi Yokukhangela Uncedo</string>
+    <string name="settings_radius_helper">Hlunga izicelo zoncedo nezidingo zomphakathi ezikufutshane kulo mgama</string>
+    <string name="settings_language">Ulwimi Olukhethiweyo</string>
+    <string name="settings_data_saver">Imo Yokonga Idatha</string>
+    <string name="settings_change_password">Tshintsha Inombolo Yekhowudi</string>
+    <string name="settings_sign_out">Phuma</string>
+    <string name="old_password_hint">Ikhowudi Yegama Yakuqala</string>
+    <string name="new_password_hint">Ikhowudi Yegama Entsha</string>
+    <string name="user_role_format">INDIMA: %1$s</string>
+
+    <!-- About Card -->
+    <string name="about_aurorah_title">Malunga ne-Aurorah CAN</string>
+    <string name="about_story">I-Aurorah CAN (Community Action Network) ngumbutho womphakathi ozinikeleyo ekuhlanganiseni inkxaso yomphakathi, ukubonelela ngoncedo olubalulekileyo, ukhuseleko lokutya, inkxaso yemfundo nezinto zempilo Kwiintsapho ezisemngciphekweni.</string>
+    <string name="about_contact">I-imeyile: info@aurorahcan.org | Ifowuni: +27 (0) 11 555 0199</string>
+    <string name="about_hours">Iiyure: Mso - Somb: 08:00 - 17:00 | Mgqib: 09:00 - 13:00</string>
+    <string name="about_address">Idilesi: 123 Hope Community Center, Main Road, Johannesburg, 2000</string>
+
+    <!-- Home Screen & Compose UI -->
+    <string name="home_hero_title">Ukudibanisa Iimfuno Zendawo Nenkxaso Yomphakathi</string>
+    <string name="home_hero_subtitle">I-Aurorah CAN iququzelela uncedo oluholwa ngumphakathi, abazinikeleyo neminikelo eKuils River nakwiindawo ezijikelezileyo.</string>
+    <string name="home_need_assistance">Ufuna Uncedo?</string>
+    <string name="home_offer_help">Bonelela Ngoncedo</string>
+    <string name="home_banner_network">Inethiweki yomphakathi, ingelilo isevisi karhulumente.</string>
+    <string name="home_ways_to_help_title">Iindlela zokunceda kufuphi</string>
+    <string name="home_loading_needs">Ilayisha iimfuno zomphakathi ezikhoyo…</string>
+    <string name="home_empty_needs">Bona iindlela zokunceda, ukunikela, okanye ukuzinikela ne-Aurorah CAN.</string>
+    <string name="home_explore_ways">Hlola iindlela zokunceda</string>
+    <string name="home_stories_title">Amabali avela komphakathi wethu</string>
+    <string name="home_stories_subtitle">Iindaba, iziphumo namaxesha asuka kumsebenzi wethu eKuils River nakwezinye iindawo.</string>
+    <string name="home_loading_stories">Ilayisha iindaba zomphakathi…</string>
+    <string name="home_filter_all_stories">Amahali onke</string>
+    <string name="home_filter_outreaches">Izicelo zomphakathi</string>
+    <string name="home_filter_impact">Iziphumo Zomsebenzi</string>
+    <string name="home_filter_announcements">Izaziso</string>
+
+    <string name="back_to_home">Buyela eKhaya</string>
+    <string name="get_help_header_subtitle">Izicelo zoncedo zendawo eKuils River nakwezinye iindawo</string>
+    <string name="get_help_success_title">Isicelo Sithunyelwe</string>
+    <string name="get_help_success_body">Enkosi, %1$s. Isicelo sakho samkelelwe uphando. Ukuthumela isicelo akungqini uncedo; kuxhomekeke kwiimeko nezinto ezikhoyo.</string>
+    <string name="submit_another_request">Thumela Esinye Isicelo</string>
+    <string name="privacy_notice_prefix">Sisebenzisa iinkcukacha zakho ukuphonononga isicelo sakho kuhlale kuqhagamshelwana nawe. </string>
+    <string name="privacy_popia_link">Isaziso sefihlo ne-POPIA</string>
+
+    <string name="volunteer_header_tag">ZINIKELE NE-AURORAH CAN</string>
+    <string name="volunteer_header_title">Yiba Mzinikeleyo</string>
+    <string name="volunteer_header_subtitle">Nikela ngexesha nezikhono kumsebenzi womphakathi</string>
+    <string name="volunteer_success_title">Enkosi, %1$s!</string>
+    <string name="volunteer_success_body">Isicelo sakho samkelwe. Ukubhalisa akungqini ukufumaneka kwesikhundla; amathuba axhomekeke kuhlolo nakudliwanondlebe.</string>
+    <string name="submit_another_application">Thumela Esinye Isicelo</string>
+    <string name="volunteer_opportunities_title">Amathuba Okuzinikela</string>
+    <string name="volunteer_callout_text">Zinikele ne-Aurorah CAN eKuils River nakwiindawo ezijikelezileyo.</string>
+
+    <string name="tab_community_needs">Iimfuno Zomphakathi</string>
+    <string name="tab_donate">Nikela</string>
+    <string name="tab_volunteer">Zinikele</string>
+    <string name="read_update">Funda iindaba  →</string>
+    <string name="read_full_story">Funda ibali ngokugqibeleleyo  →</string>
+</resources>

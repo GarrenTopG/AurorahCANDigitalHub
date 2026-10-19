@@ -37,8 +37,8 @@ import androidx.compose.ui.unit.sp
 import com.aurorah.can.data.api.ApiRepository
 import com.aurorah.can.data.model.CommunityNeed
 import com.aurorah.can.data.model.OfferAssistanceRequest
-import com.aurorah.can.ui.home.BrandPrimary
-import com.aurorah.can.ui.home.TextInk
+import com.aurorah.can.ui.theme.BrandPrimary
+import com.aurorah.can.ui.theme.TextInk
 import kotlinx.coroutines.launch
 
 @Composable
