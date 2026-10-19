@@ -11,9 +11,8 @@
 
 ## 🚀 Key Features
 
-### 🔐 1. Authentication & Single Sign-On (SSO)
+### 🔐 1. Authentication
 - **Email/Password Login & Registration**: Secure authentication with real-time input validation (RFC 5322 compliant emails & strong password enforcement).
-- **Google Single Sign-On (SSO)**: One-tap Google authentication integrated via Firebase Auth and Google Play Services Auth.
 - **Role-Based Access Control**: Differentiates between `Volunteer`, `Beneficiary`, and `Admin` user personas.
 - **Encrypted Session Management**: Local persistent session handling using `SessionManager` with secure auth tokens.
 
