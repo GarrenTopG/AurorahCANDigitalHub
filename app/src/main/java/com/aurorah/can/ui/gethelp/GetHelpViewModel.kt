@@ -35,6 +35,31 @@ data class GetHelpUiState(
     val serverError: String? = null
 )
 
+internal object GetHelpFormValidator {
+    fun validate(state: GetHelpUiState): GetHelpUiState {
+        val phoneDigits = state.phone.filter { it.isDigit() }
+        return state.copy(
+            firstNameError = if (state.firstName.isBlank()) "First name is required" else null,
+            lastNameError = if (state.lastName.isBlank()) "Last name is required" else null,
+            phoneError = when {
+                state.phone.isBlank() -> "Phone number is required"
+                phoneDigits.length < 7 -> "Please enter a valid phone number"
+                else -> null
+            },
+            locationError = if (state.location.isBlank()) "Suburb or area is required" else null,
+            categoryError = if (state.selectedCategory.isBlank()) "Please select a type of support" else null,
+            descriptionError = if (state.description.isBlank()) "Please describe what assistance you need" else null,
+            popiaError = if (!state.popiaConsent) "Consent is required to submit request" else null
+        )
+    }
+
+    fun hasErrors(state: GetHelpUiState): Boolean =
+        state.firstNameError != null || state.lastNameError != null ||
+            state.phoneError != null || state.locationError != null ||
+            state.categoryError != null || state.descriptionError != null ||
+            state.popiaError != null
+}
+
 class GetHelpViewModel(
     application: Application,
     private val repository: ApiRepository = ApiRepository(application)
@@ -72,38 +97,9 @@ class GetHelpViewModel(
 
     fun submitRequest() {
         val state = _uiState.value
-        var hasError = false
-
-        val firstNameErr = if (state.firstName.isBlank()) "First name is required" else null
-        val lastNameErr = if (state.lastName.isBlank()) "Last name is required" else null
-        val phoneDigits = state.phone.filter { it.isDigit() }
-        val phoneErr = when {
-            state.phone.isBlank() -> "Phone number is required"
-            phoneDigits.length < 7 -> "Please enter a valid phone number"
-            else -> null
-        }
-        val locationErr = if (state.location.isBlank()) "Suburb or area is required" else null
-        val categoryErr = if (state.selectedCategory.isBlank()) "Please select a type of support" else null
-        val descErr = if (state.description.isBlank()) "Please describe what assistance you need" else null
-        val popiaErr = if (!state.popiaConsent) "Consent is required to submit request" else null
-
-        if (firstNameErr != null || lastNameErr != null || phoneErr != null ||
-            locationErr != null || categoryErr != null || descErr != null || popiaErr != null) {
-            hasError = true
-        }
-
-        if (hasError) {
-            _uiState.update {
-                it.copy(
-                    firstNameError = firstNameErr,
-                    lastNameError = lastNameErr,
-                    phoneError = phoneErr,
-                    locationError = locationErr,
-                    categoryError = categoryErr,
-                    descriptionError = descErr,
-                    popiaError = popiaErr
-                )
-            }
+        val validatedState = GetHelpFormValidator.validate(state)
+        if (GetHelpFormValidator.hasErrors(validatedState)) {
+            _uiState.update { GetHelpFormValidator.validate(it) }
             return
         }
 
