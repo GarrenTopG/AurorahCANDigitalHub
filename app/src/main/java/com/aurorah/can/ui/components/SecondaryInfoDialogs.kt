@@ -27,9 +27,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.aurorah.can.ui.home.BrandPrimary
-import com.aurorah.can.ui.home.TextInk
-import com.aurorah.can.ui.home.TextMuted
+import com.aurorah.can.ui.theme.BrandPrimary
+import com.aurorah.can.ui.theme.TextInk
+import com.aurorah.can.ui.theme.TextMuted
 
 @Composable
 fun AboutDialog(onDismiss: () -> Unit) {

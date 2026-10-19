@@ -24,6 +24,8 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorSurface"
         app:elevation="8dp"
+        app:labelVisibilityMode="labeled"
+        app:itemRippleColor="#FCE7F3"
         app:itemIconTint="@color/bottom_nav_color_selector"
         app:itemTextColor="@color/bottom_nav_color_selector"
         app:menu="@menu/bottom_nav_menu"

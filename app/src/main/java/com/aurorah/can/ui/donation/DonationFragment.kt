@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -106,18 +105,15 @@ class DonationFragment : Fragment() {
 
     private fun setupSpinners() {
         // Monetary causes dropdown
-        val monetaryAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, monetaryCauses)
-        binding.actvCategory.setAdapter(monetaryAdapter)
+        binding.actvCategory.setSimpleItems(monetaryCauses.toTypedArray())
         binding.actvCategory.setText(monetaryCauses[0], false)
 
         // In-kind item categories dropdown
-        val inKindAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, inKindCategories)
-        binding.actvInKindCategory.setAdapter(inKindAdapter)
+        binding.actvInKindCategory.setSimpleItems(inKindCategories.toTypedArray())
         binding.actvInKindCategory.setText(inKindCategories[0], false)
 
         // Country code dropdown
-        val countryAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, countryCodes)
-        binding.actvCountryCode.setAdapter(countryAdapter)
+        binding.actvCountryCode.setSimpleItems(countryCodes.toTypedArray())
         binding.actvCountryCode.setText(countryCodes[0], false)
     }
 

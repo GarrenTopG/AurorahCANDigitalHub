@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
@@ -45,12 +44,10 @@ class RequestAssistanceBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupSpinners() {
-        val categoryAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, categories)
-        binding.actvCategory.setAdapter(categoryAdapter)
+        binding.actvCategory.setSimpleItems(categories.toTypedArray())
         binding.actvCategory.setText(categories[0], false)
 
-        val urgencyAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, urgencies)
-        binding.actvUrgency.setAdapter(urgencyAdapter)
+        binding.actvUrgency.setSimpleItems(urgencies.toTypedArray())
         binding.actvUrgency.setText(urgencies[2], false) // Default to Medium
     }
 

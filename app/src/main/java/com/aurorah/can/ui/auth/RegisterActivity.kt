@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
@@ -40,8 +39,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setupRoleDropdown() {
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, roles)
-        binding.actvRole.setAdapter(adapter)
+        binding.actvRole.setSimpleItems(roles.toTypedArray())
         binding.actvRole.setText(roles[0], false)
     }
 
