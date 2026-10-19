@@ -1,20 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Core Standard Design Tokens -->
-    <color name="primary_blue">#1E3A8A</color>
-    <color name="primary_blue_dark">#172554</color>
-    <color name="primary_blue_light">#60A5FA</color>
-    <color name="primary_green">#16A34A</color>
-    <color name="primary_green_dark">#15803D</color>
-    <color name="primary_green_light">#4ADE80</color>
-    <color name="dark_charcoal">#1F2937</color>
-    <color name="off_white">#F9FAFB</color>
+    <!-- Brand Palette -->
+    <color name="brand_primary">#D5105C</color>
+    <color name="brand_accent">#943D56</color>
+
+    <!-- Core Material Theme Tokens -->
+    <color name="md_theme_primary">#D5105C</color>
+    <color name="md_theme_secondary">#943D56</color>
+    <color name="md_theme_background">#FAF8F9</color>
+
+    <!-- Core Standard Design Token Aliases -->
+    <color name="primary_blue">#D5105C</color>
+    <color name="primary_blue_dark">#943D56</color>
+    <color name="primary_blue_light">#FF6090</color>
+    <color name="primary_green">#943D56</color>
+    <color name="primary_green_dark">#68253A</color>
+    <color name="primary_green_light">#C46882</color>
+
+    <!-- Public Page Surfaces and Text -->
+    <color name="page_background">#FAF8F9</color>
+    <color name="card_surface">#FFFFFF</color>
+    <color name="text_primary">#28252A</color>
+    <color name="text_secondary">#625D62</color>
+
+    <!-- Contextual UI Colors -->
+    <color name="surface_card">#FFFFFF</color>
+    <color name="background_light">#FAF8F9</color>
+    <color name="text_main">#28252A</color>
 
     <!-- Urgency Priority Badges -->
-    <color name="priority_critical">#DC2626</color>
-    <color name="priority_high">#E11D48</color>
-    <color name="priority_medium">#D97706</color>
-    <color name="priority_low">#16A34A</color>
+    <color name="urgency_critical">#FCA5A5</color>
+    <color name="urgency_high">#FF9ECE</color>
+    <color name="urgency_medium">#FCD34D</color>
+    <color name="urgency_low">#D4D4D8</color>
+
+    <color name="priority_critical">#FCA5A5</color>
+    <color name="priority_high">#FF9ECE</color>
+    <color name="priority_medium">#FCD34D</color>
+    <color name="priority_low">#D4D4D8</color>
 
     <!-- Standard UI Tokens -->
     <color name="black">#FF000000</color>
@@ -26,11 +49,9 @@
     <color name="gray_700">#374151</color>
     <color name="gray_900">#111827</color>
 
-    <!-- Contextual UI Colors -->
-    <color name="surface_card">#FFFFFF</color>
-    <color name="background_light">#F9FAFB</color>
-    <color name="text_main">#1F2937</color>
-    <color name="text_secondary">#4B5563</color>
+    <!-- Error States -->
     <color name="error_red">#DC2626</color>
     <color name="error_red_dark">#F87171</color>
+    <color name="error_container_bg">#FEF2F2</color>
+    <color name="error_container_border">#FECACA</color>
 </resources>

@@ -5,9 +5,13 @@
         android:icon="@drawable/ic_nav_home"
         android:title="@string/nav_home" />
     <item
-        android:id="@+id/navigation_needs"
-        android:icon="@drawable/ic_nav_needs"
-        android:title="@string/nav_needs" />
+        android:id="@+id/navigation_get_help"
+        android:icon="@drawable/ic_nav_get_help"
+        android:title="@string/nav_get_help" />
+    <item
+        android:id="@+id/navigation_volunteer"
+        android:icon="@drawable/ic_nav_volunteer"
+        android:title="@string/nav_volunteer" />
     <item
         android:id="@+id/navigation_donation"
         android:icon="@drawable/ic_nav_donation"

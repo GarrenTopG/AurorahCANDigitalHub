@@ -4,9 +4,11 @@
 
     <!-- Navigation -->
     <string name="nav_home">Home</string>
+    <string name="nav_get_help">Get Help</string>
+    <string name="nav_volunteer">Volunteer</string>
+    <string name="nav_donation">Donate</string>
+    <string name="nav_settings">Profile</string>
     <string name="nav_needs">Needs Matching</string>
-    <string name="nav_donation">Donation Portal</string>
-    <string name="nav_settings">Settings</string>
 
     <!-- Auth -->
     <string name="login_title">Welcome Back</string>
@@ -25,6 +27,8 @@
     <string name="login_prompt">Already have an account? Sign In</string>
 
     <!-- Validation Errors -->
+    <string name="error_title">Error</string>
+    <string name="dismiss">Dismiss</string>
     <string name="error_invalid_email">Invalid Email Address</string>
     <string name="error_invalid_password">Password must be at least 8 characters with numbers and special characters</string>
     <string name="error_password_mismatch">Passwords do not match</string>
@@ -47,7 +51,14 @@
 
     <!-- Donation Fragment -->
     <string name="donation_title">Support Our Cause</string>
+    <string name="tab_monetary">Monetary Pledge</string>
+    <string name="tab_inkind">In-Kind Items</string>
     <string name="select_category">Select Donation Category</string>
+    <string name="item_category_hint">Item Category</string>
+    <string name="item_description_hint">Item Description &amp; Quantities</string>
+    <string name="preference_hint">Collection / Drop-off Preference</string>
+    <string name="preference_dropoff">Drop-off at Hub</string>
+    <string name="preference_collection">Request Collection</string>
     <string name="select_amount">Select Amount (ZAR / R)</string>
     <string name="custom_amount_hint">Custom Amount (R)</string>
     <string name="payment_method">Payment Method</string>
@@ -56,8 +67,27 @@
     <string name="submit_donation">Complete Donation</string>
     <string name="error_invalid_amount">Amount must be greater than 0</string>
 
+    <!-- Request Assistance -->
+    <string name="request_assistance_title">Request Help / Get Assistance</string>
+    <string name="request_assistance_button">Request Help / Get Assistance</string>
+    <string name="category_hint">Category</string>
+    <string name="urgency_hint">Urgency Level</string>
+    <string name="area_location_hint">Area / Location</string>
+    <string name="contact_phone_hint">Contact Phone Number</string>
+    <string name="description_hint">Detailed Description of Need</string>
+    <string name="privacy_consent_text">I consent to Aurorah CAN processing my personal information to facilitate this assistance request.</string>
+    <string name="submit_assistance_request">Submit Assistance Request</string>
+    <string name="error_privacy_consent">Please accept the privacy consent to proceed</string>
+
+    <!-- News Article Detail Reader -->
+    <string name="news_detail_title">News Article</string>
+    <string name="author_format">By %1$s</string>
+
     <!-- Settings Fragment -->
     <string name="settings_profile_header">User Profile</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="phone_hint">Phone Number</string>
+    <string name="save_changes">Save Changes</string>
     <string name="settings_night_mode">Night Mode / Dark Theme</string>
     <string name="settings_notifications">Push Notifications</string>
     <string name="settings_change_password">Change Password</string>
@@ -65,6 +95,13 @@
     <string name="old_password_hint">Current Password</string>
     <string name="new_password_hint">New Password</string>
     <string name="user_role_format">ROLE: %1$s</string>
+
+    <!-- About Card -->
+    <string name="about_aurorah_title">About Aurorah CAN</string>
+    <string name="about_story">Aurorah CAN (Community Action Network) is a grassroots organization dedicated to mobilizing community support, providing essential relief, food security, educational assistance, and healthcare resources to vulnerable families.</string>
+    <string name="about_contact">Email: info@aurorahcan.org | Phone: +27 (0) 11 555 0199</string>
+    <string name="about_hours">Hours: Mon - Fri: 08:00 - 17:00 | Sat: 09:00 - 13:00</string>
+    <string name="about_address">Address: 123 Hope Community Center, Main Road, Johannesburg, 2000</string>
 
     <!-- Default Web Client ID for Google Sign In placeholder -->
     <string name="default_web_client_id" translatable="false">YOUR_GOOGLE_WEB_CLIENT_ID.apps.googleusercontent.com</string>

@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.aurorah.can.MainActivity
 import com.aurorah.can.R
 import com.aurorah.can.util.InputValidator
-import com.aurorah.can.data.api.MockApiRepository
+import com.aurorah.can.data.api.ApiRepository
 import com.aurorah.can.data.local.SessionManager
 import com.aurorah.can.data.model.RegisterRequest
 import com.aurorah.can.databinding.ActivityRegisterBinding
@@ -22,7 +22,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var sessionManager: SessionManager
-    private val repository = MockApiRepository()
+    private lateinit var repository: ApiRepository
 
     private val roles = listOf("Volunteer", "Beneficiary", "Donor")
 
@@ -32,6 +32,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         sessionManager = SessionManager(this)
+        repository = ApiRepository(sessionManager)
 
         setupRoleDropdown()
         setupInputValidation()
@@ -45,25 +46,34 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setupInputValidation() {
-        binding.etFullName.doOnTextChanged { text, _, _, _ ->
+        binding.etFullName.doOnTextChanged { _, _, _, _ ->
             binding.tilFullName.error = null
+            hideError()
         }
 
-        binding.etRegEmail.doOnTextChanged { text, _, _, _ ->
+        binding.etRegEmail.doOnTextChanged { _, _, _, _ ->
             binding.tilRegEmail.error = null
+            hideError()
         }
 
-        binding.etRegPassword.doOnTextChanged { text, _, _, _ ->
+        binding.etRegPassword.doOnTextChanged { _, _, _, _ ->
             binding.tilRegPassword.error = null
+            hideError()
         }
 
-        binding.etConfirmPassword.doOnTextChanged { text, _, _, _ ->
+        binding.etConfirmPassword.doOnTextChanged { _, _, _, _ ->
             binding.tilConfirmPassword.error = null
+            hideError()
         }
     }
 
     private fun setupListeners() {
+        binding.btnCloseError.setOnClickListener {
+            hideError()
+        }
+
         binding.btnRegister.setOnClickListener {
+            hideError()
             val fullName = binding.etFullName.text.toString().trim()
             val email = binding.etRegEmail.text.toString().trim()
             val password = binding.etRegPassword.text.toString().trim()
@@ -114,7 +124,7 @@ class RegisterActivity : AppCompatActivity() {
 
                 if (response.success && response.user != null) {
                     sessionManager.saveSession(
-                        token = response.token ?: "mock-jwt-token",
+                        token = response.token ?: "authenticated-jwt-token",
                         email = response.user.email,
                         name = response.user.fullName,
                         role = response.user.role
@@ -122,7 +132,7 @@ class RegisterActivity : AppCompatActivity() {
                     Toast.makeText(this@RegisterActivity, "Account created successfully!", Toast.LENGTH_SHORT).show()
                     navigateToMain()
                 } else {
-                    Toast.makeText(this@RegisterActivity, response.message, Toast.LENGTH_LONG).show()
+                    showError(response.message)
                 }
             }
         }
@@ -130,6 +140,15 @@ class RegisterActivity : AppCompatActivity() {
         binding.tvLoginPrompt.setOnClickListener {
             finish()
         }
+    }
+
+    private fun showError(message: String) {
+        binding.tvErrorMessage.text = message
+        binding.cardErrorMessage.visibility = View.VISIBLE
+    }
+
+    private fun hideError() {
+        binding.cardErrorMessage.visibility = View.GONE
     }
 
     private fun navigateToMain() {

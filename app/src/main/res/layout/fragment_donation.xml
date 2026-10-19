@@ -21,131 +21,236 @@
             android:textSize="22sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tvCategoryLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/select_category"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilCategorySpinner"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tlDonationType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:boxStrokeColor="@color/primary_blue">
+            android:layout_marginTop="16dp"
+            app:tabIndicatorColor="?attr/colorPrimary"
+            app:tabSelectedTextColor="?attr/colorPrimary">
 
-            <AutoCompleteTextView
-                android:id="@+id/actvCategory"
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tab_monetary" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tab_inkind" />
+        </com.google.android.material.tabs.TabLayout>
+
+        <!-- MONETARY CONTAINER -->
+        <LinearLayout
+            android:id="@+id/layoutMonetary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/tvCategoryLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/select_category"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCategorySpinner"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/select_category"
-                android:inputType="none" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="8dp"
+                app:boxStrokeColor="@color/md_theme_primary">
 
-        <TextView
-            android:id="@+id/tvAmountLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/select_amount"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+                <AutoCompleteTextView
+                    android:id="@+id/actvCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/select_category"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Preset donation amount chips -->
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cgAmount"
+            <TextView
+                android:id="@+id/tvAmountLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/select_amount"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cgAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipR50"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="R50" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipR100"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="R100" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipR250"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="R250" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipCustom"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Custom" />
+            </com.google.android.material.chip.ChipGroup>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCustomAmount"
+                style="@style/Widget.Aurorah.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="@string/custom_amount_hint"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etCustomAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvPaymentLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/payment_method"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/rgPaymentMethod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <RadioButton
+                    android:id="@+id/rbCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:padding="8dp"
+                    android:text="@string/payment_card"
+                    android:textSize="15sp" />
+
+                <RadioButton
+                    android:id="@+id/rbEft"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@string/payment_eft"
+                    android:textSize="15sp" />
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <!-- IN-KIND CONTAINER -->
+        <LinearLayout
+            android:id="@+id/layoutInKind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:singleSelection="true">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipR50"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="R50" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipR100"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="R100" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipR250"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="R250" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipCustom"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Custom" />
-        </com.google.android.material.chip.ChipGroup>
-
-        <!-- Custom Amount Input Field -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilCustomAmount"
-            style="@style/Widget.Aurorah.TextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="@string/custom_amount_hint"
+            android:orientation="vertical"
             android:visibility="gone">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etCustomAmount"
+            <TextView
+                android:id="@+id/tvInKindCategoryLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/item_category_hint"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilInKindCategory"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:maxLines="1" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="8dp"
+                app:boxStrokeColor="@color/md_theme_primary">
 
-        <TextView
-            android:id="@+id/tvPaymentLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/payment_method"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+                <AutoCompleteTextView
+                    android:id="@+id/actvInKindCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/item_category_hint"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <RadioGroup
-            android:id="@+id/rgPaymentMethod"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
-
-            <RadioButton
-                android:id="@+id/rbCard"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilItemDescription"
+                style="@style/Widget.Aurorah.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:checked="true"
-                android:padding="8dp"
-                android:text="@string/payment_card"
-                android:textSize="15sp" />
+                android:layout_marginTop="12dp"
+                android:hint="@string/item_description_hint">
 
-            <RadioButton
-                android:id="@+id/rbEft"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etItemDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:minLines="3" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvPreferenceLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/preference_hint"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilInKindPreference"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/payment_eft"
-                android:textSize="15sp" />
-        </RadioGroup>
+                android:layout_marginTop="8dp"
+                app:boxStrokeColor="@color/md_theme_primary">
+
+                <AutoCompleteTextView
+                    android:id="@+id/actvInKindPreference"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/preference_hint"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSubmitDonation"

@@ -16,15 +16,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sessionManager: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
         sessionManager = SessionManager(this)
 
-        // Check night mode preference
+        // Check night mode preference before super.onCreate
         val isDark = sessionManager.isNightModeEnabled()
         AppCompatDelegate.setDefaultNightMode(
             if (isDark) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
         )
+
+        super.onCreate(savedInstanceState)
 
         // Check authentication session
         if (!sessionManager.isLoggedIn()) {

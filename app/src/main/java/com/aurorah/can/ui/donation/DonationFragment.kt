@@ -10,11 +10,12 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.aurorah.can.R
-import com.aurorah.can.data.api.MockApiRepository
+import com.aurorah.can.data.api.ApiRepository
 import com.aurorah.can.data.local.SessionManager
 import com.aurorah.can.data.model.DonationRequest
 import com.aurorah.can.databinding.FragmentDonationBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.launch
 
 class DonationFragment : Fragment() {
@@ -22,11 +23,15 @@ class DonationFragment : Fragment() {
     private var _binding: FragmentDonationBinding? = null
     private val binding get() = _binding!!
 
-    private val repository = MockApiRepository()
+    private val repository by lazy { ApiRepository(requireContext()) }
 
-    private val categories = listOf("Food Parcels", "Winter Relief", "General Fund")
+    private val monetaryCategories = listOf("Food Parcels", "Winter Relief", "General Fund")
+    private val inKindCategories = listOf("Food Parcels", "Clothing", "Household Goods", "School Supplies")
+    private val preferences = listOf("Drop-off at Hub", "Request Collection")
+
     private var selectedAmount: Double = 100.0
     private var isCustomAmountSelected: Boolean = false
+    private var isMonetaryTab: Boolean = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,16 +45,47 @@ class DonationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupCategorySpinner()
+        setupTabs()
+        setupSpinners()
         setupAmountChips()
         setupCustomAmountValidation()
         setupSubmitButton()
     }
 
-    private fun setupCategorySpinner() {
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, categories)
-        binding.actvCategory.setAdapter(adapter)
-        binding.actvCategory.setText(categories[0], false)
+    private fun setupTabs() {
+        binding.tlDonationType.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab?.position == 0) {
+                    isMonetaryTab = true
+                    binding.layoutMonetary.visibility = View.VISIBLE
+                    binding.layoutInKind.visibility = View.GONE
+                } else {
+                    isMonetaryTab = false
+                    binding.layoutMonetary.visibility = View.GONE
+                    binding.layoutInKind.visibility = View.VISIBLE
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+    }
+
+    private fun setupSpinners() {
+        // Monetary category spinner
+        val monetaryAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, monetaryCategories)
+        binding.actvCategory.setAdapter(monetaryAdapter)
+        binding.actvCategory.setText(monetaryCategories[0], false)
+
+        // In-kind item category spinner
+        val inKindAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, inKindCategories)
+        binding.actvInKindCategory.setAdapter(inKindAdapter)
+        binding.actvInKindCategory.setText(inKindCategories[0], false)
+
+        // Preference spinner
+        val preferenceAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, preferences)
+        binding.actvInKindPreference.setAdapter(preferenceAdapter)
+        binding.actvInKindPreference.setText(preferences[0], false)
     }
 
     private fun setupAmountChips() {
@@ -84,14 +120,13 @@ class DonationFragment : Fragment() {
     private fun setupCustomAmountValidation() {
         binding.etCustomAmount.doOnTextChanged { text, _, _, _ ->
             binding.tilCustomAmount.error = null
-            if (isCustomAmountSelected) {
-                val input = text.toString().toDoubleOrNull()
-                if (input == null || input <= 0.0) {
-                    binding.tilCustomAmount.error = getString(R.string.error_invalid_amount)
-                } else {
-                    selectedAmount = input
-                }
+            val input = text?.toString()?.toDoubleOrNull()
+            if (input != null && input > 0.0) {
+                selectedAmount = input
             }
+        }
+        binding.etItemDescription.doOnTextChanged { _, _, _, _ ->
+            binding.tilItemDescription.error = null
         }
     }
 
@@ -111,42 +146,71 @@ class DonationFragment : Fragment() {
 
     private fun setupSubmitButton() {
         binding.btnSubmitDonation.setOnClickListener {
-            val category = binding.actvCategory.text.toString().ifBlank { categories[0] }
-
-            if (isCustomAmountSelected && !validateCustomAmount()) {
-                Toast.makeText(requireContext(), getString(R.string.error_invalid_amount), Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            val paymentMethod = if (binding.rbCard.isChecked) "Credit Card" else "Direct Bank Transfer"
             val sessionManager = SessionManager(requireContext())
             val userEmail = sessionManager.fetchUserEmail()
 
-            // Disable submit button during active API network call to prevent double-charging
+            val request: DonationRequest
+
+            if (isMonetaryTab) {
+                val category = binding.actvCategory.text.toString().ifBlank { monetaryCategories[0] }
+
+                if (isCustomAmountSelected && !validateCustomAmount()) {
+                    Toast.makeText(requireContext(), getString(R.string.error_invalid_amount), Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                val paymentMethod = if (binding.rbCard.isChecked) "Credit Card" else "Direct Bank Transfer"
+
+                request = DonationRequest(
+                    donationType = "Monetary",
+                    category = category,
+                    amount = selectedAmount,
+                    paymentMethod = paymentMethod,
+                    userEmail = userEmail
+                )
+            } else {
+                val category = binding.actvInKindCategory.text.toString().ifBlank { inKindCategories[0] }
+                val itemDesc = binding.etItemDescription.text.toString().trim()
+                val pref = binding.actvInKindPreference.text.toString().ifBlank { preferences[0] }
+
+                if (itemDesc.isEmpty()) {
+                    binding.tilItemDescription.error = getString(R.string.error_empty_field)
+                    return@setOnClickListener
+                }
+
+                request = DonationRequest(
+                    donationType = "In-Kind",
+                    category = category,
+                    itemDescription = itemDesc,
+                    preference = pref,
+                    userEmail = userEmail
+                )
+            }
+
             binding.btnSubmitDonation.isEnabled = false
             binding.pbDonation.visibility = View.VISIBLE
 
-            lifecycleScope.launch {
-                val response = repository.submitDonation(
-                    DonationRequest(
-                        category = category,
-                        amount = selectedAmount,
-                        paymentMethod = paymentMethod,
-                        userEmail = userEmail
-                    )
-                )
+            viewLifecycleOwner.lifecycleScope.launch {
+                val response = repository.submitDonation(request)
 
-                binding.pbDonation.visibility = View.GONE
-                binding.btnSubmitDonation.isEnabled = true
+                _binding?.let { b ->
+                    b.pbDonation.visibility = View.GONE
+                    b.btnSubmitDonation.isEnabled = true
+                }
 
-                if (response.success) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Donation Successful")
-                        .setMessage("${response.message}\n\nTransaction Reference: ${response.transactionRef}")
-                        .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-                        .show()
-                } else {
-                    Toast.makeText(requireContext(), response.message, Toast.LENGTH_LONG).show()
+                if (isAdded) {
+                    if (response.success) {
+                        val refMessage = if (response.transactionRef.isNotBlank()) {
+                            "\n\nTransaction Reference: ${response.transactionRef}"
+                        } else ""
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(if (isMonetaryTab) "Donation Successful" else "Pledge Received")
+                            .setMessage("${response.message}$refMessage")
+                            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                            .show()
+                    } else {
+                        Toast.makeText(requireContext(), response.message, Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }

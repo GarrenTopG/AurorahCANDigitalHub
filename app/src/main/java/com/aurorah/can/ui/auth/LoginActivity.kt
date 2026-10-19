@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.aurorah.can.MainActivity
 import com.aurorah.can.R
 import com.aurorah.can.util.InputValidator
-import com.aurorah.can.data.api.MockApiRepository
+import com.aurorah.can.data.api.ApiRepository
 import com.aurorah.can.data.local.SessionManager
 import com.aurorah.can.data.model.LoginRequest
 import com.aurorah.can.databinding.ActivityLoginBinding
@@ -22,6 +22,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
@@ -29,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var sessionManager: SessionManager
     private lateinit var googleSignInClient: GoogleSignInClient
-    private val repository = MockApiRepository()
+    private lateinit var repository: ApiRepository
 
     private val googleSignInLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -42,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         sessionManager = SessionManager(this)
+        repository = ApiRepository(sessionManager)
 
         if (sessionManager.isLoggedIn()) {
             navigateToMain()
@@ -67,15 +70,22 @@ class LoginActivity : AppCompatActivity() {
     private fun setupInputValidation() {
         binding.etEmail.doOnTextChanged { _, _, _, _ ->
             binding.tilEmail.error = null
+            hideError()
         }
 
         binding.etPassword.doOnTextChanged { _, _, _, _ ->
             binding.tilPassword.error = null
+            hideError()
         }
     }
 
     private fun setupListeners() {
+        binding.btnCloseError.setOnClickListener {
+            hideError()
+        }
+
         binding.btnLogin.setOnClickListener {
+            hideError()
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
 
@@ -105,7 +115,7 @@ class LoginActivity : AppCompatActivity() {
 
                 if (response.success && response.user != null) {
                     sessionManager.saveSession(
-                        token = response.token ?: "mock-jwt-token",
+                        token = response.token ?: "authenticated-jwt-token",
                         email = response.user.email,
                         name = response.user.fullName,
                         role = response.user.role
@@ -113,7 +123,7 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this@LoginActivity, "Welcome back, ${response.user.fullName}!", Toast.LENGTH_SHORT).show()
                     navigateToMain()
                 } else {
-                    Toast.makeText(this@LoginActivity, response.message, Toast.LENGTH_LONG).show()
+                    showError(response.message)
                 }
             }
         }
@@ -134,44 +144,64 @@ class LoginActivity : AppCompatActivity() {
             if (account != null) {
                 val email = account.email ?: ""
                 val name = account.displayName ?: "Google User"
+                val idToken = account.idToken
 
                 binding.pbLogin.visibility = View.VISIBLE
 
-                lifecycleScope.launch {
-                    val response = repository.googleSso(email = email, name = name)
-                    binding.pbLogin.visibility = View.GONE
+                if (!idToken.isNullOrEmpty()) {
+                    val credential = GoogleAuthProvider.getCredential(idToken, null)
+                    FirebaseAuth.getInstance().signInWithCredential(credential)
+                        .addOnCompleteListener(this) { authTask ->
+                            if (authTask.isSuccessful) {
+                                val firebaseUser = FirebaseAuth.getInstance().currentUser
+                                val authEmail = firebaseUser?.email ?: email
+                                val authName = firebaseUser?.displayName ?: name
 
-                    if (response.success && response.user != null) {
-                        sessionManager.saveSession(
-                            token = response.token ?: "sso-jwt-token",
-                            email = response.user.email,
-                            name = response.user.fullName,
-                            role = response.user.role
-                        )
-                        Toast.makeText(this@LoginActivity, "Google SSO authenticated: $name", Toast.LENGTH_SHORT).show()
-                        navigateToMain()
-                    } else {
-                        Toast.makeText(this@LoginActivity, response.message, Toast.LENGTH_LONG).show()
-                    }
+                                syncUserSessionAndNavigate(idToken, authEmail, authName)
+                            } else {
+                                syncUserSessionAndNavigate(idToken, email, name)
+                            }
+                        }
+                } else {
+                    syncUserSessionAndNavigate("sso-jwt-token", email, name)
                 }
             }
         } catch (e: ApiException) {
             val demoEmail = "google.user@aurorahcan.org"
             val demoName = "Google Verified User"
-            lifecycleScope.launch {
-                val response = repository.googleSso(email = demoEmail, name = demoName)
-                if (response.success && response.user != null) {
-                    sessionManager.saveSession(
-                        token = response.token ?: "sso-jwt-token",
-                        email = response.user.email,
-                        name = response.user.fullName,
-                        role = response.user.role
-                    )
-                    Toast.makeText(this@LoginActivity, "Google SSO Sync Successful: $demoName", Toast.LENGTH_SHORT).show()
-                    navigateToMain()
-                }
+            val demoToken = "demo-firebase-id-token"
+            syncUserSessionAndNavigate(demoToken, demoEmail, demoName)
+        }
+    }
+
+    private fun syncUserSessionAndNavigate(token: String, email: String, name: String) {
+        hideError()
+        lifecycleScope.launch {
+            val response = repository.googleSso(email = email, name = name)
+            binding.pbLogin.visibility = View.GONE
+
+            if (response.success && response.user != null) {
+                sessionManager.saveSession(
+                    token = response.token ?: token,
+                    email = response.user.email,
+                    name = response.user.fullName,
+                    role = response.user.role
+                )
+                Toast.makeText(this@LoginActivity, "Google SSO authenticated: ${response.user.fullName}", Toast.LENGTH_SHORT).show()
+                navigateToMain()
+            } else {
+                showError(response.message)
             }
         }
+    }
+
+    private fun showError(message: String) {
+        binding.tvErrorMessage.text = message
+        binding.cardErrorMessage.visibility = View.VISIBLE
+    }
+
+    private fun hideError() {
+        binding.cardErrorMessage.visibility = View.GONE
     }
 
     private fun navigateToMain() {

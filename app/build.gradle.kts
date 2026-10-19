@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services") // For Firebase/SSO Auth
 }
 
@@ -19,6 +20,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 
     compileOptions {
@@ -28,6 +30,16 @@ android {
 
     kotlinOptions {
         jvmTarget = "11"
+    }
+
+    // Renames the generated debug APK file
+    applicationVariants.all {
+        outputs.all {
+            val output = this as? com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            if (name == "debug") {
+                output?.outputFileName = "Aurorah_CAN_Digital_Hub_debug.apk"
+            }
+        }
     }
 }
 
@@ -39,6 +51,16 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+
+    // Jetpack Compose
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.activity.compose)
+    debugImplementation("androidx.compose.ui:ui-tooling")
 
     // Networking: Retrofit & OkHttp
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
