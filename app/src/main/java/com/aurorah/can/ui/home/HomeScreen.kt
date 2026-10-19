@@ -1,7 +1,14 @@
 package com.aurorah.can.ui.home
 
+import android.content.Intent
+import android.net.Uri
+import androidx.core.net.toUri
+import androidx.compose.ui.platform.LocalContext
+
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -32,6 +40,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -85,6 +97,9 @@ fun AurorahHomeScreen(
     onNewsClick: (NewsItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var selectedCategoryFilter by remember { mutableStateOf("All stories") }
+    val categories = listOf("All stories", "Community Outreaches", "Impact Update", "Announcements")
+
     AurorahTheme {
         Column(
             modifier = modifier
@@ -148,15 +163,74 @@ fun AurorahHomeScreen(
             }
 
             // Community News & Stories section
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                SectionHeading("Community News & Stories")
-                val stories = feedState.stories
-                when {
-                    stories.isNotEmpty() -> {
-                        stories.forEach { story ->
-                            StoryCard(story = story, onClick = { onNewsClick(story) })
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                SectionHeading("Stories from our community")
+                Text(
+                    text = "Updates, milestones and moments from our work in Kuils River and nearby communities.",
+                    color = TextMuted,
+                    fontSize = 14.sp,
+                    lineHeight = 20.sp
+                )
+
+                // Category Filter Chips
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    categories.forEach { cat ->
+                        val isSelected = cat.equals(selectedCategoryFilter, ignoreCase = true)
+                        Surface(
+                            shape = CircleShape,
+                            color = if (isSelected) BrandPrimary else Color.White,
+                            border = BorderStroke(
+                                1.dp,
+                                if (isSelected) BrandPrimary else LineColor
+                            ),
+                            modifier = Modifier.clickable { selectedCategoryFilter = cat }
+                        ) {
+                            Text(
+                                text = cat,
+                                color = if (isSelected) Color.White else TextInk,
+                                fontSize = 13.sp,
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                                modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
+                            )
                         }
                     }
+                }
+
+                val allStories = feedState.stories.ifEmpty {
+                    listOf(
+                        NewsItem(
+                            id = 1,
+                            title = "A place for young readers in Sunbird Park",
+                            summary = "Aurorah CAN established a community mini-library in July 2022 as part of Nelson Mandela Day.",
+                            body = "Aurorah CAN established a community mini-library in July 2022 as part of Nelson Mandela Day to promote literacy and provide a safe learning haven for children in Sunbird Park.",
+                            category = "Impact Update",
+                            timestamp = "July 2022",
+                            author = "Aurorah CAN Team"
+                        ),
+                        NewsItem(
+                            id = 2,
+                            title = "Winter Relief Drive in Kuils River & Surrounds",
+                            summary = "Providing blankets, warm clothing and warm soup packages to 150+ families.",
+                            body = "Our winter outreach reached vulnerable households in Sunbird Park and surrounding informal areas during extreme cold weather fronts.",
+                            category = "Community Outreaches",
+                            timestamp = "Recent Outreach",
+                            author = "Aurorah CAN Team"
+                        )
+                    )
+                }
+
+                val filteredStories = if (selectedCategoryFilter.equals("All stories", ignoreCase = true)) {
+                    allStories
+                } else {
+                    allStories.filter { it.category.equals(selectedCategoryFilter, ignoreCase = true) }
+                }
+
+                when {
                     feedState.isLoading -> {
                         Text("Loading community updates…", color = TextMuted)
                     }
@@ -166,18 +240,39 @@ fun AurorahHomeScreen(
                             onRetry = onRefresh
                         )
                     }
-                    else -> {
-                        val fallbackStory = NewsItem(
-                            id = 0,
-                            title = "A place for young readers in Sunbird Park",
-                            summary = "Aurorah CAN established a community mini-library in July 2022 as part of Nelson Mandela Day.",
-                            body = "Aurorah CAN established a community mini-library in July 2022 as part of Nelson Mandela Day to promote literacy and provide a safe learning haven for children in Sunbird Park.",
-                            category = "Community milestone",
-                            timestamp = "July 2022",
-                            author = "Aurorah CAN Team"
-                        )
-                        StoryCard(story = fallbackStory, onClick = { onNewsClick(fallbackStory) })
+                    filteredStories.isNotEmpty() -> {
+                        // Featured Story (First story)
+                        val featured = filteredStories.first()
+                        FeaturedStoryCard(story = featured, onClick = { onNewsClick(featured) })
+
+                        // Remaining Stories
+                        filteredStories.drop(1).forEach { story ->
+                            StoryCard(story = story, onClick = { onNewsClick(story) })
+                        }
                     }
+                    else -> {
+                        Text(
+                            text = "No active updates in this category.",
+                            color = TextMuted,
+                            fontSize = 14.sp,
+                            modifier = Modifier.padding(vertical = 12.dp)
+                        )
+                    }
+                }
+
+                // Media Consent Notice Banner
+                Surface(
+                    color = Color.White,
+                    shape = RoundedCornerShape(12.dp),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, LineColor)
+                ) {
+                    Text(
+                        text = "Media Consent Notice: We share photos of identifiable community members, especially children, only with written media consent. Generic imagery is labelled as illustrative.",
+                        color = TextMuted,
+                        fontSize = 12.sp,
+                        lineHeight = 18.sp,
+                        modifier = Modifier.padding(12.dp)
+                    )
                 }
             }
 
@@ -315,6 +410,85 @@ private fun NeedCard(
 }
 
 @Composable
+private fun FeaturedStoryCard(
+    story: NewsItem,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Surface(
+                    color = BrandPale,
+                    shape = RoundedCornerShape(6.dp)
+                ) {
+                    Text(
+                        text = "FEATURED STORY  ·  ${story.category.uppercase()}",
+                        color = BrandPrimary,
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
+                }
+
+                Text(
+                    text = story.timestamp.take(10),
+                    color = TextMuted,
+                    fontSize = 12.sp
+                )
+            }
+
+            Text(
+                text = story.title,
+                color = TextInk,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.ExtraBold,
+                lineHeight = 26.sp
+            )
+
+            Text(
+                text = story.summary.ifBlank { story.body.take(140) },
+                color = TextMuted,
+                fontSize = 14.sp,
+                lineHeight = 21.sp
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "By ${story.author.ifBlank { "Aurorah CAN Team" }}",
+                    color = TextMuted,
+                    fontSize = 12.sp
+                )
+
+                Text(
+                    text = "Read full story  →",
+                    color = BrandPrimary,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun StoryCard(
     story: NewsItem,
     onClick: () -> Unit
@@ -352,18 +526,31 @@ private fun StoryCard(
                 fontSize = 14.sp,
                 lineHeight = 20.sp
             )
-            Text(
-                text = "Read community updates  →",
-                color = BrandPrimary,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.SemiBold
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "By ${story.author.ifBlank { "Aurorah CAN Team" }}",
+                    color = TextMuted,
+                    fontSize = 12.sp
+                )
+
+                Text(
+                    text = "Read update  →",
+                    color = BrandPrimary,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         }
     }
 }
 
 @Composable
 private fun ContactCard() {
+    val context = LocalContext.current
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(18.dp),
@@ -381,7 +568,17 @@ private fun ContactCard() {
             )
             ContactLine(
                 icon = Icons.Filled.LocationOn,
-                text = "27 Lovebird Walk, Sunbird Park, Cape Town, 7580"
+                text = "27 Lovebird Walk, Sunbird Park, Cape Town, 7580",
+                onClick = {
+                    val address = "27 Lovebird Walk, Sunbird Park, Cape Town, 7580"
+                    val mapIntent = Intent(Intent.ACTION_VIEW, "geo:0,0?q=${Uri.encode(address)}".toUri())
+                    try {
+                        context.startActivity(mapIntent)
+                    } catch (_: Exception) {
+                        val browserIntent = Intent(Intent.ACTION_VIEW, "https://maps.google.com/?q=${Uri.encode(address)}".toUri())
+                        context.startActivity(browserIntent)
+                    }
+                }
             )
             ContactLine(
                 icon = Icons.Filled.AccessTime,
@@ -394,9 +591,11 @@ private fun ContactCard() {
 @Composable
 private fun ContactLine(
     icon: ImageVector,
-    text: String
+    text: String,
+    onClick: (() -> Unit)? = null
 ) {
     Row(
+        modifier = if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier,
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalAlignment = Alignment.Top
     ) {

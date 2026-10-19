@@ -1,9 +1,12 @@
 package com.aurorah.can.ui.home
 
+import android.content.Intent
+import androidx.core.net.toUri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.aurorah.can.R
 import com.aurorah.can.data.model.NewsItem
 import com.aurorah.can.databinding.BottomSheetNewsDetailBinding
@@ -56,9 +59,36 @@ class NewsDetailBottomSheetFragment : BottomSheetDialogFragment() {
 
         binding.tvNewsDetailTitle.text = title
         binding.tvNewsDetailCategory.text = category
-        binding.tvNewsDetailDate.text = date
+        binding.tvNewsDetailDate.text = if (date.isNotBlank()) date else "Recent Update"
         binding.tvNewsDetailAuthor.text = getString(R.string.author_format, author)
         binding.tvNewsDetailBody.text = if (body.isNotBlank()) body else title
+
+        binding.tvMediaContact.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SENDTO, "mailto:media@aurorahcan.org.za".toUri())
+            try {
+                startActivity(Intent.createChooser(intent, "Contact Media Team"))
+            } catch (_: Exception) {
+                // Fallback
+            }
+        }
+
+        binding.btnGetHelp.setOnClickListener {
+            val navController = parentFragment?.findNavController() ?: findNavController()
+            dismiss()
+            navController.navigate(R.id.navigation_get_help)
+        }
+
+        binding.btnMakePledge.setOnClickListener {
+            val navController = parentFragment?.findNavController() ?: findNavController()
+            dismiss()
+            navController.navigate(R.id.navigation_donation)
+        }
+
+        binding.btnVolunteer.setOnClickListener {
+            val navController = parentFragment?.findNavController() ?: findNavController()
+            dismiss()
+            navController.navigate(R.id.navigation_volunteer)
+        }
 
         binding.btnCloseNewsDetail.setOnClickListener {
             dismiss()

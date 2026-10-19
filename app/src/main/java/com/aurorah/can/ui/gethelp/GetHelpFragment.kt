@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.aurorah.can.data.api.ApiRepository
 import com.aurorah.can.data.local.SessionManager
 
@@ -31,7 +32,8 @@ class GetHelpFragment : Fragment() {
                     repository = repository,
                     userEmail = userEmail,
                     userName = userName,
-                    userPhone = userPhone
+                    userPhone = userPhone,
+                    onBackClick = { findNavController().popBackStack() }
                 )
             }
         }

@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
@@ -64,6 +65,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aurorah.can.data.api.ApiRepository
 import com.aurorah.can.data.model.AssistanceRequest
+import com.aurorah.can.ui.components.PrivacyDialog
 import com.aurorah.can.ui.components.*
 import com.aurorah.can.ui.home.BrandPale
 import com.aurorah.can.ui.home.BrandPrimary
@@ -79,6 +81,7 @@ fun GetHelpScreen(
     userEmail: String,
     userName: String = "",
     userPhone: String = "",
+    onBackClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     var firstName by remember {
@@ -142,6 +145,30 @@ fun GetHelpScreen(
             .padding(horizontal = 20.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        if (onBackClick != null) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onBackClick() }
+                    .padding(vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = BrandPrimary,
+                    modifier = Modifier.size(22.dp)
+                )
+                Text(
+                    text = "Back to Home",
+                    color = BrandPrimary,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+
         // Header Banner Section
         Card(
             modifier = Modifier.fillMaxWidth(),

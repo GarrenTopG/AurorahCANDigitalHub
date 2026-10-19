@@ -25,11 +25,25 @@ class DonationFragment : Fragment() {
 
     private val repository by lazy { ApiRepository(requireContext()) }
 
-    private val monetaryCategories = listOf("Food Parcels", "Winter Relief", "General Fund")
-    private val inKindCategories = listOf("Food Parcels", "Clothing", "Household Goods", "School Supplies")
-    private val preferences = listOf("Drop-off at Hub", "Request Collection")
+    private val monetaryCauses = listOf(
+        "General fund — where most needed",
+        "Food relief",
+        "Youth and learning",
+        "Community library",
+        "Community development"
+    )
 
-    private var selectedAmount: Double = 100.0
+    private val inKindCategories = listOf(
+        "Non-Perishable Food / Canned Goods",
+        "Clothing & Footwear",
+        "Blankets & Bedding",
+        "School Supplies & Books",
+        "Other Physical Goods"
+    )
+
+    private val countryCodes = listOf("🇿🇦 +27", "🇳🇦 +264", "🇧🇼 +267")
+
+    private var selectedAmount: Double = 200.0
     private var isCustomAmountSelected: Boolean = false
     private var isMonetaryTab: Boolean = true
 
@@ -48,8 +62,25 @@ class DonationFragment : Fragment() {
         setupTabs()
         setupSpinners()
         setupAmountChips()
-        setupCustomAmountValidation()
+        setupTaxCertificateToggle()
+        setupFulfillmentToggle()
+        setupAnonymousToggle()
+        setupValidation()
         setupSubmitButton()
+        prefillUserInfo()
+    }
+
+    private fun prefillUserInfo() {
+        val sessionManager = SessionManager(requireContext())
+        val savedEmail = sessionManager.fetchUserEmail()
+        val savedName = sessionManager.fetchUserName()
+
+        if (savedEmail.isNotBlank()) {
+            binding.etDonorEmail.setText(savedEmail)
+        }
+        if (savedName.isNotBlank() && savedName != "User") {
+            binding.etDonorName.setText(savedName)
+        }
     }
 
     private fun setupTabs() {
@@ -59,10 +90,12 @@ class DonationFragment : Fragment() {
                     isMonetaryTab = true
                     binding.layoutMonetary.visibility = View.VISIBLE
                     binding.layoutInKind.visibility = View.GONE
+                    binding.btnSubmitDonation.text = "Submit Donation Pledge"
                 } else {
                     isMonetaryTab = false
                     binding.layoutMonetary.visibility = View.GONE
                     binding.layoutInKind.visibility = View.VISIBLE
+                    binding.btnSubmitDonation.text = "Submit In-Kind Offer"
                 }
             }
 
@@ -72,20 +105,20 @@ class DonationFragment : Fragment() {
     }
 
     private fun setupSpinners() {
-        // Monetary category spinner
-        val monetaryAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, monetaryCategories)
+        // Monetary causes dropdown
+        val monetaryAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, monetaryCauses)
         binding.actvCategory.setAdapter(monetaryAdapter)
-        binding.actvCategory.setText(monetaryCategories[0], false)
+        binding.actvCategory.setText(monetaryCauses[0], false)
 
-        // In-kind item category spinner
+        // In-kind item categories dropdown
         val inKindAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, inKindCategories)
         binding.actvInKindCategory.setAdapter(inKindAdapter)
         binding.actvInKindCategory.setText(inKindCategories[0], false)
 
-        // Preference spinner
-        val preferenceAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, preferences)
-        binding.actvInKindPreference.setAdapter(preferenceAdapter)
-        binding.actvInKindPreference.setText(preferences[0], false)
+        // Country code dropdown
+        val countryAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, countryCodes)
+        binding.actvCountryCode.setAdapter(countryAdapter)
+        binding.actvCountryCode.setText(countryCodes[0], false)
     }
 
     private fun setupAmountChips() {
@@ -98,13 +131,18 @@ class DonationFragment : Fragment() {
                     isCustomAmountSelected = false
                     binding.tilCustomAmount.visibility = View.GONE
                 }
-                binding.chipR100.id -> {
-                    selectedAmount = 100.0
+                binding.chipR200.id -> {
+                    selectedAmount = 200.0
                     isCustomAmountSelected = false
                     binding.tilCustomAmount.visibility = View.GONE
                 }
-                binding.chipR250.id -> {
-                    selectedAmount = 250.0
+                binding.chipR500.id -> {
+                    selectedAmount = 500.0
+                    isCustomAmountSelected = false
+                    binding.tilCustomAmount.visibility = View.GONE
+                }
+                binding.chipR1000.id -> {
+                    selectedAmount = 1000.0
                     isCustomAmountSelected = false
                     binding.tilCustomAmount.visibility = View.GONE
                 }
@@ -117,7 +155,48 @@ class DonationFragment : Fragment() {
         }
     }
 
-    private fun setupCustomAmountValidation() {
+    private fun setupTaxCertificateToggle() {
+        binding.cbRequestTaxCertificate.setOnCheckedChangeListener { _, isChecked ->
+            binding.layoutTaxReceiptFields.visibility = if (isChecked) View.VISIBLE else View.GONE
+            if (isChecked) {
+                // Tax certificates require non-anonymous details
+                if (binding.cbAnonymous.isChecked) {
+                    binding.cbAnonymous.isChecked = false
+                }
+            }
+        }
+    }
+
+    private fun setupFulfillmentToggle() {
+        binding.rgFulfillmentMethod.setOnCheckedChangeListener { _, checkedId ->
+            if (checkedId == binding.rbDropoff.id) {
+                binding.cardDropoffInfo.visibility = View.VISIBLE
+                binding.tilPickupAddress.visibility = View.GONE
+            } else {
+                binding.cardDropoffInfo.visibility = View.GONE
+                binding.tilPickupAddress.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun setupAnonymousToggle() {
+        binding.cbAnonymous.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.etDonorName.setText("Anonymous Donor")
+                binding.etDonorName.isEnabled = false
+                if (binding.cbRequestTaxCertificate.isChecked) {
+                    binding.cbRequestTaxCertificate.isChecked = false
+                }
+            } else {
+                if (binding.etDonorName.text?.toString() == "Anonymous Donor") {
+                    binding.etDonorName.setText("")
+                }
+                binding.etDonorName.isEnabled = true
+            }
+        }
+    }
+
+    private fun setupValidation() {
         binding.etCustomAmount.doOnTextChanged { text, _, _, _ ->
             binding.tilCustomAmount.error = null
             val input = text?.toString()?.toDoubleOrNull()
@@ -127,6 +206,15 @@ class DonationFragment : Fragment() {
         }
         binding.etItemDescription.doOnTextChanged { _, _, _, _ ->
             binding.tilItemDescription.error = null
+        }
+        binding.etTaxIdNumber.doOnTextChanged { _, _, _, _ ->
+            binding.tilTaxIdNumber.error = null
+        }
+        binding.etTaxAddress.doOnTextChanged { _, _, _, _ ->
+            binding.tilTaxAddress.error = null
+        }
+        binding.etPickupAddress.doOnTextChanged { _, _, _, _ ->
+            binding.tilPickupAddress.error = null
         }
     }
 
@@ -146,35 +234,82 @@ class DonationFragment : Fragment() {
 
     private fun setupSubmitButton() {
         binding.btnSubmitDonation.setOnClickListener {
-            val sessionManager = SessionManager(requireContext())
-            val userEmail = sessionManager.fetchUserEmail()
+            if (!binding.cbPopiaConsent.isChecked) {
+                Toast.makeText(requireContext(), "Please accept the privacy information to proceed.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val isTaxCertRequested = binding.cbRequestTaxCertificate.isChecked
+            val isAnonymous = binding.cbAnonymous.isChecked
+
+            if (isTaxCertRequested) {
+                val taxId = binding.etTaxIdNumber.text.toString().trim()
+                val taxAddress = binding.etTaxAddress.text.toString().trim()
+                val donorName = binding.etDonorName.text.toString().trim()
+                val donorEmail = binding.etDonorEmail.text.toString().trim()
+
+                if (taxId.isEmpty()) {
+                    binding.tilTaxIdNumber.error = "Tax reference / ID required for Section 18A certificate"
+                    return@setOnClickListener
+                }
+                if (taxAddress.isEmpty()) {
+                    binding.tilTaxAddress.error = "Tax address required for Section 18A certificate"
+                    return@setOnClickListener
+                }
+                if (donorName.isEmpty() || isAnonymous) {
+                    binding.tilDonorName.error = "Your name is required for Section 18A certificate"
+                    return@setOnClickListener
+                }
+                if (donorEmail.isEmpty()) {
+                    binding.tilDonorEmail.error = "Email address is required for Section 18A certificate"
+                    return@setOnClickListener
+                }
+            }
 
             val request: DonationRequest
+            val donorName = binding.etDonorName.text.toString().trim().ifBlank { if (isAnonymous) "Anonymous Donor" else "Friend of Aurorah" }
+            val donorEmail = binding.etDonorEmail.text.toString().trim()
+            val phoneNum = binding.etPhone.text.toString().trim()
+            val countryCode = binding.actvCountryCode.text.toString().trim().takeLast(3).ifBlank { "+27" }
+            val message = binding.etMessage.text.toString().trim()
 
             if (isMonetaryTab) {
-                val category = binding.actvCategory.text.toString().ifBlank { monetaryCategories[0] }
+                val cause = binding.actvCategory.text.toString().ifBlank { monetaryCauses[0] }
 
                 if (isCustomAmountSelected && !validateCustomAmount()) {
                     Toast.makeText(requireContext(), getString(R.string.error_invalid_amount), Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
 
-                val paymentMethod = if (binding.rbCard.isChecked) "Credit Card" else "Direct Bank Transfer"
-
                 request = DonationRequest(
                     donationType = "Monetary",
-                    category = category,
+                    category = cause,
                     amount = selectedAmount,
-                    paymentMethod = paymentMethod,
-                    userEmail = userEmail
+                    donorName = donorName,
+                    userEmail = donorEmail,
+                    phone = phoneNum,
+                    countryCode = countryCode,
+                    message = message,
+                    isAnonymous = isAnonymous,
+                    requestTaxCertificate = isTaxCertRequested,
+                    taxIdNumber = if (isTaxCertRequested) binding.etTaxIdNumber.text.toString().trim() else null,
+                    taxAddress = if (isTaxCertRequested) binding.etTaxAddress.text.toString().trim() else null,
+                    popiaConsent = binding.cbPopiaConsent.isChecked
                 )
             } else {
                 val category = binding.actvInKindCategory.text.toString().ifBlank { inKindCategories[0] }
                 val itemDesc = binding.etItemDescription.text.toString().trim()
-                val pref = binding.actvInKindPreference.text.toString().ifBlank { preferences[0] }
+                val isPickup = binding.rbPickup.isChecked
+                val preference = if (isPickup) "Request Collection" else "Drop-off at Hub"
+                val pickupAddress = if (isPickup) binding.etPickupAddress.text.toString().trim() else null
 
                 if (itemDesc.isEmpty()) {
                     binding.tilItemDescription.error = getString(R.string.error_empty_field)
+                    return@setOnClickListener
+                }
+
+                if (isPickup && pickupAddress.isNullOrBlank()) {
+                    binding.tilPickupAddress.error = "Collection address required"
                     return@setOnClickListener
                 }
 
@@ -182,8 +317,15 @@ class DonationFragment : Fragment() {
                     donationType = "In-Kind",
                     category = category,
                     itemDescription = itemDesc,
-                    preference = pref,
-                    userEmail = userEmail
+                    preference = preference,
+                    pickupAddress = pickupAddress,
+                    donorName = donorName,
+                    userEmail = donorEmail,
+                    phone = phoneNum,
+                    countryCode = countryCode,
+                    message = message,
+                    isAnonymous = isAnonymous,
+                    popiaConsent = binding.cbPopiaConsent.isChecked
                 )
             }
 
@@ -201,12 +343,19 @@ class DonationFragment : Fragment() {
                 if (isAdded) {
                     if (response.success) {
                         val refMessage = if (response.transactionRef.isNotBlank()) {
-                            "\n\nTransaction Reference: ${response.transactionRef}"
+                            "\n\nPledge Reference: ${response.transactionRef}"
                         } else ""
+                        val taxCertNote = if (isTaxCertRequested) {
+                            "\n\nSection 18A Tax Certificate Request logged. A certificate will be issued to $donorEmail upon review."
+                        } else ""
+
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(if (isMonetaryTab) "Donation Successful" else "Pledge Received")
-                            .setMessage("${response.message}$refMessage")
-                            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                            .setTitle("Pledge Recorded")
+                            .setMessage("Thank you! Your pledge has been recorded.\n\nNote: Payments are not processed online. Aurorah CAN team will follow up on your offer.$taxCertNote$refMessage")
+                            .setPositiveButton("OK") { dialog, _ ->
+                                dialog.dismiss()
+                                resetForm()
+                            }
                             .show()
                     } else {
                         Toast.makeText(requireContext(), response.message, Toast.LENGTH_LONG).show()
@@ -214,6 +363,15 @@ class DonationFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun resetForm() {
+        binding.etItemDescription.setText("")
+        binding.etTaxIdNumber.setText("")
+        binding.etTaxAddress.setText("")
+        binding.etPickupAddress.setText("")
+        binding.etMessage.setText("")
+        binding.cbRequestTaxCertificate.isChecked = false
     }
 
     override fun onDestroyView() {
