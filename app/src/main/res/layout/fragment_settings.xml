@@ -244,9 +244,10 @@
             android:layout_marginTop="12dp"
             android:layout_marginBottom="24dp"
             android:text="@string/settings_sign_out"
+            android:textColor="@color/white"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:backgroundTint="@color/urgency_critical"
+            app:backgroundTint="@color/sign_out_bg"
             app:cornerRadius="8dp" />
 
     </LinearLayout>

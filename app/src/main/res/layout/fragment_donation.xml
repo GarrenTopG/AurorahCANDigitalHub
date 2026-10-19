@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -16,28 +17,58 @@
             android:id="@+id/tvDonationTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/donation_title"
+            android:text="Make a Donation Pledge"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="22sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDonationSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Record an intended monetary contribution or offer goods for local community work in Kuils River."
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="14sp" />
+
+        <!-- PLEDGE NOTICE CARD -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#FFF8E1"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeColor="#FFE082"
+            app:strokeWidth="1dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="This page records a donation pledge. Payments are not processed online. Your confirmation records your pledge or offer for our records."
+                android:textColor="#5D4037"
+                android:textSize="13sp"
+                android:lineSpacingExtra="2dp" />
+        </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tlDonationType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             app:tabIndicatorColor="?attr/colorPrimary"
             app:tabSelectedTextColor="?attr/colorPrimary">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tab_monetary" />
+                android:text="Monetary Pledge" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tab_inkind" />
+                android:text="In-Kind Goods" />
         </com.google.android.material.tabs.TabLayout>
 
         <!-- MONETARY CONTAINER -->
@@ -49,39 +80,13 @@
             android:visibility="visible">
 
             <TextView
-                android:id="@+id/tvCategoryLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/select_category"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilCategorySpinner"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:boxStrokeColor="@color/md_theme_primary">
-
-                <AutoCompleteTextView
-                    android:id="@+id/actvCategory"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/select_category"
-                    android:inputType="none" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
                 android:id="@+id/tvAmountLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/select_amount"
+                android:layout_marginTop="20dp"
+                android:text="Monetary Pledge Amount (ZAR)"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.chip.ChipGroup
@@ -99,19 +104,26 @@
                     android:text="R50" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chipR100"
+                    android:id="@+id/chipR200"
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="R100" />
+                    android:text="R200" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chipR250"
+                    android:id="@+id/chipR500"
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="R250" />
+                    android:text="R500" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipR1000"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="R1000" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipCustom"
@@ -127,7 +139,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:hint="@string/custom_amount_hint"
+                android:hint="Custom Amount (R)"
                 android:visibility="gone">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -138,39 +150,81 @@
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- SECTION 18A TAX CERTIFICATE CHECKBOX & FIELDS -->
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cbRequestTaxCertificate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Request a Section 18A tax certificate (monetary pledges only)"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:id="@+id/layoutTaxReceiptFields"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilTaxIdNumber"
+                    style="@style/Widget.Aurorah.TextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Tax Reference / ID Number *">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTaxIdNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilTaxAddress"
+                    style="@style/Widget.Aurorah.TextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Tax Address *">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTaxAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPostalAddress"
+                        android:maxLines="2" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
             <TextView
-                android:id="@+id/tvPaymentLabel"
+                android:id="@+id/tvCategoryLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/payment_method"
+                android:text="What Will Your Donation Support?"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <RadioGroup
-                android:id="@+id/rgPaymentMethod"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCategorySpinner"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                app:boxStrokeColor="@color/md_theme_primary">
 
-                <RadioButton
-                    android:id="@+id/rbCard"
+                <AutoCompleteTextView
+                    android:id="@+id/actvCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:padding="8dp"
-                    android:text="@string/payment_card"
-                    android:textSize="15sp" />
-
-                <RadioButton
-                    android:id="@+id/rbEft"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="@string/payment_eft"
-                    android:textSize="15sp" />
-            </RadioGroup>
+                    android:hint="Select Cause / Purpose"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
@@ -186,10 +240,10 @@
                 android:id="@+id/tvInKindCategoryLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/item_category_hint"
+                android:layout_marginTop="20dp"
+                android:text="Item Category *"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -204,7 +258,7 @@
                     android:id="@+id/actvInKindCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/item_category_hint"
+                    android:hint="Select Item Category"
                     android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -214,7 +268,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:hint="@string/item_description_hint">
+                android:hint="Item Description &amp; Estimated Quantities *">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etItemDescription"
@@ -225,43 +279,227 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/tvPreferenceLabel"
+                android:id="@+id/tvFulfillmentLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/preference_hint"
+                android:text="Fulfillment Method"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilInKindPreference"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            <RadioGroup
+                android:id="@+id/rgFulfillmentMethod"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:boxStrokeColor="@color/md_theme_primary">
+                android:layout_marginTop="8dp">
 
-                <AutoCompleteTextView
-                    android:id="@+id/actvInKindPreference"
+                <RadioButton
+                    android:id="@+id/rbDropoff"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/preference_hint"
-                    android:inputType="none" />
+                    android:checked="true"
+                    android:padding="8dp"
+                    android:text="I will drop off"
+                    android:textSize="15sp" />
+
+                <RadioButton
+                    android:id="@+id/rbPickup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Request collection"
+                    android:textSize="15sp" />
+            </RadioGroup>
+
+            <!-- DROPOFF INFO CARD -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardDropoffInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Drop-off Location:"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Aurorah NPC, 27 Lovebird Walk, Sunbird Park, Cape Town, 7580"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Hours: Mon–Fri 08:00–17:00; Sat 09:00–14:00"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- PICKUP ADDRESS INPUT -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPickupAddress"
+                style="@style/Widget.Aurorah.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="Collection Address *"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPickupAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPostalAddress"
+                    android:maxLines="2" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
+
+        <!-- CONTACT INFORMATION SECTION -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Your Information"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/cbAnonymous"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="I prefer to donate anonymously"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="14sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilDonorName"
+            style="@style/Widget.Aurorah.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Your Name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDonorName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilDonorEmail"
+            style="@style/Widget.Aurorah.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Email Address (Optional)">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDonorEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCountryCode"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                    android:id="@+id/actvCountryCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Code"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPhone"
+                style="@style/Widget.Aurorah.TextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:hint="Phone Number (Optional)">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilMessage"
+            style="@style/Widget.Aurorah.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Message (Optional)">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="2" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- POPIA CONSENT -->
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/cbPopiaConsent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:checked="true"
+            android:text="I have read the privacy information and agree that Aurorah NPC may use the details I provide to record and review this pledge or offer."
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="12sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSubmitDonation"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
-            android:text="@string/submit_donation"
+            android:text="Submit Donation Pledge"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:cornerRadius="8dp" />
+            app:cornerRadius="12dp" />
 
         <ProgressBar
             android:id="@+id/pbDonation"

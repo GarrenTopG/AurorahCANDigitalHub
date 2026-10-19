@@ -98,8 +98,18 @@ data class DonationRequest(
     @SerializedName(value = "amount") val amount: Double? = null,
     @SerializedName(value = "paymentMethod", alternate = ["payment_method"]) val paymentMethod: String? = null,
     @SerializedName(value = "itemDescription", alternate = ["item_description", "description"]) val itemDescription: String? = null,
-    @SerializedName(value = "preference", alternate = ["delivery_preference", "collection_preference"]) val preference: String? = null,
-    @SerializedName(value = "userEmail", alternate = ["user_email", "email"]) val userEmail: String
+    @SerializedName(value = "preference", alternate = ["delivery_preference", "collection_preference", "logistics_type"]) val preference: String? = null,
+    @SerializedName(value = "userEmail", alternate = ["user_email", "email"]) val userEmail: String? = null,
+    @SerializedName(value = "donorName", alternate = ["donor_name", "full_name"]) val donorName: String? = null,
+    @SerializedName(value = "phone", alternate = ["phone_number", "contact_phone"]) val phone: String? = null,
+    @SerializedName(value = "countryCode", alternate = ["country_code"]) val countryCode: String? = "+27",
+    @SerializedName(value = "message") val message: String? = null,
+    @SerializedName(value = "isAnonymous", alternate = ["is_anonymous", "anonymous"]) val isAnonymous: Boolean = false,
+    @SerializedName(value = "requestTaxCertificate", alternate = ["request_tax_certificate", "tax_certificate"]) val requestTaxCertificate: Boolean = false,
+    @SerializedName(value = "taxIdNumber", alternate = ["tax_id_number", "tax_id"]) val taxIdNumber: String? = null,
+    @SerializedName(value = "taxAddress", alternate = ["tax_address"]) val taxAddress: String? = null,
+    @SerializedName(value = "pickupAddress", alternate = ["pickup_address"]) val pickupAddress: String? = null,
+    @SerializedName(value = "popiaConsent", alternate = ["popia", "popia_consent"]) val popiaConsent: Boolean = true
 )
 
 data class DonationResponse(

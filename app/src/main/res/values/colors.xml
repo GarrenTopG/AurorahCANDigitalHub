@@ -3,6 +3,7 @@
     <!-- Brand Palette -->
     <color name="brand_primary">#D5105C</color>
     <color name="brand_accent">#943D56</color>
+    <color name="sign_out_bg">#943D56</color>
 
     <!-- Core Material Theme Tokens -->
     <color name="md_theme_primary">#D5105C</color>
