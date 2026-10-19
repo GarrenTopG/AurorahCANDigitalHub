@@ -68,4 +68,18 @@ class AuthInterceptorTest {
         val capturedRequest = chain.capturedRequest
         assertEquals(null, capturedRequest?.header("Authorization"))
     }
+
+    @Test
+    fun intercept_WithBlankToken_DoesNotAttachAuthorizationHeader() {
+        val authInterceptor = AuthInterceptor { "  " }
+
+        val originalRequest = Request.Builder()
+            .url("http://10.0.2.2:8000/api/needs")
+            .build()
+
+        val chain = FakeChain(originalRequest)
+        authInterceptor.intercept(chain)
+
+        assertEquals(null, chain.capturedRequest?.header("Authorization"))
+    }
 }
