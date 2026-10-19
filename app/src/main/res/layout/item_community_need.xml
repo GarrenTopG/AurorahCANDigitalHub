@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_badge_high"
-                android:textColor="@color/white"
+                android:textColor="@color/text_primary"
                 android:textSize="11sp"
                 android:textStyle="bold"
                 tools:text="HIGH" />
@@ -99,7 +99,7 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:backgroundTint="@color/primary_green"
+            app:backgroundTint="@color/md_theme_secondary"
             app:cornerRadius="8dp" />
 
     </LinearLayout>

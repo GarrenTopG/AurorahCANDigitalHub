@@ -2,19 +2,19 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.AurorahCANDigitalHub" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Color Palette -->
-        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryContainer">#DBEAFE</item>
-        <item name="colorOnPrimaryContainer">@color/primary_blue_dark</item>
+        <item name="colorPrimaryContainer">#FCE4EC</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_primary</item>
 
-        <item name="colorSecondary">@color/primary_green</item>
+        <item name="colorSecondary">@color/md_theme_secondary</item>
         <item name="colorOnSecondary">@color/white</item>
-        <item name="colorSecondaryContainer">#DCFCE7</item>
-        <item name="colorOnSecondaryContainer">@color/primary_green_dark</item>
+        <item name="colorSecondaryContainer">#F8E8EC</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_secondary</item>
 
-        <item name="android:colorBackground">@color/background_light</item>
-        <item name="colorSurface">@color/surface_card</item>
-        <item name="colorOnSurface">@color/text_main</item>
+        <item name="android:colorBackground">@color/md_theme_background</item>
+        <item name="colorSurface">@color/card_surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
         <item name="colorOnSurfaceVariant">@color/text_secondary</item>
 
         <item name="colorError">@color/error_red</item>
@@ -29,10 +29,11 @@
 
     <!-- Custom Outlined TextInputLayout Style -->
     <style name="Widget.Aurorah.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/primary_blue</item>
-        <item name="hintTextColor">@color/primary_blue</item>
+        <item name="boxStrokeColor">@color/md_theme_primary</item>
+        <item name="hintTextColor">@color/md_theme_primary</item>
         <item name="errorIconTint">@color/error_red</item>
         <item name="errorTextColor">@color/error_red</item>
+        <item name="errorEnabled">true</item>
         <item name="boxCornerRadiusTopStart">8dp</item>
         <item name="boxCornerRadiusTopEnd">8dp</item>
         <item name="boxCornerRadiusBottomStart">8dp</item>

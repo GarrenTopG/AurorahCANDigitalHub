@@ -35,14 +35,15 @@ class NeedsAdapter(
         fun bind(item: CommunityNeed) {
             val context = binding.root.context
             binding.tvNeedId.text = context.getString(R.string.need_id_format, item.needId)
-            binding.tvCategory.text = "[ ${item.category} ]"
-            binding.tvNeedTitle.text = item.title
-            binding.tvNeedDesc.text = item.description
-            binding.tvLocation.text = "📍 ${item.location}"
+            binding.tvCategory.text = "[ ${item.category ?: "General"} ]"
+            binding.tvNeedTitle.text = item.title ?: ""
+            binding.tvNeedDesc.text = item.description ?: ""
+            binding.tvLocation.text = "📍 ${item.location ?: ""}"
 
             // Urgency Badge setup
-            binding.tvUrgencyBadge.text = item.priority.uppercase()
-            val badgeDrawable = when (item.priority.lowercase()) {
+            val priority = (item.priority ?: "Low").lowercase()
+            binding.tvUrgencyBadge.text = priority.uppercase()
+            val badgeDrawable = when (priority) {
                 "critical" -> R.drawable.bg_badge_critical
                 "high" -> R.drawable.bg_badge_high
                 "medium" -> R.drawable.bg_badge_medium

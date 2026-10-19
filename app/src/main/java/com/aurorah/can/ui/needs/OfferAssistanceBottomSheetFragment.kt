@@ -5,8 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
-import com.aurorah.can.data.api.MockApiRepository
+import com.aurorah.can.data.api.ApiRepository
 import com.aurorah.can.data.local.SessionManager
 import com.aurorah.can.data.model.OfferAssistanceRequest
 import com.aurorah.can.databinding.BottomSheetOfferAssistanceBinding
@@ -18,7 +19,7 @@ class OfferAssistanceBottomSheetFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetOfferAssistanceBinding? = null
     private val binding get() = _binding!!
 
-    private val repository = MockApiRepository()
+    private val repository by lazy { ApiRepository(requireContext()) }
 
     private var needId: Int = 0
     private var needTitle: String = ""
@@ -59,6 +60,7 @@ class OfferAssistanceBottomSheetFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.tvNeedTitleInSheet.text = needTitle
+        setupInputValidation()
 
         binding.btnSubmitOffer.setOnClickListener {
             val skill = binding.etSkill.text.toString().trim()
@@ -77,7 +79,7 @@ class OfferAssistanceBottomSheetFragment : BottomSheetDialogFragment() {
             binding.pbOffer.visibility = View.VISIBLE
             binding.btnSubmitOffer.isEnabled = false
 
-            lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch {
                 val response = repository.offerAssistance(
                     OfferAssistanceRequest(
                         needId = needId,
@@ -86,12 +88,25 @@ class OfferAssistanceBottomSheetFragment : BottomSheetDialogFragment() {
                         notes = notes
                     )
                 )
-                binding.pbOffer.visibility = View.GONE
-                binding.btnSubmitOffer.isEnabled = true
+                _binding?.let { b ->
+                    b.pbOffer.visibility = View.GONE
+                    b.btnSubmitOffer.isEnabled = true
+                }
 
-                Toast.makeText(requireContext(), response.message, Toast.LENGTH_LONG).show()
-                dismiss()
+                if (isAdded) {
+                    Toast.makeText(requireContext(), response.message, Toast.LENGTH_LONG).show()
+                    dismiss()
+                }
             }
+        }
+    }
+
+    private fun setupInputValidation() {
+        binding.etSkill.doOnTextChanged { _, _, _, _ ->
+            binding.tilSkill.error = null
+        }
+        binding.etNotes.doOnTextChanged { _, _, _, _ ->
+            binding.tilNotes.error = null
         }
     }
 

@@ -12,10 +12,14 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_needs"
-        android:name="com.aurorah.can.ui.needs.NeedsFragment"
-        android:label="@string/nav_needs"
-        tools:layout="@layout/fragment_needs" />
+        android:id="@+id/navigation_get_help"
+        android:name="com.aurorah.can.ui.gethelp.GetHelpFragment"
+        android:label="@string/nav_get_help" />
+
+    <fragment
+        android:id="@+id/navigation_volunteer"
+        android:name="com.aurorah.can.ui.volunteer.VolunteerFragment"
+        android:label="@string/nav_volunteer" />
 
     <fragment
         android:id="@+id/navigation_donation"

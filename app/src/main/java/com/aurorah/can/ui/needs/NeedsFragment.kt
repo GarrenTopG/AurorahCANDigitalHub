@@ -7,9 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.aurorah.can.data.api.MockApiRepository
+import com.aurorah.can.data.api.ApiRepository
 import com.aurorah.can.data.model.CommunityNeed
 import com.aurorah.can.databinding.FragmentNeedsBinding
+import com.aurorah.can.ui.assistance.RequestAssistanceBottomSheetFragment
 import kotlinx.coroutines.launch
 
 class NeedsFragment : Fragment() {
@@ -17,7 +18,7 @@ class NeedsFragment : Fragment() {
     private var _binding: FragmentNeedsBinding? = null
     private val binding get() = _binding!!
 
-    private val repository = MockApiRepository()
+    private val repository by lazy { ApiRepository(requireContext()) }
     private var allNeedsList: List<CommunityNeed> = emptyList()
 
     private val needsAdapter = NeedsAdapter { selectedNeed ->
@@ -43,6 +44,11 @@ class NeedsFragment : Fragment() {
         binding.rvNeeds.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = needsAdapter
+        }
+
+        binding.btnRequestAssistanceNeeds.setOnClickListener {
+            val bottomSheet = RequestAssistanceBottomSheetFragment()
+            bottomSheet.show(childFragmentManager, "RequestAssistanceBottomSheet")
         }
 
         setupFilterChips()
@@ -77,10 +83,12 @@ class NeedsFragment : Fragment() {
 
     private fun loadNeedsData() {
         binding.pbNeeds.visibility = View.VISIBLE
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             allNeedsList = repository.getNeeds()
-            binding.pbNeeds.visibility = View.GONE
-            needsAdapter.updateData(allNeedsList)
+            _binding?.let { b ->
+                b.pbNeeds.visibility = View.GONE
+                needsAdapter.updateData(allNeedsList)
+            }
         }
     }
 

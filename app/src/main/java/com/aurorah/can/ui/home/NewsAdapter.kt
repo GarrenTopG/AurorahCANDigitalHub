@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aurorah.can.data.model.NewsItem
 import com.aurorah.can.databinding.ItemNewsBinding
 
-class NewsAdapter(private var newsList: List<NewsItem> = emptyList()) :
-    RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
+class NewsAdapter(
+    private var newsList: List<NewsItem> = emptyList(),
+    private val onItemClick: (NewsItem) -> Unit = {}
+) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
     fun updateData(newList: List<NewsItem>) {
         newsList = newList
@@ -20,7 +22,7 @@ class NewsAdapter(private var newsList: List<NewsItem> = emptyList()) :
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        holder.bind(newsList[position])
+        holder.bind(newsList[position], onItemClick)
     }
 
     override fun getItemCount(): Int = newsList.size
@@ -28,11 +30,14 @@ class NewsAdapter(private var newsList: List<NewsItem> = emptyList()) :
     class NewsViewHolder(private val binding: ItemNewsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: NewsItem) {
+        fun bind(item: NewsItem, onItemClick: (NewsItem) -> Unit) {
             binding.tvNewsTitle.text = item.title
             binding.tvNewsSummary.text = item.summary
             binding.tvNewsTimestamp.text = item.timestamp
-            binding.tvNewsCategory.text = item.category
+            binding.tvNewsCategory.text = item.category.ifBlank { "General" }
+            binding.root.setOnClickListener {
+                onItemClick(item)
+            }
         }
     }
 }

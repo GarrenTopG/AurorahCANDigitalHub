@@ -72,7 +72,7 @@
         android:text="@string/submit_offer"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:backgroundTint="@color/primary_green"
+        app:backgroundTint="@color/md_theme_secondary"
         app:cornerRadius="8dp" />
 
     <ProgressBar
