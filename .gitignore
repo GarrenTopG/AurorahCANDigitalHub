@@ -39,6 +39,7 @@ local.properties
 *.keystore
 *.pepk
 secrets.properties
+keystore.properties
 
 # OS generated files
 .DS_Store

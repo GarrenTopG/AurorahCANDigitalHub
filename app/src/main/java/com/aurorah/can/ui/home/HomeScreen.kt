@@ -169,20 +169,32 @@ fun AurorahHomeScreen(
                         NewsItem(
                             id = 1,
                             title = "A place for young readers in Sunbird Park",
-                            summary = "Aurorah CAN established a community mini-library in July 2022 as part of Nelson Mandela Day.",
-                            body = "Aurorah CAN established a community mini-library in July 2022 as part of Nelson Mandela Day to promote literacy and provide a safe learning haven for children in Sunbird Park.",
+                            summary = "Aurorah CAN established a community mini-library in July 2022 as part of Nelson Mandela Day to promote literacy and provide a safe learning haven.",
+                            body = "Aurorah CAN established a community mini-library in Sunbird Park in July 2022 as part of our Nelson Mandela Day initiative.\n\nThe mini-library provides local children and youth with open access to storybooks, educational resource materials, and a quiet, safe learning environment after school hours.\n\nThanks to generous book donations from local residents and community partners, the library collection now holds over 600 titles across multiple languages including English, Afrikaans, and isiXhosa.\n\nVolunteers host weekly reading circles and literacy sessions every Tuesday and Thursday afternoon, fostering a passion for lifelong learning in Kuils River and surrounding neighborhoods.",
                             category = "Impact Update",
                             timestamp = "July 2022",
-                            author = "Aurorah CAN Team"
+                            author = "Aurorah CAN Team",
+                            imageUrl = "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800&q=80"
                         ),
                         NewsItem(
                             id = 2,
                             title = "Winter Relief Drive in Kuils River & Surrounds",
-                            summary = "Providing blankets, warm clothing and warm soup packages to 150+ families.",
-                            body = "Our winter outreach reached vulnerable households in Sunbird Park and surrounding informal areas during extreme cold weather fronts.",
+                            summary = "Providing blankets, warm clothing and warm soup packages to 150+ families across local sectors.",
+                            body = "As winter weather fronts hit the Western Cape, Aurorah CAN launched its annual Winter Warmth Drive to assist vulnerable households across Sunbird Park, Happy Valley, and informal settlements nearby.\n\nThrough rapid community coordination, our teams distributed thermal blankets, winter jackets, rainproof boots, and emergency food parcels to more than 150 families.\n\nHot soup kitchens were also mobilized over three consecutive weekends, serving over 800 hot meals to elderly residents and young children.\n\nWe extend our deepest gratitude to all donors, driver volunteers, and neighborhood networks who made this rapid response possible.",
                             category = "Community Outreaches",
                             timestamp = "Recent Outreach",
-                            author = "Aurorah CAN Team"
+                            author = "Aurorah CAN Team",
+                            imageUrl = "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=800&q=80"
+                        ),
+                        NewsItem(
+                            id = 3,
+                            title = "Digital Hub Skills & Youth Training Workshop Launch",
+                            summary = "Empowering local youth with computer literacy, digital CV preparation, and job application support.",
+                            body = "Aurorah CAN is thrilled to announce the rollout of our new Community Digital Hub training sessions designed to empower local youth with digital literacy, CV creation, and online job application skills.\n\nThe initiative provides free access to internet-connected workstations, guided tutorials on mobile and desktop applications, and one-on-one mentorship for job seekers and aspiring entrepreneurs.\n\nWorkshops run weekly at the community hall. Registration is open to all community members via the Aurorah CAN Digital Hub app or in person.",
+                            category = "Announcements",
+                            timestamp = "Active Program",
+                            author = "Aurorah CAN Team",
+                            imageUrl = "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80"
                         )
                     )
                 }

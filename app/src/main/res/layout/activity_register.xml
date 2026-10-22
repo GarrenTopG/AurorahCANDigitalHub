@@ -4,36 +4,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="?android:attr/colorBackground">
+    android:background="@drawable/bg_screen_gradient">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="24dp">
 
-        <ImageView
-            android:id="@+id/imgLogoReg"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardLogoReg"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_marginTop="16dp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_logo"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="1.5dp"
+            app:strokeColor="@color/logo_border_stroke"
+            app:cardBackgroundColor="?attr/colorSurface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgLogoReg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_logo"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.App.RoundedLogo" />
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/tvRegTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:text="@string/register_title"
             android:textColor="?attr/colorPrimary"
             android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imgLogoReg" />
+            app:layout_constraintTop_toBottomOf="@id/cardLogoReg" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardErrorMessage"

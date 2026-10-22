@@ -4,9 +4,34 @@
 # For more details, see
 #   https://d.android.com/r/tools/r8/keep-rules
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Preserve generic type signatures and inner class metadata for Retrofit, Gson, and Kotlin Coroutines
+-keepattributes Signature, InnerClasses, EnclosingMethod
+-keepattributes RuntimeVisibleAnnotations, RuntimeInvisibleAnnotations
+-keepattributes RuntimeVisibleParameterAnnotations, RuntimeInvisibleParameterAnnotations
+-keepattributes AnnotationDefault
+
+# Keep Data Models and their fields for Gson serialization/deserialization
+-keep class com.aurorah.can.data.model.** { *; }
+-keepclassmembers class com.aurorah.can.data.model.** { *; }
+
+# Keep Retrofit API interfaces and their methods
+-keep interface com.aurorah.can.data.api.** { *; }
+-keepclassmembers interface com.aurorah.can.data.api.** { *; }
+
+# Gson rules
+-dontwarn sun.misc.Unsafe
+-keep class com.google.gson.** { *; }
+-keepclassmembers class com.google.gson.** { *; }
+
+# Retrofit rules
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+
+# OkHttp rules
+-dontwarn okhttp3.**
+
+# Kotlin Coroutines Continuation signatures
+-keepclassmembers class kotlin.coroutines.Continuation { *; }

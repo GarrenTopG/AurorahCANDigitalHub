@@ -1,6 +1,7 @@
 package com.aurorah.can
 
 import com.aurorah.can.data.model.*
+import com.aurorah.can.util.NewsUtils
 import com.google.gson.Gson
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -141,7 +142,8 @@ class ModelsSerializationTest {
                 "content": "Full detailed report on community health initiatives across sectors.",
                 "author": "Dr. Sarah Jenkins",
                 "timestamp": "2026-03-31",
-                "category": "Healthcare"
+                "category": "Healthcare",
+                "image_url": "https://example.com/health.jpg"
             }
         """.trimIndent()
 
@@ -149,6 +151,39 @@ class ModelsSerializationTest {
         assertEquals("Community Health Drive", news.title)
         assertEquals("Full detailed report on community health initiatives across sectors.", news.body)
         assertEquals("Dr. Sarah Jenkins", news.author)
+        assertEquals("https://example.com/health.jpg", news.imageUrl)
+    }
+
+    @Test
+    fun newsItem_deserializesAzureSqlDbVariations() {
+        val azureSqlJson = """
+            {
+                "news_id": 12,
+                "headline": "Celebrating Mandela Day and Four Years of the Community Hotspot Library",
+                "description": "Aurorah marked Mandela Day and four years of its Community Hotspot Library with a day of service, learning and connection.",
+                "details": "<p>Aurorah marked Mandela Day and four years of its Community Hotspot Library with a day of service, learning and connection.</p><p>Volunteers and youth gathered to celebrate this milestone.</p>",
+                "author_name": "Aurorah CAN Team",
+                "created_at": "2026-10-18T08:22:22.497000",
+                "cover_image": "images/mandela-day.jpg"
+            }
+        """.trimIndent()
+
+        val news = gson.fromJson(azureSqlJson, NewsItem::class.java)
+        assertEquals("Celebrating Mandela Day and Four Years of the Community Hotspot Library", news.title)
+        assertEquals("Aurorah marked Mandela Day and four years of its Community Hotspot Library with a day of service, learning and connection.", news.summary)
+        assertTrue(news.body.contains("Volunteers and youth gathered"))
+        assertEquals("Aurorah CAN Team", news.author)
+        assertEquals("2026-10-18T08:22:22.497000", news.timestamp)
+        assertEquals("images/mandela-day.jpg", news.imageUrl)
+
+        val formattedDate = NewsUtils.formatNewsDate(news.timestamp)
+        assertEquals("18 Oct 2026", formattedDate)
+
+        val resolvedImage = NewsUtils.resolveImageUrl(news.imageUrl)
+        assertEquals("https://aurorah-web-hub.onrender.com/images/mandela-day.jpg", resolvedImage)
+
+        val parsedBody = NewsUtils.parseHtmlContent(news.body).toString()
+        assertTrue(parsedBody.contains("Aurorah marked Mandela Day"))
     }
 
     @Test

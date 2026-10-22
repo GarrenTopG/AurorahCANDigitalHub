@@ -148,6 +148,15 @@
     <string name="read_update">Read update  →</string>
     <string name="read_full_story">Read full story  →</string>
 
+    <!-- Privacy & Account Management -->
+    <string name="news_article_image">News Article Image</string>
+    <string name="privacy_policy_title">Privacy Policy &amp; Data Rights</string>
+    <string name="privacy_policy_url">https://garrentopg.github.io/aurorahcan-privacy/</string>
+    <string name="delete_account">Delete Account &amp; Personal Data</string>
+    <string name="delete_account_confirm_title">Delete Account &amp; Data?</string>
+    <string name="delete_account_confirm_message">Are you sure you want to permanently delete your Aurorah CAN account? This will permanently erase your personal profile, contact information, donation records, and volunteer history from our active systems. This action cannot be undone.</string>
+    <string name="delete_account_success">Your account and associated personal data have been deleted.</string>
+
     <!-- Default Web Client ID for Google Sign In placeholder -->
     <string name="default_web_client_id" translatable="false">YOUR_GOOGLE_WEB_CLIENT_ID.apps.googleusercontent.com</string>
 </resources>

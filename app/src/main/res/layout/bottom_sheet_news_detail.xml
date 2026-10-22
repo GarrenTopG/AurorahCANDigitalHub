@@ -20,6 +20,25 @@
             android:layout_marginBottom="16dp"
             android:background="@color/gray_300" />
 
+        <!-- ARTICLE IMAGE CONTAINER -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardNewsImageContainer"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="0dp">
+
+            <ImageView
+                android:id="@+id/ivNewsDetailImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/news_article_image"
+                tools:src="@drawable/ic_news_placeholder" />
+        </com.google.android.material.card.MaterialCardView>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -99,7 +118,7 @@
             android:id="@+id/tvNewsDetailBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="4dp"
+            android:lineSpacingExtra="6dp"
             android:textColor="?attr/colorOnSurface"
             android:textSize="15sp"
             tools:text="Detailed content of the news article goes here..." />
