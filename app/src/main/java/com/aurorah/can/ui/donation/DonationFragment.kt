@@ -217,14 +217,14 @@ class DonationFragment : Fragment() {
     private fun validateCustomAmount(): Boolean {
         if (!isCustomAmountSelected) return true
 
-        val input = binding.etCustomAmount.text.toString().toDoubleOrNull()
-        return if (input == null || input <= 0.0) {
+        val amount = binding.etCustomAmount.text.toString()
+        if (!DonationInputValidator.isValidCustomAmount(amount)) {
             binding.tilCustomAmount.error = getString(R.string.error_invalid_amount)
-            false
+            return false
         } else {
             binding.tilCustomAmount.error = null
-            selectedAmount = input
-            true
+            selectedAmount = amount.trim().toDouble()
+            return true
         }
     }
 
@@ -299,12 +299,12 @@ class DonationFragment : Fragment() {
                 val preference = if (isPickup) "Request Collection" else "Drop-off at Hub"
                 val pickupAddress = if (isPickup) binding.etPickupAddress.text.toString().trim() else null
 
-                if (itemDesc.isEmpty()) {
+                if (!DonationInputValidator.isValidItemDescription(itemDesc)) {
                     binding.tilItemDescription.error = getString(R.string.error_empty_field)
                     return@setOnClickListener
                 }
 
-                if (isPickup && pickupAddress.isNullOrBlank()) {
+                if (!DonationInputValidator.isValidPickupAddress(isPickup, pickupAddress)) {
                     binding.tilPickupAddress.error = "Collection address required"
                     return@setOnClickListener
                 }

@@ -57,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aurorah.can.data.api.ApiRepository
 import com.aurorah.can.data.model.DonationRequest
+import com.aurorah.can.ui.donation.DonationInputValidator
 import com.aurorah.can.ui.theme.BrandPale
 import com.aurorah.can.ui.theme.BrandPrimary
 import com.aurorah.can.ui.theme.TextInk
@@ -445,13 +446,12 @@ fun DonateSubTab(
                         onClick = {
                             var valid = true
                             if (isMonetary && isCustomSelected) {
-                                val parsed = customAmountText.toDoubleOrNull()
-                                if (parsed == null || parsed <= 0.0) {
+                                if (!DonationInputValidator.isValidCustomAmount(customAmountText)) {
                                     amountError = "Enter a valid donation amount"
                                     valid = false
                                 }
                             }
-                            if (!isMonetary && itemDescription.isBlank()) {
+                            if (!isMonetary && !DonationInputValidator.isValidItemDescription(itemDescription)) {
                                 itemDescError = "Please describe the items you wish to donate"
                                 valid = false
                             }

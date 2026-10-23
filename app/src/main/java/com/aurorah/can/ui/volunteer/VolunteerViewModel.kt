@@ -33,6 +33,31 @@ data class VolunteerUiState(
     val serverError: String? = null
 )
 
+internal object VolunteerFormValidator {
+    fun validate(state: VolunteerUiState): VolunteerUiState {
+        val phoneDigits = state.phone.filter { it.isDigit() }
+        return state.copy(
+            firstNameError = if (state.firstName.isBlank()) "First name is required" else null,
+            lastNameError = if (state.lastName.isBlank()) "Last name is required" else null,
+            phoneError = when {
+                state.phone.isBlank() -> "Phone number is required"
+                phoneDigits.length < 7 -> "Please enter a valid phone number"
+                else -> null
+            },
+            locationError = if (state.location.isBlank()) "Location/Sub-area is required" else null,
+            skillsError = if (state.skills.isBlank()) "Please enter at least one skill" else null,
+            daysError = if (state.selectedDays.isEmpty()) "Please select at least one day" else null,
+            popiaError = if (!state.popiaConsent) "You must agree to the POPIA consent to submit" else null
+        )
+    }
+
+    fun hasErrors(state: VolunteerUiState): Boolean =
+        state.firstNameError != null || state.lastNameError != null ||
+            state.phoneError != null || state.locationError != null ||
+            state.skillsError != null || state.daysError != null ||
+            state.popiaError != null
+}
+
 class VolunteerViewModel(
     application: Application,
     private val repository: ApiRepository = ApiRepository(application)
@@ -76,38 +101,9 @@ class VolunteerViewModel(
 
     fun submitApplication() {
         val state = _uiState.value
-        var hasError = false
-
-        val firstNameErr = if (state.firstName.isBlank()) "First name is required" else null
-        val lastNameErr = if (state.lastName.isBlank()) "Last name is required" else null
-        val phoneDigits = state.phone.filter { it.isDigit() }
-        val phoneErr = when {
-            state.phone.isBlank() -> "Phone number is required"
-            phoneDigits.length < 7 -> "Please enter a valid phone number"
-            else -> null
-        }
-        val locationErr = if (state.location.isBlank()) "Location/Sub-area is required" else null
-        val skillsErr = if (state.skills.isBlank()) "Please enter at least one skill" else null
-        val daysErr = if (state.selectedDays.isEmpty()) "Please select at least one day" else null
-        val popiaErr = if (!state.popiaConsent) "You must agree to the POPIA consent to submit" else null
-
-        if (firstNameErr != null || lastNameErr != null || phoneErr != null ||
-            locationErr != null || skillsErr != null || daysErr != null || popiaErr != null) {
-            hasError = true
-        }
-
-        if (hasError) {
-            _uiState.update {
-                it.copy(
-                    firstNameError = firstNameErr,
-                    lastNameError = lastNameErr,
-                    phoneError = phoneErr,
-                    locationError = locationErr,
-                    skillsError = skillsErr,
-                    daysError = daysErr,
-                    popiaError = popiaErr
-                )
-            }
+        val validatedState = VolunteerFormValidator.validate(state)
+        if (VolunteerFormValidator.hasErrors(validatedState)) {
+            _uiState.update { VolunteerFormValidator.validate(it) }
             return
         }
 

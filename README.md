@@ -1,4 +1,4 @@
-# Aurorah CAN Digital Hub 🌟
+# 🌍 Aurorah CAN Digital Hub
 
 ![App Banner](app/src/main/ic_launcher-playstore.png)
 
@@ -99,6 +99,53 @@ The user interface was crafted following **Google Material Design 3 (M3)** guide
 ### 2. Software Architecture & Design Patterns
 The application follows modern Android best practices utilizing the **MVVM (Model-View-ViewModel)** pattern with the **Repository Pattern** for unidirectional data flow.
 
+### Internal staff
+
+Staff accounts are provisioned by an operator rather than through public registration.
+
+| Staff role     | Access scope                                                                   |
+| -------------- | ------------------------------------------------------------------------------ |
+| Administrator  | Operational workspaces, staff management, and audit records                    |
+| Case Worker    | Beneficiary requests, community needs, and volunteer scheduling                |
+| Finance        | Donation verification, allocations, financial summaries, and permitted reports |
+| Content Editor | News and announcements                                                         |
+| Read-Only      | Aggregated operational summaries without individual-record editing             |
+
+Permissions are enforced on the server for dashboard data, mutations, and exports. The Read-Only role uses aggregated data rather than returning individual beneficiary contact details or individual donation and volunteer records.
+
+---
+
+## 🏗️ System Architecture
+
+The system follows a three-layer architecture, separating the user interface, application logic, and data persistence.
+
+```mermaid
+flowchart TD
+    A["Community Members and Staff"]
+    B["Web Browser"]
+    C["Android Application"]
+    D["Presentation Layer<br/>HTML, CSS, JavaScript, Jinja2"]
+    E["FastAPI Application"]
+    F["Authentication and Authorization"]
+    G["Business Logic and Validation"]
+    H["REST API"]
+    I["Database Access Layer"]
+    J[("SQLite")]
+    K[("Azure SQL Server")]
+    L["PDF and CSV Reporting"]
+
+    A --> B
+    A --> C
+    B --> D
+    D --> E
+    C --> H
+    H --> E
+    E --> F
+    E --> G
+    G --> I
+    G --> L
+    I --> J
+    I --> K
 ```
 [ UI Layer (Compose / ViewBinding) ]
                │
@@ -318,6 +365,10 @@ erDiagram
         datetime DonationDate
     }
 ```
+
+Additional modules handle staff account administration, audit logging, retention, and other supporting workflows.
+
+The SQLite database is generated or initialised by the application when required. If your repository tracks the database file, make sure no real beneficiary, donor, or staff information is committed to version control.
 
 ---
 
