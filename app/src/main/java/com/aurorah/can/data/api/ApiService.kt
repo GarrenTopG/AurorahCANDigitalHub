@@ -3,6 +3,7 @@ package com.aurorah.can.data.api
 import com.aurorah.can.data.model.*
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -28,6 +29,9 @@ interface ApiService {
 
     @POST("api/auth/logout")
     suspend fun logout(): Response<ApiResponse>
+
+    @DELETE("api/auth/account")
+    suspend fun deleteAccount(): Response<ApiResponse>
 
     @GET("api/news")
     suspend fun getNews(): Response<List<NewsItem>>

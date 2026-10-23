@@ -148,4 +148,13 @@
     <string name="tab_volunteer">Zinikele</string>
     <string name="read_update">Funda iindaba  →</string>
     <string name="read_full_story">Funda ibali ngokugqibeleleyo  →</string>
+
+    <!-- Privacy & Account Management -->
+    <string name="news_article_image">Umfanekiso Weendaba</string>
+    <string name="privacy_policy_title">Ipolisi Yefihlo ne-POPIA</string>
+    <string name="privacy_policy_url">https://garrentopg.github.io/aurorahcan-privacy/</string>
+    <string name="delete_account">Cima I-akhawunti Neenkcukacha</string>
+    <string name="delete_account_confirm_title">Cima I-akhawunti?</string>
+    <string name="delete_account_confirm_message">Uqinisekile ufuna ukucima i-akhawunti yakho ye-Aurorah CAN ngokusisigxina? Oku kuya kucima iinkcukacha zakho neerekhodi zakho.</string>
+    <string name="delete_account_success">I-akhawunti yakho neenkcukacha zakho zicimile.</string>
 </resources>

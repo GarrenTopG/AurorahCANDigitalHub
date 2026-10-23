@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
+        binding.bottomNavigation.itemIconTintList = null
         binding.bottomNavigation.setupWithNavController(navController)
 
         // Custom transition animations and clean backstack handling for bottom navigation

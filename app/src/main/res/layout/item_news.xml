@@ -16,56 +16,72 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivNewsImage"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/news_article_image"
+            android:visibility="gone"
+            tools:src="@drawable/ic_news_placeholder"
+            tools:visibility="visible" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvNewsCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_badge_low"
+                    android:textColor="@color/text_primary"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    tools:text="Campaign" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/tvNewsTimestamp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textSize="12sp"
+                    tools:text="2 hours ago" />
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/tvNewsCategory"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvNewsTitle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_badge_low"
-                android:textColor="@color/text_primary"
-                android:textSize="11sp"
+                android:layout_marginTop="10dp"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                tools:text="Campaign" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
+                tools:text="Winter Support Campaign Launch" />
 
             <TextView
-                android:id="@+id/tvNewsTimestamp"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvNewsSummary"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="12sp"
-                tools:text="2 hours ago" />
+                android:textSize="14sp"
+                tools:text="Collecting thermal blankets, warm coats, and winter boots for displaced families in local sectors." />
+
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvNewsTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            tools:text="Winter Support Campaign Launch" />
-
-        <TextView
-            android:id="@+id/tvNewsSummary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="14sp"
-            tools:text="Collecting thermal blankets, warm coats, and winter boots for displaced families in local sectors." />
-
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

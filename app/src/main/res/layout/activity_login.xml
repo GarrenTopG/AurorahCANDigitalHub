@@ -5,36 +5,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="?android:attr/colorBackground">
+    android:background="@drawable/bg_screen_gradient">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="24dp">
 
-        <ImageView
-            android:id="@+id/imgLogo"
-            android:layout_width="88dp"
-            android:layout_height="88dp"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardLogo"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
             android:layout_marginTop="32dp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_logo"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="6dp"
+            app:strokeWidth="1.5dp"
+            app:strokeColor="@color/logo_border_stroke"
+            app:cardBackgroundColor="?attr/colorSurface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="12dp"
+                android:scaleType="fitCenter"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_logo"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.App.RoundedLogo" />
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/tvAppName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:text="@string/app_name"
             android:textColor="?attr/colorPrimary"
             android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imgLogo" />
+            app:layout_constraintTop_toBottomOf="@id/cardLogo" />
 
         <TextView
             android:id="@+id/tvSlogan"
@@ -171,37 +185,6 @@
             app:layout_constraintTop_toTopOf="@id/btnLogin" />
 
         <TextView
-            android:id="@+id/tvDivider"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="─────  OR  ─────"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnLogin" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSsoGoogle"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/sso_google_button"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="15sp"
-            app:strokeColor="@color/md_theme_primary"
-            app:cornerRadius="8dp"
-            app:icon="@drawable/ic_google"
-            app:iconGravity="textStart"
-            app:iconPadding="12dp"
-            app:iconTint="@null"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvDivider" />
-
-        <TextView
             android:id="@+id/tvRegisterPrompt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -217,7 +200,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnSsoGoogle" />
+            app:layout_constraintTop_toBottomOf="@id/btnLogin" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -24,6 +24,13 @@
     <color name="text_primary">#28252A</color>
     <color name="text_secondary">#625D62</color>
 
+    <!-- Smooth Gradient Tokens -->
+    <color name="bg_gradient_start_light">#FDF0F4</color>
+    <color name="bg_gradient_end_light">#FAF8F9</color>
+    <color name="bg_gradient_start_dark">#2C1A22</color>
+    <color name="bg_gradient_end_dark">#1A1618</color>
+    <color name="logo_border_stroke">#20D5105C</color>
+
     <!-- Contextual UI Colors -->
     <color name="surface_card">#FFFFFF</color>
     <color name="background_light">#FAF8F9</color>

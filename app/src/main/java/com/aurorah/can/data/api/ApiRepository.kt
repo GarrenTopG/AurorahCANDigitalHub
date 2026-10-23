@@ -4,7 +4,11 @@ import android.content.Context
 import com.aurorah.can.data.local.SessionManager
 import com.aurorah.can.data.model.*
 import com.google.gson.Gson
+import com.google.gson.JsonParser
 import retrofit2.Response
+import java.io.InterruptedIOException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 class ApiRepository(private val apiService: ApiService) {
 
@@ -27,7 +31,7 @@ class ApiRepository(private val apiService: ApiService) {
         } catch (e: Exception) {
             AuthResponse(
                 success = false,
-                message = e.localizedMessage ?: "Network connection error"
+                message = resolveNetworkErrorMessage(e)
             )
         }
     }
@@ -46,7 +50,7 @@ class ApiRepository(private val apiService: ApiService) {
         } catch (e: Exception) {
             AuthResponse(
                 success = false,
-                message = e.localizedMessage ?: "Network connection error"
+                message = resolveNetworkErrorMessage(e)
             )
         }
     }
@@ -65,7 +69,7 @@ class ApiRepository(private val apiService: ApiService) {
         } catch (e: Exception) {
             AuthResponse(
                 success = false,
-                message = e.localizedMessage ?: "Network connection error"
+                message = resolveNetworkErrorMessage(e)
             )
         }
     }
@@ -84,7 +88,7 @@ class ApiRepository(private val apiService: ApiService) {
         } catch (e: Exception) {
             ApiResponse(
                 success = false,
-                message = e.localizedMessage ?: "Network connection error"
+                message = resolveNetworkErrorMessage(e)
             )
         }
     }
@@ -129,7 +133,7 @@ class ApiRepository(private val apiService: ApiService) {
         } catch (e: Exception) {
             ApiResponse(
                 success = false,
-                message = e.localizedMessage ?: "Network connection error"
+                message = resolveNetworkErrorMessage(e)
             )
         }
     }
@@ -148,7 +152,7 @@ class ApiRepository(private val apiService: ApiService) {
         } catch (e: Exception) {
             ApiResponse(
                 success = false,
-                message = e.localizedMessage ?: "Network connection error"
+                message = resolveNetworkErrorMessage(e)
             )
         }
     }
@@ -167,7 +171,7 @@ class ApiRepository(private val apiService: ApiService) {
         } catch (e: Exception) {
             AuthResponse(
                 success = false,
-                message = e.localizedMessage ?: "Network connection error"
+                message = resolveNetworkErrorMessage(e)
             )
         }
     }
@@ -186,7 +190,7 @@ class ApiRepository(private val apiService: ApiService) {
         } catch (e: Exception) {
             AuthResponse(
                 success = false,
-                message = e.localizedMessage ?: "Network connection error"
+                message = resolveNetworkErrorMessage(e)
             )
         }
     }
@@ -207,6 +211,25 @@ class ApiRepository(private val apiService: ApiService) {
         }
     }
 
+    suspend fun deleteAccount(): ApiResponse {
+        return try {
+            val response = apiService.deleteAccount()
+            if (response.isSuccessful && response.body() != null) {
+                response.body()!!
+            } else {
+                parseErrorResponse(response) ?: ApiResponse(
+                    success = false,
+                    message = "Account deletion failed (${response.code()})"
+                )
+            }
+        } catch (e: Exception) {
+            ApiResponse(
+                success = false,
+                message = resolveNetworkErrorMessage(e)
+            )
+        }
+    }
+
     suspend fun submitVolunteer(request: VolunteerRequest): ApiResponse {
         return try {
             val response = apiService.submitVolunteer(request)
@@ -221,7 +244,7 @@ class ApiRepository(private val apiService: ApiService) {
         } catch (e: Exception) {
             ApiResponse(
                 success = false,
-                message = e.localizedMessage ?: "Network connection error"
+                message = resolveNetworkErrorMessage(e)
             )
         }
     }
@@ -242,7 +265,7 @@ class ApiRepository(private val apiService: ApiService) {
             DonationResponse(
                 success = false,
                 transactionRef = "",
-                message = e.localizedMessage ?: "Network connection error"
+                message = resolveNetworkErrorMessage(e)
             )
         }
     }
@@ -251,12 +274,66 @@ class ApiRepository(private val apiService: ApiService) {
         return try {
             val errorJson = response.errorBody()?.string()
             if (!errorJson.isNullOrBlank()) {
-                gson.fromJson(errorJson, T::class.java)
+                val parsed = gson.fromJson(errorJson, T::class.java)
+                val extractedMessage = try {
+                    val jsonElement = JsonParser.parseString(errorJson)
+                    if (jsonElement.isJsonObject) {
+                        val obj = jsonElement.asJsonObject
+                        obj.get("detail")?.asString
+                            ?: obj.get("error")?.asString
+                            ?: obj.get("message")?.asString
+                            ?: obj.get("reason")?.asString
+                            ?: obj.get("error_message")?.asString
+                    } else null
+                } catch (_: Exception) {
+                    null
+                }
+
+                val finalMessage = when {
+                    parsed is AuthResponse && parsed.message.isNotBlank() -> parsed.message
+                    parsed is ApiResponse && parsed.message.isNotBlank() -> parsed.message
+                    !extractedMessage.isNullOrBlank() -> extractedMessage
+                    else -> "Operation failed (${response.code()})"
+                }
+
+                @Suppress("UNCHECKED_CAST")
+                when (T::class) {
+                    AuthResponse::class -> AuthResponse(
+                        success = false,
+                        message = finalMessage,
+                        token = (parsed as? AuthResponse)?.token,
+                        user = (parsed as? AuthResponse)?.user
+                    ) as T
+                    ApiResponse::class -> ApiResponse(
+                        success = false,
+                        message = finalMessage
+                    ) as T
+                    else -> parsed
+                }
             } else {
                 null
             }
         } catch (_: Exception) {
-            null
+            val fallbackMessage = "Operation failed (${response.code()})"
+            @Suppress("UNCHECKED_CAST")
+            when (T::class) {
+                AuthResponse::class -> AuthResponse(success = false, message = fallbackMessage) as T
+                ApiResponse::class -> ApiResponse(success = false, message = fallbackMessage) as T
+                else -> null
+            }
+        }
+    }
+
+    private fun resolveNetworkErrorMessage(e: Exception, defaultMessage: String = "Network connection error"): String {
+        return when {
+            e is SocketTimeoutException || e is InterruptedIOException || e.message?.contains("timeout", ignoreCase = true) == true -> {
+                "Server is taking longer than expected to respond. Please try again in a moment."
+            }
+            e is UnknownHostException -> {
+                "Unable to connect to server. Please check your internet connection."
+            }
+            !e.localizedMessage.isNullOrBlank() -> e.localizedMessage
+            else -> defaultMessage
         }
     }
 }

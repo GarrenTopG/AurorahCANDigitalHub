@@ -2,6 +2,7 @@ package com.aurorah.can.ui.settings
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -51,7 +52,9 @@ class SettingsFragment : Fragment() {
         setupEditProfile()
         setupToggles()
         setupChangePassword()
+        setupPrivacyPolicy()
         setupSignOut()
+        setupDeleteAccount()
     }
 
     private fun setupProfileHeader() {
@@ -248,6 +251,54 @@ class SettingsFragment : Fragment() {
                     startActivity(intent)
                 }
                 .setNegativeButton("Cancel", null)
+                .show()
+        }
+    }
+
+    private fun setupPrivacyPolicy() {
+        binding.btnPrivacyPolicy.setOnClickListener {
+            val url = getString(R.string.privacy_policy_url)
+            try {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Unable to open browser: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setupDeleteAccount() {
+        binding.btnDeleteAccount.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(getString(R.string.delete_account_confirm_title))
+                .setMessage(getString(R.string.delete_account_confirm_message))
+                .setPositiveButton(getString(R.string.delete_account)) { dialog, _ ->
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        val response = repository.deleteAccount()
+                        if (isAdded) {
+                            if (response.success) {
+                                sessionManager.clearSession()
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.delete_account_success),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                val intent = Intent(requireContext(), LoginActivity::class.java).apply {
+                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                }
+                                startActivity(intent)
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    response.message.ifBlank { "Failed to delete account" },
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    }
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
                 .show()
         }
     }

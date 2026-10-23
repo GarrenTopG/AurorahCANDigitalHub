@@ -148,4 +148,13 @@
     <string name="tab_volunteer">Volontiya</string>
     <string name="read_update">Funda isibuyekezo  →</string>
     <string name="read_full_story">Funda indaba yonke  →</string>
+
+    <!-- Privacy & Account Management -->
+    <string name="news_article_image">Isithombe Sezindaba</string>
+    <string name="privacy_policy_title">Inqubomgomo Yobumfihlo</string>
+    <string name="privacy_policy_url">https://garrentopg.github.io/aurorahcan-privacy/</string>
+    <string name="delete_account">Susa I-akhawunti Nemininingwane</string>
+    <string name="delete_account_confirm_title">Susa I-akhawunti?</string>
+    <string name="delete_account_confirm_message">Uqinisekile ufuna ukususa i-akhawunti yakho ye-Aurorah CAN ngokuphelele? Lokhu kuzosusa imininingwane yakho namarekhodi akho.</string>
+    <string name="delete_account_success">I-akhawunti yakho nemininingwane yakho isusiwe.</string>
 </resources>

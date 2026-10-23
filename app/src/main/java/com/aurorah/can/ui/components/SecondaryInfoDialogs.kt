@@ -20,16 +20,18 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.aurorah.can.ui.theme.BrandPrimary
-import com.aurorah.can.ui.theme.TextInk
-import com.aurorah.can.ui.theme.TextMuted
+import com.aurorah.can.R
+import com.aurorah.can.ui.theme.*
 
 @Composable
 fun AboutDialog(onDismiss: () -> Unit) {
@@ -190,6 +192,9 @@ private fun ContactDetailItem(
 
 @Composable
 fun PrivacyDialog(onDismiss: () -> Unit) {
+    val uriHandler = LocalUriHandler.current
+    val privacyPolicyUrl = stringResource(R.string.privacy_policy_url)
+
     AlertDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
@@ -198,6 +203,17 @@ fun PrivacyDialog(onDismiss: () -> Unit) {
                 colors = ButtonDefaults.buttonColors(containerColor = BrandPrimary)
             ) {
                 Text("Understood")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    try {
+                        uriHandler.openUri(privacyPolicyUrl)
+                    } catch (_: Exception) {}
+                }
+            ) {
+                Text("View Full Online Policy", color = BrandPrimary, fontSize = 13.sp)
             }
         },
         title = {

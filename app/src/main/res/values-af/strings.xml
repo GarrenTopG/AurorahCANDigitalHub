@@ -148,4 +148,13 @@
     <string name="tab_volunteer">Vrywilliger</string>
     <string name="read_update">Lees opdatering  →</string>
     <string name="read_full_story">Lees volle story  →</string>
+
+    <!-- Privacy & Account Management -->
+    <string name="news_article_image">Nuusartikelprent</string>
+    <string name="privacy_policy_title">Privaatheidsbeleid &amp; Dataregte</string>
+    <string name="privacy_policy_url">https://garrentopg.github.io/aurorahcan-privacy/</string>
+    <string name="delete_account">Vee Rekening &amp; Persoonlike Data Uit</string>
+    <string name="delete_account_confirm_title">Vee Rekening Uit?</string>
+    <string name="delete_account_confirm_message">Is jy seker jy wil jou Aurorah CAN-rekening permanent uitvee? Dit sal jou profiel, kontakbesonderhede, skenkingsrekords en vrywilligergeskiedenis permanent verwyder.</string>
+    <string name="delete_account_success">Jou rekening en gepaardgaande data is uitgevee.</string>
 </resources>

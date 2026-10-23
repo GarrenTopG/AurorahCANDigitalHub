@@ -36,6 +36,17 @@ class RegisterActivity : AppCompatActivity() {
         setupRoleDropdown()
         setupInputValidation()
         setupListeners()
+        preWarmServer()
+    }
+
+    private fun preWarmServer() {
+        lifecycleScope.launch {
+            try {
+                repository.getNews()
+            } catch (_: Exception) {
+                // Ignore silent pre-warm background errors
+            }
+        }
     }
 
     private fun setupRoleDropdown() {
@@ -108,29 +119,41 @@ class RegisterActivity : AppCompatActivity() {
             binding.btnRegister.isEnabled = false
 
             lifecycleScope.launch {
-                val response = repository.register(
-                    RegisterRequest(
-                        fullName = fullName,
-                        email = email,
-                        password = password,
-                        role = role
+                try {
+                    val response = repository.register(
+                        RegisterRequest(
+                            fullName = fullName,
+                            email = email,
+                            password = password,
+                            role = role
+                        )
                     )
-                )
 
-                binding.pbRegister.visibility = View.GONE
-                binding.btnRegister.isEnabled = true
+                    binding.pbRegister.visibility = View.GONE
+                    binding.btnRegister.isEnabled = true
 
-                if (response.success && response.user != null) {
-                    sessionManager.saveSession(
-                        token = response.token ?: "authenticated-jwt-token",
-                        email = response.user.email,
-                        name = response.user.fullName,
-                        role = response.user.role
-                    )
-                    Toast.makeText(this@RegisterActivity, "Account created successfully!", Toast.LENGTH_SHORT).show()
-                    navigateToMain()
-                } else {
-                    showError(response.message)
+                    if (response.success && response.user != null) {
+                        sessionManager.saveSession(
+                            token = response.token ?: "authenticated-jwt-token",
+                            email = response.user.email,
+                            name = response.user.fullName,
+                            role = response.user.role
+                        )
+                        Toast.makeText(this@RegisterActivity, "Account created successfully!", Toast.LENGTH_SHORT).show()
+                        navigateToMain()
+                    } else {
+                        val errorMsg = if (response.message.isNotBlank()) response.message else "Registration failed. Please try again."
+                        showError(errorMsg)
+                    }
+                } catch (e: Exception) {
+                    binding.pbRegister.visibility = View.GONE
+                    binding.btnRegister.isEnabled = true
+                    val errorMsg = if (e.message?.contains("timeout", ignoreCase = true) == true) {
+                        "Server is taking longer than expected to respond (warming up). Please try again in a moment."
+                    } else {
+                        e.localizedMessage ?: "An error occurred during registration."
+                    }
+                    showError(errorMsg)
                 }
             }
         }

@@ -27,6 +27,19 @@
 
     <style name="Theme.AurorahCANDigitalHub" parent="Base.Theme.AurorahCANDigitalHub" />
 
+    <!-- Starting Theme for Splash Screen -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <item name="windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
+        <item name="windowSplashScreenBackground">@color/bg_gradient_start_light</item>
+        <item name="postSplashScreenTheme">@style/Theme.AurorahCANDigitalHub</item>
+    </style>
+
+    <!-- Custom Logo Shape Appearance -->
+    <style name="ShapeAppearance.App.RoundedLogo" parent="ShapeAppearance.Material3.Corner.Medium">
+        <item name="cornerSize">20dp</item>
+    </style>
+
     <!-- Custom Outlined TextInputLayout Style -->
     <style name="Widget.Aurorah.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">@color/md_theme_primary</item>
