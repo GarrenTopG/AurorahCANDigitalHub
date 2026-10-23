@@ -8,23 +8,39 @@ import java.util.TimeZone
 
 object NewsUtils {
 
-    private const val BASE_WEB_URL = "https://aurorah-web-hub.onrender.com"
+    private const val BASE_BACKEND_URL = "https://aurorah-web-hub.onrender.com"
 
     fun resolveImageUrl(url: String?): String? {
         if (url.isNullOrBlank()) return null
         val trimmed = url.trim()
         return when {
-            trimmed.startsWith("http://", ignoreCase = true) -> {
-                trimmed.replaceFirst("http://", "https://", ignoreCase = true)
-            }
             trimmed.startsWith("https://", ignoreCase = true) -> {
-                trimmed
+                if (trimmed.contains("aurorahcan.org.za/static/", ignoreCase = true) ||
+                    trimmed.contains("aurorahcan.org.za/uploads/", ignoreCase = true) ||
+                    trimmed.contains("aurorahcan.org.za/images/", ignoreCase = true)) {
+                    trimmed.replace("aurorahcan.org.za", "aurorah-web-hub.onrender.com", ignoreCase = true)
+                } else {
+                    trimmed
+                }
+            }
+            trimmed.startsWith("http://", ignoreCase = true) -> {
+                val httpsUrl = trimmed.replaceFirst("http://", "https://", ignoreCase = true)
+                if (httpsUrl.contains("aurorahcan.org.za/static/", ignoreCase = true) ||
+                    httpsUrl.contains("aurorahcan.org.za/uploads/", ignoreCase = true) ||
+                    httpsUrl.contains("aurorahcan.org.za/images/", ignoreCase = true)) {
+                    httpsUrl.replace("aurorahcan.org.za", "aurorah-web-hub.onrender.com", ignoreCase = true)
+                } else {
+                    httpsUrl
+                }
+            }
+            trimmed.startsWith("//") -> {
+                "https:$trimmed"
             }
             trimmed.startsWith("/") -> {
-                "$BASE_WEB_URL$trimmed"
+                "$BASE_BACKEND_URL$trimmed"
             }
             else -> {
-                "$BASE_WEB_URL/$trimmed"
+                "$BASE_BACKEND_URL/$trimmed"
             }
         }
     }

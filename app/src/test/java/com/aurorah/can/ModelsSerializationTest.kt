@@ -187,6 +187,49 @@ class ModelsSerializationTest {
     }
 
     @Test
+    fun newsItem_resolvesRelativeImageUrlsAndHttpToHttps() {
+        val relativeLeadingSlash = "/static/images/news/example.png"
+        assertEquals(
+            "https://aurorah-web-hub.onrender.com/static/images/news/example.png",
+            NewsUtils.resolveImageUrl(relativeLeadingSlash)
+        )
+
+        val relativeNoLeadingSlash = "static/images/news/example.png"
+        assertEquals(
+            "https://aurorah-web-hub.onrender.com/static/images/news/example.png",
+            NewsUtils.resolveImageUrl(relativeNoLeadingSlash)
+        )
+
+        val httpUrl = "http://aurorahcan.org.za/static/images/news/example.png"
+        assertEquals(
+            "https://aurorah-web-hub.onrender.com/static/images/news/example.png",
+            NewsUtils.resolveImageUrl(httpUrl)
+        )
+
+        val httpsUrl = "https://aurorahcan.org.za/static/images/news/example.png"
+        assertEquals(
+            "https://aurorah-web-hub.onrender.com/static/images/news/example.png",
+            NewsUtils.resolveImageUrl(httpsUrl)
+        )
+
+        val externalHttps = "https://images.unsplash.com/photo-12345"
+        assertEquals(
+            "https://images.unsplash.com/photo-12345",
+            NewsUtils.resolveImageUrl(externalHttps)
+        )
+
+        val protocolRelative = "//aurorah-web-hub.onrender.com/static/img.png"
+        assertEquals(
+            "https://aurorah-web-hub.onrender.com/static/img.png",
+            NewsUtils.resolveImageUrl(protocolRelative)
+        )
+
+        val nullUrl: String? = null
+        assertEquals(null, NewsUtils.resolveImageUrl(nullUrl))
+        assertEquals(null, NewsUtils.resolveImageUrl("   "))
+    }
+
+    @Test
     fun updateProfileRequest_serializesAndDeserializesCorrectly() {
         val request = UpdateProfileRequest(
             fullName = "Sarah Connor",

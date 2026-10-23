@@ -48,7 +48,7 @@ data class NewsItem(
     @SerializedName(value = "author", alternate = ["by", "writer", "author_name", "authorName", "created_by", "createdBy", "publisher"]) val author: String = "Aurorah CAN Team",
     @SerializedName(value = "timestamp", alternate = ["created_at", "createdAt", "date", "published_at", "publishedAt", "created_date", "createdDate", "date_created", "dateCreated", "publish_date", "publishDate", "updated_at", "updatedAt"]) val timestamp: String = "",
     @SerializedName(value = "category", alternate = ["topic", "tag", "section", "category_name", "categoryName"]) val category: String = "General",
-    @SerializedName(value = "imageUrl", alternate = ["image_url", "image", "media_url", "mediaUrl", "picture", "picture_url", "pictureUrl", "photo", "photo_url", "photoUrl", "cover_image", "coverImage", "featured_image", "featuredImage", "thumbnail", "thumbnail_url", "thumbnailUrl", "image_path", "imagePath", "url"]) val imageUrl: String? = null
+    @SerializedName(value = "image_url", alternate = ["imageUrl", "image", "media_url", "mediaUrl", "picture", "picture_url", "pictureUrl", "photo", "photo_url", "photoUrl", "cover_image", "coverImage", "featured_image", "featuredImage", "thumbnail", "thumbnail_url", "thumbnailUrl", "image_path", "imagePath", "url"]) val imageUrl: String? = null
 )
 
 data class CommunityNeed(

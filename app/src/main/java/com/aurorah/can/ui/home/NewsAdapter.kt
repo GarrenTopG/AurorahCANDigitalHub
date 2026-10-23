@@ -42,16 +42,16 @@ class NewsAdapter(
             binding.tvNewsTimestamp.text = NewsUtils.formatNewsDate(item.timestamp)
             binding.tvNewsCategory.text = item.category.ifBlank { "General" }
 
+            binding.ivNewsImage.visibility = View.VISIBLE
             val resolvedUrl = NewsUtils.resolveImageUrl(item.imageUrl)
             if (!resolvedUrl.isNullOrBlank()) {
-                binding.ivNewsImage.visibility = View.VISIBLE
                 binding.ivNewsImage.load(resolvedUrl) {
                     placeholder(R.drawable.ic_news_placeholder)
                     error(R.drawable.ic_news_placeholder)
                     crossfade(true)
                 }
             } else {
-                binding.ivNewsImage.visibility = View.GONE
+                binding.ivNewsImage.setImageResource(R.drawable.ic_news_placeholder)
             }
 
             binding.root.setOnClickListener {
