@@ -4,96 +4,32 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.aurorah.can.data.api.ApiRepository
-import com.aurorah.can.data.model.CommunityNeed
-import com.aurorah.can.databinding.FragmentNeedsBinding
-import com.aurorah.can.ui.assistance.RequestAssistanceBottomSheetFragment
-import kotlinx.coroutines.launch
+import androidx.fragment.app.viewModels
+import com.aurorah.can.ui.getinvolved.CommunityNeedsSubTab
+import dagger.hilt.android.AndroidEntryPoint
 
+@Deprecated(
+    message = "NeedsFragment is deprecated in favor of Compose component CommunityNeedsSubTab.",
+    replaceWith = ReplaceWith("CommunityNeedsSubTab", "com.aurorah.can.ui.getinvolved.CommunityNeedsSubTab")
+)
+@AndroidEntryPoint
 class NeedsFragment : Fragment() {
 
-    private var _binding: FragmentNeedsBinding? = null
-    private val binding get() = _binding!!
-
-    private val repository by lazy { ApiRepository(requireContext()) }
-    private var allNeedsList: List<CommunityNeed> = emptyList()
-
-    private val needsAdapter = NeedsAdapter { selectedNeed ->
-        val bottomSheet = OfferAssistanceBottomSheetFragment.newInstance(
-            needId = selectedNeed.needId,
-            needTitle = selectedNeed.title
-        )
-        bottomSheet.show(childFragmentManager, "OfferAssistanceBottomSheet")
-    }
+    private val viewModel: NeedsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentNeedsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.rvNeeds.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = needsAdapter
-        }
-
-        binding.btnRequestAssistanceNeeds.setOnClickListener {
-            val bottomSheet = RequestAssistanceBottomSheetFragment()
-            bottomSheet.show(childFragmentManager, "RequestAssistanceBottomSheet")
-        }
-
-        setupFilterChips()
-        loadNeedsData()
-    }
-
-    private fun setupFilterChips() {
-        binding.cgFilterNeeds.setOnCheckedStateChangeListener { _, checkedIds ->
-            if (checkedIds.isEmpty()) {
-                needsAdapter.updateData(allNeedsList)
-                return@setOnCheckedStateChangeListener
-            }
-
-            val categoryFilter = when (checkedIds.first()) {
-                binding.chipFood.id -> "Food"
-                binding.chipClothing.id -> "Clothing"
-                binding.chipEducation.id -> "Education"
-                binding.chipHealthcare.id -> "Healthcare"
-                else -> "All"
-            }
-
-            if (categoryFilter == "All") {
-                needsAdapter.updateData(allNeedsList)
-            } else {
-                val filtered = allNeedsList.filter {
-                    it.category.equals(categoryFilter, ignoreCase = true)
-                }
-                needsAdapter.updateData(filtered)
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                CommunityNeedsSubTab(viewModel = viewModel)
             }
         }
-    }
-
-    private fun loadNeedsData() {
-        binding.pbNeeds.visibility = View.VISIBLE
-        viewLifecycleOwner.lifecycleScope.launch {
-            allNeedsList = repository.getNeeds()
-            _binding?.let { b ->
-                b.pbNeeds.visibility = View.GONE
-                needsAdapter.updateData(allNeedsList)
-            }
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

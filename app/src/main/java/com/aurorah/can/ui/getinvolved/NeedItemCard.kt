@@ -20,9 +20,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.aurorah.can.R
 import com.aurorah.can.data.model.CommunityNeed
 import com.aurorah.can.ui.components.PriorityBadge
 import com.aurorah.can.ui.theme.BrandPrimary
@@ -94,7 +96,7 @@ fun NeedItemCard(
                     contentDescription = null,
                     modifier = Modifier.padding(end = 6.dp).size(18.dp)
                 )
-                Text("Offer Assistance", fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.offer_assistance), fontWeight = FontWeight.Bold)
             }
         }
     }

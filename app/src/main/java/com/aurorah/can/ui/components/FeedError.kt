@@ -11,7 +11,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import com.aurorah.can.R
 import com.aurorah.can.ui.theme.TextMuted
 
 @Composable
@@ -36,7 +38,7 @@ fun FeedError(
                 imageVector = Icons.Filled.Refresh,
                 contentDescription = null
             )
-            Text("Retry")
+            Text(stringResource(R.string.btn_retry))
         }
     }
 }

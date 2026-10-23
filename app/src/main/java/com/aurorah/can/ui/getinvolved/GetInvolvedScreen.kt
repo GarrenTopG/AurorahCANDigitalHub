@@ -19,14 +19,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aurorah.can.R
-import com.aurorah.can.data.api.ApiRepository
+import com.aurorah.can.ui.donation.DonationViewModel
+import com.aurorah.can.ui.needs.NeedsViewModel
 import com.aurorah.can.ui.theme.BrandPrimary
 import com.aurorah.can.ui.theme.TextMuted
 import com.aurorah.can.ui.volunteer.VolunteerScreen
+import com.aurorah.can.ui.volunteer.VolunteerViewModel
 
 @Composable
 fun GetInvolvedScreen(
-    repository: ApiRepository,
+    needsViewModel: NeedsViewModel,
+    donationViewModel: DonationViewModel,
+    volunteerViewModel: VolunteerViewModel,
     userEmail: String,
     userName: String = "",
     userPhone: String = "",
@@ -72,10 +76,10 @@ fun GetInvolvedScreen(
         }
 
         when (selectedTabIndex) {
-            0 -> CommunityNeedsSubTab(repository = repository, userEmail = userEmail)
-            1 -> DonateSubTab(repository = repository, userEmail = userEmail)
+            0 -> CommunityNeedsSubTab(viewModel = needsViewModel)
+            1 -> DonateSubTab(viewModel = donationViewModel)
             2 -> VolunteerScreen(
-                repository = repository,
+                viewModel = volunteerViewModel,
                 userEmail = userEmail,
                 userName = userName,
                 userPhone = userPhone

@@ -1,15 +1,17 @@
 package com.aurorah.can.ui.gethelp
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aurorah.can.data.api.ApiRepository
+import com.aurorah.can.data.api.NetworkResult
 import com.aurorah.can.data.model.AssistanceRequest
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class GetHelpUiState(
     val firstName: String = "",
@@ -60,10 +62,10 @@ internal object GetHelpFormValidator {
             state.popiaError != null
 }
 
-class GetHelpViewModel(
-    application: Application,
-    private val repository: ApiRepository = ApiRepository(application)
-) : AndroidViewModel(application) {
+@HiltViewModel
+class GetHelpViewModel @Inject constructor(
+    private val repository: ApiRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(GetHelpUiState())
     val uiState: StateFlow<GetHelpUiState> = _uiState.asStateFlow()
@@ -122,21 +124,35 @@ class GetHelpViewModel(
                 userEmail = state.email.trim()
             )
 
-            val apiResponse = repository.requestAssistance(request)
-            if (apiResponse.success) {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        isSuccess = true,
-                        submittedFullName = fullName
-                    )
+            when (val result = repository.requestAssistance(request)) {
+                is NetworkResult.Success -> {
+                    if (result.data.success) {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                isSuccess = true,
+                                submittedFullName = fullName
+                            )
+                        }
+                    } else {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                serverError = result.data.message.ifBlank { "Failed to submit request." }
+                            )
+                        }
+                    }
                 }
-            } else {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        serverError = apiResponse.message.ifBlank { "Failed to submit request. Please check connection and try again." }
-                    )
+                is NetworkResult.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            serverError = result.message
+                        )
+                    }
+                }
+                is NetworkResult.Loading -> {
+                    _uiState.update { it.copy(isLoading = true) }
                 }
             }
         }

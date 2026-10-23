@@ -157,4 +157,108 @@
     <string name="delete_account_confirm_title">Cima I-akhawunti?</string>
     <string name="delete_account_confirm_message">Uqinisekile ufuna ukucima i-akhawunti yakho ye-Aurorah CAN ngokusisigxina? Oku kuya kucima iinkcukacha zakho neerekhodi zakho.</string>
     <string name="delete_account_success">I-akhawunti yakho neenkcukacha zakho zicimile.</string>
+
+    <!-- Phase 3 Localization Strings -->
+    <!-- Donation & Pledge -->
+    <string name="donation_pledge_title">Dala Isithembiso Somnikelo</string>
+    <string name="donation_pledge_notice_title">Isaziso Sesisithembiso Somnikelo</string>
+    <string name="donation_pledge_notice_body">Ukuthumela umnikelo kwi-app kubhalisa isithembiso. I-app ayisebenzisi iihlawulelo zekhadi okanye zebhanki ngokuthe ngqo.</string>
+    <string name="section_18a_title">Ufuna Isahluko 18A Irisithi Yerhafu?</string>
+    <string name="section_18a_body">Iirisithi zerhafu zeSahluko 18A zilawulwa kwi-web yethu. Cofa ngezantsi ukundwendwela i-portal esemthethweni.</string>
+    <string name="section_18a_button">Ndwendwela I-Webstite Nge-Sahluko 18A Irisithi</string>
+    <string name="pledge_received_monetary">Isithembiso Lemali Samkelwe</string>
+    <string name="pledge_received_inkind">Isithembiso Seephahla Samkelwe</string>
+    <string name="pledge_reference_format">Inkomba: %1$s</string>
+    <string name="pledge_received_thank_you">Enkosi ngokuxhasa i-Aurorah CAN. Ithmba lethu liza kuphonononga isithembiso sakho likugcine unolwazi.</string>
+    <string name="make_another_donation">Dala Esinye Isithembiso</string>
+    <string name="review_donation_pledge">Phonononga Isithembiso Somnikelo</string>
+    <string name="review_donation_type">Uhlobo Somnikelo</string>
+    <string name="review_fund_category">Iingxowa / Isahluko</string>
+    <string name="review_pledge_amount">Isixa Sesisithembiso</string>
+    <string name="review_preferred_method">Indlela Ekhethiweyo</string>
+    <string name="review_monetary">Ngemali</string>
+    <string name="review_inkind_goods">Iimpahla Zenceba</string>
+    <string name="review_item_category">Isahluko Seemveliso</string>
+    <string name="review_description">Inkcazelo</string>
+    <string name="review_fulfillment">Uzalisekiso</string>
+    <string name="btn_back">Buyela</string>
+    <string name="btn_submit_pledge">Thumela Isithembiso</string>
+    <string name="chip_monetary_pledge">Isithembiso Lemali</string>
+    <string name="chip_inkind_goods">Iimpahla Zenceba</string>
+    <string name="monetary_category_label">Isahluko Lemali *</string>
+    <string name="select_amount_label">Khetha Isixa *</string>
+    <string name="chip_custom_amount">Isixa Esikhethiweyo</string>
+    <string name="custom_amount_label">Isixa Esikhethiweyo (ZAR) *</string>
+    <string name="payment_method_label">Indlela Yokuhlawula</string>
+    <string name="payment_card_ref">Inkomba Yekhadi</string>
+    <string name="payment_eft_ref">EFT / Unyanzelo Lwebhanki</string>
+    <string name="item_category_label">Isahluko Seemveliso *</string>
+    <string name="item_desc_quantity_label">Inkcazelo Yeemveliso &amp; Ubukhulu *</string>
+    <string name="item_desc_quantity_placeholder">umz. iibhokisi ezi-5 zokutya okungawiyo, iiblankethi zengqele ezi-10</string>
+    <string name="fulfillment_preference_label">Indlela Yokuzaliseka *</string>
+    <string name="btn_review_pledge">Phonononga Isithembiso</string>
+
+    <!-- Community Needs -->
+    <string name="community_needs_title">Iimfuno Zomphakathi Ezikhoyo</string>
+    <string name="community_needs_subtitle">Hlola iimfuno ezifunekayo eKuils River kwaye ubonelele ngexesha okanye ngamakhono akho.</string>
+    <string name="no_needs_found_format">Akafumanekanga iimfuno zomphakathi ze \'%1$s\'</string>
+    <string name="btn_refresh_list">Hlaziya Uluhlu</string>
+    <string name="offer_logged_title">Isithembiso Sibhalisiwe</string>
+    <string name="btn_ok">Kulungile</string>
+
+    <!-- Offer Help Dialog -->
+    <string name="offer_help_dialog_title">Bonelela Ngoncedo</string>
+    <string name="assisting_with_format">Ukunceda nge: %1$s</string>
+    <string name="your_skill_label">Ikhono Lakho okanye Inkonzo *</string>
+    <string name="your_skill_placeholder">umz. Umqhubi, Ilogistics, Ukupakisha Ukutya, Ukufundisa</string>
+    <string name="additional_notes_label">Amanqaku Adlulisiweyo / Ukufumaneka</string>
+    <string name="additional_notes_placeholder">umz. Ndifumaneka ngeMgqibelo, ndinesithuthi</string>
+    <string name="btn_cancel">Cima</string>
+
+    <!-- Contact Card & Find Us -->
+    <string name="find_us_title">Sifumane</string>
+    <string name="address_sunbird_park">27 Lovebird Walk, Sunbird Park, Cape Town, 7580</string>
+    <string name="hours_sunbird_park">Mso–Somb 08:00–17:00; Mgq 09:00–14:00</string>
+
+    <!-- Get Help Form & Screen -->
+    <string name="your_details_header">Iinkcukacha Zakho</string>
+    <string name="first_name_label">Igama *</string>
+    <string name="last_name_label">Ifani *</string>
+    <string name="suburb_area_label">Indawo okanye Ilokishi *</string>
+    <string name="requests_location_helper">Izicelo zisebenza eKuils River nakwiindawo ezijikelezileyo.</string>
+    <string name="assistance_details_header">Iinkcukacha Zoncedo</string>
+    <string name="support_type_label">Uhlobo Zoncedo Olufunekayo *</string>
+    <string name="describe_need_label">Inkcazelo Yemfuno Zakho *</string>
+    <string name="describe_need_placeholder">Caza uncedo olufunekayo neemeko ezimalunga noko...</string>
+    <string name="urgency_level_label">Inqlevel Yokukhawuleza</string>
+    <string name="get_help_popia_consent">Ndiyifundile ingcaciso yefihlo kwaye ndiyavuma ukuba i-Aurorah NPC isebenzise iinkcukacha zam ukuphonononga isicelo zam.</string>
+    <string name="btn_submit_request">Thumela Isicelo</string>
+
+    <!-- Volunteer Form & Screen -->
+    <string name="personal_info_header">Iinkcukacha Zakho</string>
+    <string name="email_optional_label">Idilesi Ye-Imeyile (Ngokuthanda)</string>
+    <string name="volunteer_location_helper">Izikhundla zokuzinikela zikwi-Kuils River nakwiindawo ezikufutshane.</string>
+    <string name="skills_availability_header">Amakhono &amp; Ukufumaneka Zakho</string>
+    <string name="skills_experience_label">Amakhono &amp; Amathuba Zakho *</string>
+    <string name="skills_experience_placeholder">Umz. ukufundisa, ezempilo, iwreke, ukupheka, ulawulo, ilogistics, umqhubi...</string>
+    <string name="days_available_label">Iintsuku Ezifumanekayo *</string>
+    <string name="select_at_least_one">(Khetha ubuncinane enye)</string>
+    <string name="volunteer_privacy_notice">Igama, indawo, inombolo yefowuni, amakhono neentsuku zakho kuyafuneka ukuhlola isicelo sakho.</string>
+    <string name="volunteer_popia_consent">Ndiyifundile ingcaciso yefihlo kwaye ndiyavuma ukuba i-Aurorah NPC isebenzise ezi nkcukacha ukuphonononga isicelo zam sokuzinikela.</string>
+    <string name="btn_submit_application">Thumela Isicelo</string>
+    <string name="safeguarding_title">Ukungena nokukhusela:</string>
+    <string name="safeguarding_body">Izicelo ziyahlolwa ngaphambi kokubekwa. Abagxeki banokumenywa udliwanondlebe. Izikhundla ezinxulumene nabantwana zidinga uhlolo lokukhusela abantwana.</string>
+    <string name="volunteer_privacy_prefix">Sisebenzisa igama, indawo, fowuni kwiinkcukacha zakho ukuphonononga isicelo sakho. </string>
+
+    <!-- Dialogs & General -->
+    <string name="btn_close">Vala</string>
+    <string name="btn_understood">Kuyuqondakale</string>
+    <string name="btn_view_full_policy">Bona Ipolisi Entanethi Yonke</string>
+    <string name="btn_retry">Zama Kwakhona</string>
+    <string name="news_load_error">Akukwazekanga ukulayisha iindaba zomphakathi.</string>
+    <string name="no_updates_category">Akukho zindaba kwaso kulesi sahluko.</string>
+    <string name="media_consent_notice">Isaziso Sosasazo: Sibelana ngemifanekiso yabantu bomphakathi kuphela ngemvume ebhaliweyo.</string>
+    <string name="hero_tag">AURORAH NPC  ·  KUILS RIVER, CAPE TOWN</string>
+    <string name="view_ways_to_help">Bona iindlela zokunceda  →</string>
+    <string name="featured_story_tag_format">IBALI ELIPHAMBILI  ·  %1$s</string>
 </resources>

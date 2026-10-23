@@ -12,7 +12,7 @@ class ModelsSerializationTest {
     private val gson = Gson()
 
     @Test
-    fun user_deserializesSnakeCaseAndCamelCase() {
+    fun userDto_deserializesSnakeCaseAndCamelCase_andMapsToDomain() {
         val snakeCaseJson = """
             {
                 "user_id": 42,
@@ -23,12 +23,17 @@ class ModelsSerializationTest {
             }
         """.trimIndent()
 
-        val userFromSnake = gson.fromJson(snakeCaseJson, User::class.java)
-        assertEquals(42, userFromSnake.userId)
-        assertEquals("Jane Doe", userFromSnake.fullName)
-        assertEquals("jane@aurorahcan.org", userFromSnake.email)
-        assertEquals("Donor", userFromSnake.role)
-        assertEquals("token-abc", userFromSnake.token)
+        val userDtoFromSnake = gson.fromJson(snakeCaseJson, UserDto::class.java)
+        assertEquals(42, userDtoFromSnake.userId)
+        assertEquals("Jane Doe", userDtoFromSnake.fullName)
+        assertEquals("jane@aurorahcan.org", userDtoFromSnake.email)
+        assertEquals("Donor", userDtoFromSnake.role)
+        assertEquals("token-abc", userDtoFromSnake.token)
+
+        val userDomainFromSnake = userDtoFromSnake.toDomain()
+        assertEquals(42, userDomainFromSnake.userId)
+        assertEquals("Jane Doe", userDomainFromSnake.fullName)
+        assertEquals("jane@aurorahcan.org", userDomainFromSnake.email)
 
         val camelCaseJson = """
             {
@@ -40,13 +45,17 @@ class ModelsSerializationTest {
             }
         """.trimIndent()
 
-        val userFromCamel = gson.fromJson(camelCaseJson, User::class.java)
-        assertEquals(10, userFromCamel.userId)
-        assertEquals("John Smith", userFromCamel.fullName)
+        val userDtoFromCamel = gson.fromJson(camelCaseJson, UserDto::class.java)
+        assertEquals(10, userDtoFromCamel.userId)
+        assertEquals("John Smith", userDtoFromCamel.fullName)
+
+        val userDomainFromCamel = userDtoFromCamel.toDomain()
+        assertEquals(10, userDomainFromCamel.userId)
+        assertEquals("John Smith", userDomainFromCamel.fullName)
     }
 
     @Test
-    fun communityNeed_deserializesSnakeCaseAndCamelCase() {
+    fun communityNeedDto_deserializesSnakeCaseAndCamelCase_andMapsToDomain() {
         val json = """
             {
                 "need_id": 101,
@@ -60,15 +69,19 @@ class ModelsSerializationTest {
             }
         """.trimIndent()
 
-        val need = gson.fromJson(json, CommunityNeed::class.java)
-        assertEquals(101, need.needId)
-        assertEquals("Food Parcel Request", need.title)
-        assertEquals("Soweto, Johannesburg", need.location)
-        assertEquals("2026-03-30", need.createdAt)
+        val needDto = gson.fromJson(json, CommunityNeedDto::class.java)
+        assertEquals(101, needDto.needId)
+        assertEquals("Food Parcel Request", needDto.title)
+        assertEquals("Soweto, Johannesburg", needDto.location)
+        assertEquals("2026-03-30", needDto.createdAt)
+
+        val needDomain = needDto.toDomain()
+        assertEquals(101, needDomain.needId)
+        assertEquals("Food Parcel Request", needDomain.title)
     }
 
     @Test
-    fun donationResponse_deserializesSnakeCase() {
+    fun donationResponseDto_deserializesSnakeCase_andMapsToDomain() {
         val json = """
             {
                 "success": true,
@@ -77,10 +90,14 @@ class ModelsSerializationTest {
             }
         """.trimIndent()
 
-        val donationResponse = gson.fromJson(json, DonationResponse::class.java)
-        assertTrue(donationResponse.success)
-        assertEquals("TXN-2026-999", donationResponse.transactionRef)
-        assertEquals("Donation received successfully", donationResponse.message)
+        val donationResponseDto = gson.fromJson(json, DonationResponseDto::class.java)
+        assertTrue(donationResponseDto.success)
+        assertEquals("TXN-2026-999", donationResponseDto.transactionRef)
+        assertEquals("Donation received successfully", donationResponseDto.message)
+
+        val domain = donationResponseDto.toDomain()
+        assertTrue(domain.success)
+        assertEquals("TXN-2026-999", domain.transactionRef)
     }
 
     @Test
@@ -133,7 +150,7 @@ class ModelsSerializationTest {
     }
 
     @Test
-    fun newsItem_deserializesAuthorAndBody() {
+    fun newsItemDto_deserializesAuthorAndBody_andMapsToDomain() {
         val json = """
             {
                 "id": 5,
@@ -147,15 +164,20 @@ class ModelsSerializationTest {
             }
         """.trimIndent()
 
-        val news = gson.fromJson(json, NewsItem::class.java)
-        assertEquals("Community Health Drive", news.title)
-        assertEquals("Full detailed report on community health initiatives across sectors.", news.body)
-        assertEquals("Dr. Sarah Jenkins", news.author)
-        assertEquals("https://example.com/health.jpg", news.imageUrl)
+        val newsDto = gson.fromJson(json, NewsItemDto::class.java)
+        assertEquals("Community Health Drive", newsDto.title)
+        assertEquals("Full detailed report on community health initiatives across sectors.", newsDto.body)
+        assertEquals("Dr. Sarah Jenkins", newsDto.author)
+        assertEquals("https://example.com/health.jpg", newsDto.imageUrl)
+
+        val newsDomain = newsDto.toDomain()
+        assertEquals("Community Health Drive", newsDomain.title)
+        assertEquals("Full detailed report on community health initiatives across sectors.", newsDomain.body)
+        assertEquals("Dr. Sarah Jenkins", newsDomain.author)
     }
 
     @Test
-    fun newsItem_deserializesAzureSqlDbVariations() {
+    fun newsItemDto_deserializesAzureSqlDbVariations() {
         val azureSqlJson = """
             {
                 "news_id": 12,
@@ -168,7 +190,8 @@ class ModelsSerializationTest {
             }
         """.trimIndent()
 
-        val news = gson.fromJson(azureSqlJson, NewsItem::class.java)
+        val newsDto = gson.fromJson(azureSqlJson, NewsItemDto::class.java)
+        val news = newsDto.toDomain()
         assertEquals("Celebrating Mandela Day and Four Years of the Community Hotspot Library", news.title)
         assertEquals("Aurorah marked Mandela Day and four years of its Community Hotspot Library with a day of service, learning and connection.", news.summary)
         assertTrue(news.body.contains("Volunteers and youth gathered"))

@@ -4,31 +4,33 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.aurorah.can.MainActivity
 import com.aurorah.can.R
-import com.aurorah.can.util.InputValidator
-import com.aurorah.can.data.api.ApiRepository
 import com.aurorah.can.data.local.SessionManager
-import com.aurorah.can.data.model.LoginRequest
 import com.aurorah.can.databinding.ActivityLoginBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var sessionManager: SessionManager
-    private lateinit var repository: ApiRepository
+    private val viewModel: LoginViewModel by viewModels()
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
-
-        sessionManager = SessionManager(this)
-        repository = ApiRepository(sessionManager)
 
         if (sessionManager.isLoggedIn()) {
             navigateToMain()
@@ -40,71 +42,62 @@ class LoginActivity : AppCompatActivity() {
 
         setupInputValidation()
         setupListeners()
+        observeViewModel()
     }
 
     private fun setupInputValidation() {
-        binding.etEmail.doOnTextChanged { _, _, _, _ ->
+        binding.etEmail.doOnTextChanged { text, _, _, _ ->
+            viewModel.onEmailChanged(text?.toString() ?: "")
             binding.tilEmail.error = null
-            hideError()
         }
 
-        binding.etPassword.doOnTextChanged { _, _, _, _ ->
+        binding.etPassword.doOnTextChanged { text, _, _, _ ->
+            viewModel.onPasswordChanged(text?.toString() ?: "")
             binding.tilPassword.error = null
-            hideError()
         }
     }
 
     private fun setupListeners() {
         binding.btnCloseError.setOnClickListener {
-            hideError()
+            viewModel.hideError()
         }
 
         binding.btnLogin.setOnClickListener {
-            hideError()
-            val email = binding.etEmail.text.toString().trim()
-            val password = binding.etPassword.text.toString().trim()
-
-            var isValid = true
-
-            // Input validation using InputValidator
-            if (!InputValidator.isValidEmail(email)) {
-                binding.tilEmail.error = getString(R.string.error_invalid_email)
-                isValid = false
-            }
-
-            // Password complexity check
-            if (!InputValidator.isSecurePassword(password)) {
-                binding.tilPassword.error = getString(R.string.error_invalid_password)
-                isValid = false
-            }
-
-            if (!isValid) return@setOnClickListener
-
-            binding.pbLogin.visibility = View.VISIBLE
-            binding.btnLogin.isEnabled = false
-
-            lifecycleScope.launch {
-                val response = repository.login(LoginRequest(email, password))
-                binding.pbLogin.visibility = View.GONE
-                binding.btnLogin.isEnabled = true
-
-                if (response.success && response.user != null) {
-                    sessionManager.saveSession(
-                        token = response.token ?: "authenticated-jwt-token",
-                        email = response.user.email,
-                        name = response.user.fullName,
-                        role = response.user.role
-                    )
-                    Toast.makeText(this@LoginActivity, "Welcome back, ${response.user.fullName}!", Toast.LENGTH_SHORT).show()
-                    navigateToMain()
-                } else {
-                    showError(response.message)
-                }
-            }
+            viewModel.login()
         }
 
         binding.tvRegisterPrompt.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
+        }
+    }
+
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    binding.pbLogin.visibility = if (state.isLoading) View.VISIBLE else View.GONE
+                    binding.btnLogin.isEnabled = !state.isLoading
+
+                    binding.tilEmail.error = state.emailError?.let {
+                        if (it == "Invalid Email Address") getString(R.string.error_invalid_email) else it
+                    }
+
+                    binding.tilPassword.error = state.passwordError?.let {
+                        if (it.contains("Password must be at least")) getString(R.string.error_invalid_password) else it
+                    }
+
+                    if (!state.errorMessage.isNullOrBlank()) {
+                        showError(state.errorMessage)
+                    } else {
+                        hideError()
+                    }
+
+                    if (state.isSuccess) {
+                        Toast.makeText(this@LoginActivity, "Welcome back, ${state.userFullName}!", Toast.LENGTH_SHORT).show()
+                        navigateToMain()
+                    }
+                }
+            }
         }
     }
 

@@ -1,15 +1,17 @@
 package com.aurorah.can.ui.volunteer
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aurorah.can.data.api.ApiRepository
+import com.aurorah.can.data.api.NetworkResult
 import com.aurorah.can.data.model.VolunteerRequest
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class VolunteerUiState(
     val firstName: String = "",
@@ -58,10 +60,10 @@ internal object VolunteerFormValidator {
             state.popiaError != null
 }
 
-class VolunteerViewModel(
-    application: Application,
-    private val repository: ApiRepository = ApiRepository(application)
-) : AndroidViewModel(application) {
+@HiltViewModel
+class VolunteerViewModel @Inject constructor(
+    private val repository: ApiRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(VolunteerUiState())
     val uiState: StateFlow<VolunteerUiState> = _uiState.asStateFlow()
@@ -123,15 +125,29 @@ class VolunteerViewModel(
                 userEmail = state.email.trim()
             )
 
-            val apiResponse = repository.submitVolunteer(request)
-            if (apiResponse.success) {
-                _uiState.update { it.copy(isLoading = false, isSuccess = true) }
-            } else {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        serverError = apiResponse.message.ifBlank { "Failed to submit application. Please check your connection and try again." }
-                    )
+            when (val result = repository.submitVolunteer(request)) {
+                is NetworkResult.Success -> {
+                    if (result.data.success) {
+                        _uiState.update { it.copy(isLoading = false, isSuccess = true) }
+                    } else {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                serverError = result.data.message.ifBlank { "Failed to submit application." }
+                            )
+                        }
+                    }
+                }
+                is NetworkResult.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            serverError = result.message
+                        )
+                    }
+                }
+                is NetworkResult.Loading -> {
+                    _uiState.update { it.copy(isLoading = true) }
                 }
             }
         }

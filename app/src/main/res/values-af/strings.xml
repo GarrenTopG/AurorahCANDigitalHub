@@ -157,4 +157,108 @@
     <string name="delete_account_confirm_title">Vee Rekening Uit?</string>
     <string name="delete_account_confirm_message">Is jy seker jy wil jou Aurorah CAN-rekening permanent uitvee? Dit sal jou profiel, kontakbesonderhede, skenkingsrekords en vrywilligergeskiedenis permanent verwyder.</string>
     <string name="delete_account_success">Jou rekening en gepaardgaande data is uitgevee.</string>
+
+    <!-- Phase 3 Localization Strings -->
+    <!-- Donation & Pledge -->
+    <string name="donation_pledge_title">Maak \'n Skenkingsbelofte</string>
+    <string name="donation_pledge_notice_title">Skenkingsbelofte Kennisgewing</string>
+    <string name="donation_pledge_notice_body">Die indiening van \'n skenking in die toep teken \'n belofte-verwysing aan. Die mobiele toep verwerk nie direkte kaart-/bankbetalings nie.</string>
+    <string name="section_18a_title">Het jy \'n Artikel 18A-Belastingontvangs nodig?</string>
+    <string name="section_18a_body">Artikel 18A-belastingontvangste word deur ons webplatform bestuur. Tik hieronder om die amptelike portaal te besoek.</string>
+    <string name="section_18a_button">Besoek Webwerf vir Artikel 18A-Ontvangs</string>
+    <string name="pledge_received_monetary">Monetêre Belofte Ontvang</string>
+    <string name="pledge_received_inkind">Goedere-belofte Ontvang</string>
+    <string name="pledge_reference_format">Verwysing: %1$s</string>
+    <string name="pledge_received_thank_you">Dankie dat jy Aurorah CAN ondersteun. Ons span sal jou belofte verwys en jou op die hoogte hou.</string>
+    <string name="make_another_donation">Maak Nog \'n Skenking</string>
+    <string name="review_donation_pledge">Hersien Skenkingsbelofte</string>
+    <string name="review_donation_type">Skenkingstipe</string>
+    <string name="review_fund_category">Fonds / Kategorie</string>
+    <string name="review_pledge_amount">Beloftebedrag</string>
+    <string name="review_preferred_method">Verkose Metode</string>
+    <string name="review_monetary">Monetêr</string>
+    <string name="review_inkind_goods">Goedere</string>
+    <string name="review_item_category">Itemkategorie</string>
+    <string name="review_description">Beskrywing</string>
+    <string name="review_fulfillment">Vervulling</string>
+    <string name="btn_back">Terug</string>
+    <string name="btn_submit_pledge">Dien Belofte In</string>
+    <string name="chip_monetary_pledge">Monetêre Belofte</string>
+    <string name="chip_inkind_goods">Goedere Skenking</string>
+    <string name="monetary_category_label">Monetêre Kategorie *</string>
+    <string name="select_amount_label">Kies Bedrag *</string>
+    <string name="chip_custom_amount">Aangepaste Bedrag</string>
+    <string name="custom_amount_label">Aangepaste Bedrag (ZAR) *</string>
+    <string name="payment_method_label">Betalingsverwysingsmetode</string>
+    <string name="payment_card_ref">Kredietkaartverwysing</string>
+    <string name="payment_eft_ref">EFT / Direkte Oorplasing</string>
+    <string name="item_category_label">Itemkategorie *</string>
+    <string name="item_desc_quantity_label">Itembeskrywing &amp; Hoeveelheid *</string>
+    <string name="item_desc_quantity_placeholder">bv. 5 bokse nie-bederfbare blikkieskos, 10 winterkomberse</string>
+    <string name="fulfillment_preference_label">Vervullingsvoorkeur *</string>
+    <string name="btn_review_pledge">Hersien Belofte</string>
+
+    <!-- Community Needs -->
+    <string name="community_needs_title">Huidige Gemeenskapsbehoeftes</string>
+    <string name="community_needs_subtitle">Verken dringende behoeftes in Kuilsrivier-gemeenskappe en bied jou tyd of vaardighede aan om te help.</string>
+    <string name="no_needs_found_format">Geen gemeenskapsbehoeftes gevind vir \'%1$s\' nie</string>
+    <string name="btn_refresh_list">Vervars Lys</string>
+    <string name="offer_logged_title">Aanbod Aangeteken</string>
+    <string name="btn_ok">OOK</string>
+
+    <!-- Offer Help Dialog -->
+    <string name="offer_help_dialog_title">Bied Hulp Aan</string>
+    <string name="assisting_with_format">Hulp met: %1$s</string>
+    <string name="your_skill_label">Jou Vaardigheid of Spesialiteit *</string>
+    <string name="your_skill_placeholder">bv. Bestuurder, Logistiek, Kosverpakking, Onderrig</string>
+    <string name="additional_notes_label">Addisionele Notas / Beskikbaarheid</string>
+    <string name="additional_notes_placeholder">bv. Beskikbaar op Saterdae, het \'n optelvoertuig</string>
+    <string name="btn_cancel">Kanselleer</string>
+
+    <!-- Contact Card & Find Us -->
+    <string name="find_us_title">Vind ons</string>
+    <string name="address_sunbird_park">Lovebird-staptog 27, Sunbird Park, Kaapstad, 7580</string>
+    <string name="hours_sunbird_park">Ma–Vr 08:00–17:00; Sa 09:00–14:00</string>
+
+    <!-- Get Help Form & Screen -->
+    <string name="your_details_header">Jou Besonderhede</string>
+    <string name="first_name_label">Eerste Naam *</string>
+    <string name="last_name_label">Van *</string>
+    <string name="suburb_area_label">Voorstad of Gebied *</string>
+    <string name="requests_location_helper">Versoeke word binne Kuilsrivier en omliggende gemeenskappe bedien.</string>
+    <string name="assistance_details_header">Hulpbesonderhede</string>
+    <string name="support_type_label">Tipe Ondersteuning Benodig *</string>
+    <string name="describe_need_label">Beskryf Jou Behoefte *</string>
+    <string name="describe_need_placeholder">Beskryf watter ondersteuning benodig word en enige tersaaklike omstandighede...</string>
+    <string name="urgency_level_label">Dringendheidsvlak</string>
+    <string name="get_help_popia_consent">Ek het die privaatheidsinligting gelees en stem in dat Aurorah NPC hierdie besonderhede mag aanteken en gebruik om my versoek te evalueer en my te kontak oor moontlike hulp.</string>
+    <string name="btn_submit_request">Dien Versoek In</string>
+
+    <!-- Volunteer Form & Screen -->
+    <string name="personal_info_header">Persoonlike Inligting</string>
+    <string name="email_optional_label">E-posadres (Opsioneel)</string>
+    <string name="volunteer_location_helper">Vrywilligersrolle is gebaseer in Kuilsrivier en omliggende gemeenskappe.</string>
+    <string name="skills_availability_header">Jou Vaardighede &amp; Beskikbaarheid</string>
+    <string name="skills_experience_label">Jou Vaardighede &amp; Ervaring *</string>
+    <string name="skills_experience_placeholder">Bv. onderrig, gesondheidsorg, timmerwerk, kookkuns, administrasie, logistiek, bestuurder...</string>
+    <string name="days_available_label">Dae Beskikbaar *</string>
+    <string name="select_at_least_one">(Kies minstens een)</string>
+    <string name="volunteer_privacy_notice">Jou naam, voorstad, telefoonnommer, vaardighede en beskikbaarheid word benodig om jou aansoek te evalueer en op te volg. E-pos is opsioneel.</string>
+    <string name="volunteer_popia_consent">Ek het die privaatheidsinligting gelees en stem in dat Aurorah NPC hierdie besonderhede mag gebruik om my vrywilligeraansoek te hersien en my daaroor te kontak.</string>
+    <string name="btn_submit_application">Dien Aansoek In</string>
+    <string name="safeguarding_title">Inwerkingstelling en beskerming:</string>
+    <string name="safeguarding_body">Aansoeke word hersien voor plasing. Kandidate kan na \'n onderhoud en oriëntasie genooi word. Rolle wat direkte kontak met kinders behels, vereis van toepassing synde kinderbeskermingskontroles.</string>
+    <string name="volunteer_privacy_prefix">Ons gebruik jou naam, gebied, telefoonnommer, vaardighede en beskikbaarheid om jou aansoek te hersien en jou te kontak. E-pos is opsioneel. </string>
+
+    <!-- Dialogs & General -->
+    <string name="btn_close">Sluit</string>
+    <string name="btn_understood">Verstaan</string>
+    <string name="btn_view_full_policy">Bekyk Volledige Aanlyn Beleid</string>
+    <string name="btn_retry">Probeer Weer</string>
+    <string name="news_load_error">Gemeenskapsopdaterings kon nie gelaai word nie.</string>
+    <string name="no_updates_category">Geen aktiewe opdaterings in hierdie kategorie nie.</string>
+    <string name="media_consent_notice">Media Toestemmingskennisgewing: Ons deel foto\'s van identifiseerbare gemeenskapslede slegs met skriftelike mediatoestemming.</string>
+    <string name="hero_tag">AURORAH NPC  ·  KUILSRIVIER, KAAPSTAD</string>
+    <string name="view_ways_to_help">Sien maniere om te help  →</string>
+    <string name="featured_story_tag_format">HOOFSTORY  ·  %1$s</string>
 </resources>

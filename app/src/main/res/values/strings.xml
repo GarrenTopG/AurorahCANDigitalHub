@@ -157,6 +157,110 @@
     <string name="delete_account_confirm_message">Are you sure you want to permanently delete your Aurorah CAN account? This will permanently erase your personal profile, contact information, donation records, and volunteer history from our active systems. This action cannot be undone.</string>
     <string name="delete_account_success">Your account and associated personal data have been deleted.</string>
 
+    <!-- Phase 3 Localization Strings -->
+    <!-- Donation & Pledge -->
+    <string name="donation_pledge_title">Make a Donation Pledge</string>
+    <string name="donation_pledge_notice_title">Donation Pledge Notice</string>
+    <string name="donation_pledge_notice_body">Submitting a donation in the app records a pledge reference. The mobile app does not process direct card/bank payments.</string>
+    <string name="section_18a_title">Need a Section 18A Tax Receipt?</string>
+    <string name="section_18a_body">Section 18A tax receipts are managed through our web platform. Tap below to visit the official portal.</string>
+    <string name="section_18a_button">Visit Website for Section 18A Receipt</string>
+    <string name="pledge_received_monetary">Monetary Pledge Received</string>
+    <string name="pledge_received_inkind">In-Kind Pledge Received</string>
+    <string name="pledge_reference_format">Reference: %1$s</string>
+    <string name="pledge_received_thank_you">Thank you for supporting Aurorah CAN. Our team will reference your pledge and keep you updated.</string>
+    <string name="make_another_donation">Make Another Donation</string>
+    <string name="review_donation_pledge">Review Donation Pledge</string>
+    <string name="review_donation_type">Donation Type</string>
+    <string name="review_fund_category">Fund / Category</string>
+    <string name="review_pledge_amount">Pledge Amount</string>
+    <string name="review_preferred_method">Preferred Method</string>
+    <string name="review_monetary">Monetary</string>
+    <string name="review_inkind_goods">In-Kind Goods</string>
+    <string name="review_item_category">Item Category</string>
+    <string name="review_description">Description</string>
+    <string name="review_fulfillment">Fulfillment</string>
+    <string name="btn_back">Back</string>
+    <string name="btn_submit_pledge">Submit Pledge</string>
+    <string name="chip_monetary_pledge">Monetary Pledge</string>
+    <string name="chip_inkind_goods">In-Kind Goods</string>
+    <string name="monetary_category_label">Monetary Category *</string>
+    <string name="select_amount_label">Select Amount *</string>
+    <string name="chip_custom_amount">Custom Amount</string>
+    <string name="custom_amount_label">Custom Amount (ZAR) *</string>
+    <string name="payment_method_label">Payment Reference Method</string>
+    <string name="payment_card_ref">Credit Card Reference</string>
+    <string name="payment_eft_ref">EFT / Direct Transfer</string>
+    <string name="item_category_label">Item Category *</string>
+    <string name="item_desc_quantity_label">Item Description &amp; Quantity *</string>
+    <string name="item_desc_quantity_placeholder">e.g. 5 boxes of non-perishable canned food, 10 winter blankets</string>
+    <string name="fulfillment_preference_label">Fulfillment Preference *</string>
+    <string name="btn_review_pledge">Review Pledge</string>
+
+    <!-- Community Needs -->
+    <string name="community_needs_title">Current Community Needs</string>
+    <string name="community_needs_subtitle">Explore urgent needs identified across Kuils River communities and offer your time or skills to help.</string>
+    <string name="no_needs_found_format">No community needs found for \'%1$s\'</string>
+    <string name="btn_refresh_list">Refresh List</string>
+    <string name="offer_logged_title">Offer Logged</string>
+    <string name="btn_ok">OK</string>
+
+    <!-- Offer Help Dialog -->
+    <string name="offer_help_dialog_title">Offer Help</string>
+    <string name="assisting_with_format">Assisting with: %1$s</string>
+    <string name="your_skill_label">Your Skill or Specialty *</string>
+    <string name="your_skill_placeholder">e.g. Driver, Logistics, Food Packing, Teaching</string>
+    <string name="additional_notes_label">Additional Notes / Availability</string>
+    <string name="additional_notes_placeholder">e.g. Available Saturdays, have a pickup vehicle</string>
+    <string name="btn_cancel">Cancel</string>
+
+    <!-- Contact Card & Find Us -->
+    <string name="find_us_title">Find us</string>
+    <string name="address_sunbird_park">27 Lovebird Walk, Sunbird Park, Cape Town, 7580</string>
+    <string name="hours_sunbird_park">Mon–Fri 08:00–17:00; Sat 09:00–14:00</string>
+
+    <!-- Get Help Form & Screen -->
+    <string name="your_details_header">Your Details</string>
+    <string name="first_name_label">First Name *</string>
+    <string name="last_name_label">Last Name *</string>
+    <string name="suburb_area_label">Suburb or Area *</string>
+    <string name="requests_location_helper">Requests are served within Kuils River and nearby communities.</string>
+    <string name="assistance_details_header">Assistance Details</string>
+    <string name="support_type_label">Type of Support Needed *</string>
+    <string name="describe_need_label">Describe Your Need *</string>
+    <string name="describe_need_placeholder">Describe what support is needed and any relevant circumstances...</string>
+    <string name="urgency_level_label">Urgency Level</string>
+    <string name="get_help_popia_consent">I have read the privacy information and agree that Aurorah NPC may record and use these details to evaluate my request and contact me about potential assistance.</string>
+    <string name="btn_submit_request">Submit Request</string>
+
+    <!-- Volunteer Form & Screen -->
+    <string name="personal_info_header">Personal Information</string>
+    <string name="email_optional_label">Email Address (Optional)</string>
+    <string name="volunteer_location_helper">Volunteer roles are based in Kuils River and nearby communities.</string>
+    <string name="skills_availability_header">Your Skills &amp; Availability</string>
+    <string name="skills_experience_label">Your Skills &amp; Experience *</string>
+    <string name="skills_experience_placeholder">E.g., teaching, healthcare, carpentry, cooking, admin work, logistics, driver...</string>
+    <string name="days_available_label">Days Available *</string>
+    <string name="select_at_least_one">(Select at least one)</string>
+    <string name="volunteer_privacy_notice">Your name, suburb, phone number, skills and availability are required to assess and follow up on your application. Email is optional. If required information is missing, we may be unable to review your application.</string>
+    <string name="volunteer_popia_consent">I have read the privacy information and agree that Aurorah NPC may use these details to review my volunteer application and contact me about it.</string>
+    <string name="btn_submit_application">Submit Application</string>
+    <string name="safeguarding_title">Onboarding and safeguarding:</string>
+    <string name="safeguarding_body">Applications are reviewed before placement. Candidates may be invited to an interview and orientation. Roles involving direct contact with children require the applicable child-protection checks, including Child Protection Register vetting under the Children’s Act. Additional background checks may apply to a role.</string>
+    <string name="volunteer_privacy_prefix">We use your name, area, phone number, skills and availability to review your application and contact you. Email is optional. </string>
+
+    <!-- Dialogs & General -->
+    <string name="btn_close">Close</string>
+    <string name="btn_understood">Understood</string>
+    <string name="btn_view_full_policy">View Full Online Policy</string>
+    <string name="btn_retry">Retry</string>
+    <string name="news_load_error">Community updates could not be loaded.</string>
+    <string name="no_updates_category">No active updates in this category.</string>
+    <string name="media_consent_notice">Media Consent Notice: We share photos of identifiable community members, especially children, only with written media consent. Generic imagery is labelled as illustrative.</string>
+    <string name="hero_tag">AURORAH NPC  ·  KUILS RIVER, CAPE TOWN</string>
+    <string name="view_ways_to_help">View ways to help  →</string>
+    <string name="featured_story_tag_format">FEATURED STORY  ·  %1$s</string>
+
     <!-- Default Web Client ID for Google Sign In placeholder -->
     <string name="default_web_client_id" translatable="false">YOUR_GOOGLE_WEB_CLIENT_ID.apps.googleusercontent.com</string>
 </resources>

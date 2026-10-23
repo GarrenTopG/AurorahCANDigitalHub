@@ -157,4 +157,108 @@
     <string name="delete_account_confirm_title">Susa I-akhawunti?</string>
     <string name="delete_account_confirm_message">Uqinisekile ufuna ukususa i-akhawunti yakho ye-Aurorah CAN ngokuphelele? Lokhu kuzosusa imininingwane yakho namarekhodi akho.</string>
     <string name="delete_account_success">I-akhawunti yakho nemininingwane yakho isusiwe.</string>
+
+    <!-- Phase 3 Localization Strings -->
+    <!-- Donation & Pledge -->
+    <string name="donation_pledge_title">Dala Isithembiso Somnikelo</string>
+    <string name="donation_pledge_notice_title">Isaziso Sesisithembiso Somnikelo</string>
+    <string name="donation_pledge_notice_body">Ukuthumela umnikelo kuhlelo lokusebenza kubhalisa isithembiso. Uhlelo lokusebenza aluyenzisi izinkokhelo zekhadi noma zasebhange ngqo.</string>
+    <string name="section_18a_title">Udinga Irisithi Yentela Ye-Sahluko 18A?</string>
+    <string name="section_18a_body">Izirisithi zentela zeSahluko 18A zilawulwa kwi-web yethu. Thinta ngezansi ukuze uvakashele ingosi esemthethweni.</string>
+    <string name="section_18a_button">Vakashela Iwebhusayithi Ye-Sahluko 18A Irisithi</string>
+    <string name="pledge_received_monetary">Isithembiso Semali Samukelwe</string>
+    <string name="pledge_received_inkind">Isithembiso Sezimpahla Samukelwe</string>
+    <string name="pledge_reference_format">Inkomba: %1$s</string>
+    <string name="pledge_received_thank_you">Siyabonga ngokusekela i-Aurorah CAN. Ithimba lethu lizobuyekeza isithembiso sakho futhi likugcine unolwazi.</string>
+    <string name="make_another_donation">Dala Esinye Isithembiso</string>
+    <string name="review_donation_pledge">Buyekeza Isithembiso Somnikelo</string>
+    <string name="review_donation_type">Uhlobo Somnikelo</string>
+    <string name="review_fund_category">Izikhwama / Umkhakha</string>
+    <string name="review_pledge_amount">Inani Lesisithembiso</string>
+    <string name="review_preferred_method">Indlela Ekhethiwe</string>
+    <string name="review_monetary">Ngemali</string>
+    <string name="review_inkind_goods">Izimpahla Zomusa</string>
+    <string name="review_item_category">Umkhakha Wezimpahla</string>
+    <string name="review_description">Incazelo</string>
+    <string name="review_fulfillment">Ukufezeka</string>
+    <string name="btn_back">Emuva</string>
+    <string name="btn_submit_pledge">Thumela Isithembiso</string>
+    <string name="chip_monetary_pledge">Isithembiso Semali</string>
+    <string name="chip_inkind_goods">Izimpahla Zomusa</string>
+    <string name="monetary_category_label">Umkhakha Wemali *</string>
+    <string name="select_amount_label">Khetha Inani *</string>
+    <string name="chip_custom_amount">Inani Elibekiwe</string>
+    <string name="custom_amount_label">Inani Elibekiwe (ZAR) *</string>
+    <string name="payment_method_label">Indlela Yokukhokha</string>
+    <string name="payment_card_ref">Inkomba Yekhadi</string>
+    <string name="payment_eft_ref">EFT / Ukudlulisela Kwasebhange</string>
+    <string name="item_category_label">Umkhakha Wezimpahla *</string>
+    <string name="item_desc_quantity_label">Incazelo Yezimpahla Nevolumu *</string>
+    <string name="item_desc_quantity_placeholder">isib. amabhokisi ayi-5 okudla okungawiyo, izingubo zasebusika eziyi-10</string>
+    <string name="fulfillment_preference_label">Indlela Yokuthumela *</string>
+    <string name="btn_review_pledge">Buyekeza Isithembiso</string>
+
+    <!-- Community Needs -->
+    <string name="community_needs_title">Izimfuno Zomphakathi Zamanje</string>
+    <string name="community_needs_subtitle">Hlola izimfuno zomphakathi eKuils River bese uhlinzeka ngesikhathi noma ngamakhono akho.</string>
+    <string name="no_needs_found_format">Akafunyanwanga izimfuno zomphakathi ze \'%1$s\'</string>
+    <string name="btn_refresh_list">Hlaziya Uhlu</string>
+    <string name="offer_logged_title">Isithembiso Sibhalisiwe</string>
+    <string name="btn_ok">OK</string>
+
+    <!-- Offer Help Dialog -->
+    <string name="offer_help_dialog_title">Hlinzeka Ngosizo</string>
+    <string name="assisting_with_format">Usizo nge: %1$s</string>
+    <string name="your_skill_label">Ikhono Lakho noma Insimu *</string>
+    <string name="your_skill_placeholder">isib. Umshayeli, Ilogistics, Ukupakisha Ukudla, Ukufundisa</string>
+    <string name="additional_notes_label">Amanothi Engeziwe / Ukutholakala</string>
+    <string name="additional_notes_placeholder">isib. Ngitholakala ngeSonto, nginemoto</string>
+    <string name="btn_cancel">Khansela</string>
+
+    <!-- Contact Card & Find Us -->
+    <string name="find_us_title">Sithole</string>
+    <string name="address_sunbird_park">27 Lovebird Walk, Sunbird Park, Cape Town, 7580</string>
+    <string name="hours_sunbird_park">Mso–Somb 08:00–17:00; Mgq 09:00–14:00</string>
+
+    <!-- Get Help Form & Screen -->
+    <string name="your_details_header">Imininingwane Yakho</string>
+    <string name="first_name_label">Igama *</string>
+    <string name="last_name_label">Isibongo *</string>
+    <string name="suburb_area_label">Indawo noma Ilokishi *</string>
+    <string name="requests_location_helper">Izicelo zisebenza eKuils River nakuzo zonke izindawo ezizungezile.</string>
+    <string name="assistance_details_header">Imininingwane Yosizo</string>
+    <string name="support_type_label">Uhlobo Lwe-Inkxaso *</string>
+    <string name="describe_need_label">Incazelo Yemfuneko *</string>
+    <string name="describe_need_placeholder">Caza usizo oludingekayo nezimo ezihambisana nalokho...</string>
+    <string name="urgency_level_label">Izinga Lokushesha</string>
+    <string name="get_help_popia_consent">Ngiyifundile imininingwane yobumfihlo futhi ngiyavuma ukuthi i-Aurorah NPC isebenzise le mininingwane ukuze ibuyekeze isicelo sami.</string>
+    <string name="btn_submit_request">Thumela Isicelo</string>
+
+    <!-- Volunteer Form & Screen -->
+    <string name="personal_info_header">Imininingwane Yakho</string>
+    <string name="email_optional_label">Ikheli Le-Imeyili (Ngokuzikhethela)</string>
+    <string name="volunteer_location_helper">Izindima zokuxhasa zise-Kuils River nakuzo zonke izindawo eziseduze.</string>
+    <string name="skills_availability_header">Amakhono &amp; Ukutholakala Yakho</string>
+    <string name="skills_experience_label">Amakhono &amp; Izahlobo Yakho *</string>
+    <string name="skills_experience_placeholder">Isib. ukufundisa, ezempilo, iwreke, ukupheka, ukuphatha, ilogistics, umshayeli...</string>
+    <string name="days_available_label">Izinsuku Ezitholakalayo *</string>
+    <string name="select_at_least_one">(Khetha okungenani eyodwa)</string>
+    <string name="volunteer_privacy_notice">Igama, indawo, inombolo yocingo, amakhono nezinsuku zakho kuyadingeka ukubuyekeza isicelo sakho.</string>
+    <string name="volunteer_popia_consent">Ngiyifundile imininingwane yobumfihlo futhi ngiyavuma ukuthi i-Aurorah NPC isebenzise le mininingwane ukuze ibuyekeze isicelo sami sokuvola.</string>
+    <string name="btn_submit_application">Thumela Isicelo</string>
+    <string name="safeguarding_title">Ukungenisa nokuvikela:</string>
+    <string name="safeguarding_body">Izicelo ziyabuyekezwa ngaphambi kokubekwa. Abazongenela bangamenywa engxoxweni. Izindima ezithinta abantwana zidinga ukuhlolwa kokuvikelwa kwabantwana.</string>
+    <string name="volunteer_privacy_prefix">Sisebenzisa igama, indawo, ucingo namakhono akho ukubuyekeza isicelo sakho. </string>
+
+    <!-- Dialogs & General -->
+    <string name="btn_close">Vala</string>
+    <string name="btn_understood">Kuyazwisiseka</string>
+    <string name="btn_view_full_policy">Buka Inqubomgomo Yonke Online</string>
+    <string name="btn_retry">Zama Futhi</string>
+    <string name="news_load_error">Akukwazekanga ukulayisha izibuyekezo zomphakathi.</string>
+    <string name="no_updates_category">Akukho zibuyekezo kulo mkhakha.</string>
+    <string name="media_consent_notice">Isaziso Sokusaza: Sabelana ngezithombe zabantu bomphakathi kuphela ngemvume ebhaliwe.</string>
+    <string name="hero_tag">AURORAH NPC  ·  KUILS RIVER, CAPE TOWN</string>
+    <string name="view_ways_to_help">Bona izindlela zokusiza  →</string>
+    <string name="featured_story_tag_format">INDABA EYINHLOKO  ·  %1$s</string>
 </resources>

@@ -23,15 +23,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
+import com.aurorah.can.R
 import com.aurorah.can.ui.theme.BrandPrimary
 
 @Composable
 fun ContactCard(modifier: Modifier = Modifier) {
     val context = LocalContext.current
+    val address = stringResource(R.string.address_sunbird_park)
+
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(18.dp),
@@ -42,16 +46,15 @@ fun ContactCard(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = "Find us",
+                text = stringResource(R.string.find_us_title),
                 color = Color.White,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
             ContactLine(
                 icon = Icons.Filled.LocationOn,
-                text = "27 Lovebird Walk, Sunbird Park, Cape Town, 7580",
+                text = address,
                 onClick = {
-                    val address = "27 Lovebird Walk, Sunbird Park, Cape Town, 7580"
                     val mapIntent = Intent(Intent.ACTION_VIEW, "geo:0,0?q=${Uri.encode(address)}".toUri())
                     try {
                         context.startActivity(mapIntent)
@@ -63,7 +66,7 @@ fun ContactCard(modifier: Modifier = Modifier) {
             )
             ContactLine(
                 icon = Icons.Filled.AccessTime,
-                text = "Mon–Fri 08:00–17:00; Sat 09:00–14:00"
+                text = stringResource(R.string.hours_sunbird_park)
             )
         }
     }

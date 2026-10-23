@@ -31,7 +31,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aurorah.can.R
-import com.aurorah.can.ui.theme.*
+import com.aurorah.can.ui.theme.BrandPrimary
+import com.aurorah.can.ui.theme.TextInk
+import com.aurorah.can.ui.theme.TextMuted
 
 @Composable
 fun AboutDialog(onDismiss: () -> Unit) {
@@ -42,7 +44,7 @@ fun AboutDialog(onDismiss: () -> Unit) {
                 onClick = onDismiss,
                 colors = ButtonDefaults.buttonColors(containerColor = BrandPrimary)
             ) {
-                Text("Close")
+                Text(stringResource(R.string.btn_close))
             }
         },
         title = {
@@ -57,7 +59,7 @@ fun AboutDialog(onDismiss: () -> Unit) {
                     modifier = Modifier.size(24.dp)
                 )
                 Text(
-                    text = "About Aurorah CAN",
+                    text = stringResource(R.string.about_aurorah_title),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     color = TextInk
@@ -72,30 +74,10 @@ fun AboutDialog(onDismiss: () -> Unit) {
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    text = "Aurorah Community Action Network (CAN) is a non-profit company (NPC) based in Kuils River, Cape Town.",
+                    text = stringResource(R.string.about_story),
                     fontSize = 14.sp,
                     lineHeight = 20.sp,
                     color = TextInk
-                )
-                Text(
-                    text = "We focus on practical, community-led initiatives to support vulnerable households, young people, and local residents. Key programs include:",
-                    fontSize = 14.sp,
-                    lineHeight = 20.sp,
-                    color = TextInk
-                )
-                Column(
-                    modifier = Modifier.padding(start = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    Text("• Sunbird Park Mini-Library & Youth Literacy", fontSize = 13.sp, color = TextMuted)
-                    Text("• Community Food Parcels & Relief Logistics", fontSize = 13.sp, color = TextMuted)
-                    Text("• Local Skill Sharing & Volunteer Coordination", fontSize = 13.sp, color = TextMuted)
-                }
-                Text(
-                    text = "Our work is built on transparency, community trust, and mutual assistance.",
-                    fontSize = 13.sp,
-                    color = TextInk,
-                    fontWeight = FontWeight.Medium
                 )
             }
         },
@@ -112,7 +94,7 @@ fun ContactDialog(onDismiss: () -> Unit) {
                 onClick = onDismiss,
                 colors = ButtonDefaults.buttonColors(containerColor = BrandPrimary)
             ) {
-                Text("Close")
+                Text(stringResource(R.string.btn_close))
             }
         },
         title = {
@@ -127,7 +109,7 @@ fun ContactDialog(onDismiss: () -> Unit) {
                     modifier = Modifier.size(24.dp)
                 )
                 Text(
-                    text = "Contact Aurorah CAN",
+                    text = stringResource(R.string.find_us_title),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     color = TextInk
@@ -144,12 +126,12 @@ fun ContactDialog(onDismiss: () -> Unit) {
                 ContactDetailItem(
                     icon = Icons.Filled.LocationOn,
                     title = "Address",
-                    detail = "27 Lovebird Walk, Sunbird Park, Cape Town, 7580"
+                    detail = stringResource(R.string.address_sunbird_park)
                 )
                 ContactDetailItem(
                     icon = Icons.Filled.AccessTime,
                     title = "Operating Hours",
-                    detail = "Mon–Fri: 08:00 – 17:00\nSat: 09:00 – 14:00"
+                    detail = stringResource(R.string.hours_sunbird_park)
                 )
                 ContactDetailItem(
                     icon = Icons.Filled.Phone,
@@ -202,7 +184,7 @@ fun PrivacyDialog(onDismiss: () -> Unit) {
                 onClick = onDismiss,
                 colors = ButtonDefaults.buttonColors(containerColor = BrandPrimary)
             ) {
-                Text("Understood")
+                Text(stringResource(R.string.btn_understood))
             }
         },
         dismissButton = {
@@ -213,7 +195,7 @@ fun PrivacyDialog(onDismiss: () -> Unit) {
                     } catch (_: Exception) {}
                 }
             ) {
-                Text("View Full Online Policy", color = BrandPrimary, fontSize = 13.sp)
+                Text(stringResource(R.string.btn_view_full_policy), color = BrandPrimary, fontSize = 13.sp)
             }
         },
         title = {
@@ -228,7 +210,7 @@ fun PrivacyDialog(onDismiss: () -> Unit) {
                     modifier = Modifier.size(24.dp)
                 )
                 Text(
-                    text = "Privacy & POPIA Notice",
+                    text = stringResource(R.string.privacy_policy_title),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     color = TextInk
@@ -262,12 +244,6 @@ fun PrivacyDialog(onDismiss: () -> Unit) {
                     Text("• Volunteer Applications: Processed for background suitability, skill matching, and role placement.", fontSize = 13.sp, color = TextMuted)
                     Text("• Donations: Pledges are recorded securely for organization records.", fontSize = 13.sp, color = TextMuted)
                 }
-                Text(
-                    text = "Your data is never sold to third parties. If required details are missing, we may be unable to process your request.",
-                    fontSize = 12.sp,
-                    color = TextInk,
-                    fontWeight = FontWeight.Medium
-                )
             }
         },
         shape = RoundedCornerShape(20.dp)

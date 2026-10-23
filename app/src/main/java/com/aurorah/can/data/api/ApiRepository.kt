@@ -9,272 +9,142 @@ import retrofit2.Response
 import java.io.InterruptedIOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ApiRepository(private val apiService: ApiService) {
+@Singleton
+class ApiRepository @Inject constructor(private val apiService: ApiService) {
 
     constructor(context: Context) : this(RetrofitClient.getApiService(context))
     constructor(sessionManager: SessionManager) : this(RetrofitClient.getApiService(sessionManager))
 
     private val gson = Gson()
 
-    suspend fun login(request: LoginRequest): AuthResponse {
-        return try {
-            val response = apiService.login(request)
-            if (response.isSuccessful && response.body() != null) {
-                response.body()!!
-            } else {
-                parseErrorResponse(response) ?: AuthResponse(
-                    success = false,
-                    message = "Login failed (${response.code()})"
-                )
-            }
-        } catch (e: Exception) {
-            AuthResponse(
-                success = false,
-                message = resolveNetworkErrorMessage(e)
-            )
-        }
+    suspend fun login(request: LoginRequest): NetworkResult<AuthResponse> {
+        return safeApiCall(
+            apiCall = { apiService.login(request) },
+            transform = { it.toDomain() }
+        )
     }
 
-    suspend fun register(request: RegisterRequest): AuthResponse {
-        return try {
-            val response = apiService.register(request)
-            if (response.isSuccessful && response.body() != null) {
-                response.body()!!
-            } else {
-                parseErrorResponse(response) ?: AuthResponse(
-                    success = false,
-                    message = "Registration failed (${response.code()})"
-                )
-            }
-        } catch (e: Exception) {
-            AuthResponse(
-                success = false,
-                message = resolveNetworkErrorMessage(e)
-            )
-        }
+    suspend fun register(request: RegisterRequest): NetworkResult<AuthResponse> {
+        return safeApiCall(
+            apiCall = { apiService.register(request) },
+            transform = { it.toDomain() }
+        )
     }
 
-    suspend fun googleSso(email: String, name: String): AuthResponse {
-        return try {
-            val response = apiService.googleSso(GoogleSsoRequest(email = email, name = name))
-            if (response.isSuccessful && response.body() != null) {
-                response.body()!!
-            } else {
-                parseErrorResponse(response) ?: AuthResponse(
-                    success = false,
-                    message = "Google SSO authentication failed (${response.code()})"
-                )
-            }
-        } catch (e: Exception) {
-            AuthResponse(
-                success = false,
-                message = resolveNetworkErrorMessage(e)
-            )
-        }
+    suspend fun googleSso(email: String, name: String): NetworkResult<AuthResponse> {
+        return safeApiCall(
+            apiCall = { apiService.googleSso(GoogleSsoRequest(email = email, name = name)) },
+            transform = { it.toDomain() }
+        )
     }
 
-    suspend fun changePassword(request: ChangePasswordRequest): ApiResponse {
-        return try {
-            val response = apiService.changePassword(request)
-            if (response.isSuccessful && response.body() != null) {
-                response.body()!!
-            } else {
-                parseErrorResponse(response) ?: ApiResponse(
-                    success = false,
-                    message = "Password update failed (${response.code()})"
-                )
-            }
-        } catch (e: Exception) {
-            ApiResponse(
-                success = false,
-                message = resolveNetworkErrorMessage(e)
-            )
-        }
+    suspend fun changePassword(request: ChangePasswordRequest): NetworkResult<ApiResponse> {
+        return safeApiCall(
+            apiCall = { apiService.changePassword(request) },
+            transform = { it }
+        )
     }
 
-    suspend fun getNews(): List<NewsItem> {
-        return try {
-            val response = apiService.getNews()
-            if (response.isSuccessful) {
-                response.body() ?: emptyList()
-            } else {
-                emptyList()
-            }
-        } catch (_: Exception) {
-            emptyList()
-        }
+    suspend fun getNews(): NetworkResult<List<NewsItem>> {
+        return safeApiCall(
+            apiCall = { apiService.getNews() },
+            transform = { list -> list.map { it.toDomain() } }
+        )
     }
 
-    suspend fun getNeeds(): List<CommunityNeed> {
-        return try {
-            val response = apiService.getNeeds()
-            if (response.isSuccessful) {
-                response.body() ?: emptyList()
-            } else {
-                emptyList()
-            }
-        } catch (_: Exception) {
-            emptyList()
-        }
+    suspend fun getNeeds(): NetworkResult<List<CommunityNeed>> {
+        return safeApiCall(
+            apiCall = { apiService.getNeeds() },
+            transform = { list -> list.map { it.toDomain() } }
+        )
     }
 
-    suspend fun offerAssistance(request: OfferAssistanceRequest): ApiResponse {
-        return try {
-            val response = apiService.offerAssistance(request)
-            if (response.isSuccessful && response.body() != null) {
-                response.body()!!
-            } else {
-                parseErrorResponse(response) ?: ApiResponse(
-                    success = false,
-                    message = "Submitting offer failed (${response.code()})"
-                )
-            }
-        } catch (e: Exception) {
-            ApiResponse(
-                success = false,
-                message = resolveNetworkErrorMessage(e)
-            )
-        }
+    suspend fun offerAssistance(request: OfferAssistanceRequest): NetworkResult<ApiResponse> {
+        return safeApiCall(
+            apiCall = { apiService.offerAssistance(request) },
+            transform = { it }
+        )
     }
 
-    suspend fun requestAssistance(request: AssistanceRequest): ApiResponse {
-        return try {
-            val response = apiService.requestAssistance(request)
-            if (response.isSuccessful && response.body() != null) {
-                response.body()!!
-            } else {
-                parseErrorResponse(response) ?: ApiResponse(
-                    success = false,
-                    message = "Submitting assistance request failed (${response.code()})"
-                )
-            }
-        } catch (e: Exception) {
-            ApiResponse(
-                success = false,
-                message = resolveNetworkErrorMessage(e)
-            )
-        }
+    suspend fun requestAssistance(request: AssistanceRequest): NetworkResult<ApiResponse> {
+        return safeApiCall(
+            apiCall = { apiService.requestAssistance(request) },
+            transform = { it }
+        )
     }
 
-    suspend fun updateProfile(request: UpdateProfileRequest): AuthResponse {
-        return try {
-            val response = apiService.updateProfile(request)
-            if (response.isSuccessful && response.body() != null) {
-                response.body()!!
-            } else {
-                parseErrorResponse(response) ?: AuthResponse(
-                    success = false,
-                    message = "Updating profile failed (${response.code()})"
-                )
-            }
-        } catch (e: Exception) {
-            AuthResponse(
-                success = false,
-                message = resolveNetworkErrorMessage(e)
-            )
-        }
+    suspend fun updateProfile(request: UpdateProfileRequest): NetworkResult<AuthResponse> {
+        return safeApiCall(
+            apiCall = { apiService.updateProfile(request) },
+            transform = { it.toDomain() }
+        )
     }
 
-    suspend fun getProfile(): AuthResponse {
-        return try {
-            val response = apiService.getProfile()
-            if (response.isSuccessful && response.body() != null) {
-                response.body()!!
-            } else {
-                parseErrorResponse(response) ?: AuthResponse(
-                    success = false,
-                    message = "Fetching profile failed (${response.code()})"
-                )
-            }
-        } catch (e: Exception) {
-            AuthResponse(
-                success = false,
-                message = resolveNetworkErrorMessage(e)
-            )
-        }
+    suspend fun getProfile(): NetworkResult<AuthResponse> {
+        return safeApiCall(
+            apiCall = { apiService.getProfile() },
+            transform = { it.toDomain() }
+        )
     }
 
-    suspend fun logout(): ApiResponse {
+    suspend fun logout(): NetworkResult<ApiResponse> {
         return try {
             val response = apiService.logout()
             if (response.isSuccessful && response.body() != null) {
-                response.body()!!
+                NetworkResult.Success(response.body()!!)
             } else {
-                parseErrorResponse(response) ?: ApiResponse(
-                    success = true,
-                    message = "Logged out successfully"
-                )
+                NetworkResult.Success(ApiResponse(success = true, message = "Logged out successfully"))
             }
         } catch (_: Exception) {
-            ApiResponse(success = true, message = "Logged out")
+            NetworkResult.Success(ApiResponse(success = true, message = "Logged out"))
         }
     }
 
-    suspend fun deleteAccount(): ApiResponse {
+    suspend fun deleteAccount(): NetworkResult<ApiResponse> {
+        return safeApiCall(
+            apiCall = { apiService.deleteAccount() },
+            transform = { it }
+        )
+    }
+
+    suspend fun submitVolunteer(request: VolunteerRequest): NetworkResult<ApiResponse> {
+        return safeApiCall(
+            apiCall = { apiService.submitVolunteer(request) },
+            transform = { it }
+        )
+    }
+
+    suspend fun submitDonation(request: DonationRequest): NetworkResult<DonationResponse> {
+        return safeApiCall(
+            apiCall = { apiService.submitDonation(request) },
+            transform = { it.toDomain() }
+        )
+    }
+
+    private suspend fun <T, R> safeApiCall(
+        apiCall: suspend () -> Response<T>,
+        transform: (T) -> R
+    ): NetworkResult<R> {
         return try {
-            val response = apiService.deleteAccount()
+            val response = apiCall()
             if (response.isSuccessful && response.body() != null) {
-                response.body()!!
+                NetworkResult.Success(transform(response.body()!!))
             } else {
-                parseErrorResponse(response) ?: ApiResponse(
-                    success = false,
-                    message = "Account deletion failed (${response.code()})"
-                )
+                val errorMessage = parseErrorMessage(response)
+                NetworkResult.Error(errorMessage)
             }
         } catch (e: Exception) {
-            ApiResponse(
-                success = false,
-                message = resolveNetworkErrorMessage(e)
-            )
+            NetworkResult.Error(resolveNetworkErrorMessage(e), e)
         }
     }
 
-    suspend fun submitVolunteer(request: VolunteerRequest): ApiResponse {
-        return try {
-            val response = apiService.submitVolunteer(request)
-            if (response.isSuccessful && response.body() != null) {
-                response.body()!!
-            } else {
-                parseErrorResponse(response) ?: ApiResponse(
-                    success = false,
-                    message = "Volunteer submission failed (${response.code()})"
-                )
-            }
-        } catch (e: Exception) {
-            ApiResponse(
-                success = false,
-                message = resolveNetworkErrorMessage(e)
-            )
-        }
-    }
-
-    suspend fun submitDonation(request: DonationRequest): DonationResponse {
-        return try {
-            val response = apiService.submitDonation(request)
-            if (response.isSuccessful && response.body() != null) {
-                response.body()!!
-            } else {
-                parseErrorResponse(response) ?: DonationResponse(
-                    success = false,
-                    transactionRef = "",
-                    message = "Donation processing failed (${response.code()})"
-                )
-            }
-        } catch (e: Exception) {
-            DonationResponse(
-                success = false,
-                transactionRef = "",
-                message = resolveNetworkErrorMessage(e)
-            )
-        }
-    }
-
-    private inline fun <reified T> parseErrorResponse(response: Response<*>): T? {
+    private fun parseErrorMessage(response: Response<*>): String {
         return try {
             val errorJson = response.errorBody()?.string()
             if (!errorJson.isNullOrBlank()) {
-                val parsed = gson.fromJson(errorJson, T::class.java)
                 val extractedMessage = try {
                     val jsonElement = JsonParser.parseString(errorJson)
                     if (jsonElement.isJsonObject) {
@@ -284,43 +154,17 @@ class ApiRepository(private val apiService: ApiService) {
                             ?: obj.get("message")?.asString
                             ?: obj.get("reason")?.asString
                             ?: obj.get("error_message")?.asString
+                            ?: obj.get("description")?.asString
                     } else null
                 } catch (_: Exception) {
                     null
                 }
-
-                val finalMessage = when {
-                    parsed is AuthResponse && parsed.message.isNotBlank() -> parsed.message
-                    parsed is ApiResponse && parsed.message.isNotBlank() -> parsed.message
-                    !extractedMessage.isNullOrBlank() -> extractedMessage
-                    else -> "Operation failed (${response.code()})"
-                }
-
-                @Suppress("UNCHECKED_CAST")
-                when (T::class) {
-                    AuthResponse::class -> AuthResponse(
-                        success = false,
-                        message = finalMessage,
-                        token = (parsed as? AuthResponse)?.token,
-                        user = (parsed as? AuthResponse)?.user
-                    ) as T
-                    ApiResponse::class -> ApiResponse(
-                        success = false,
-                        message = finalMessage
-                    ) as T
-                    else -> parsed
-                }
+                extractedMessage ?: "Operation failed (${response.code()})"
             } else {
-                null
+                "Operation failed (${response.code()})"
             }
         } catch (_: Exception) {
-            val fallbackMessage = "Operation failed (${response.code()})"
-            @Suppress("UNCHECKED_CAST")
-            when (T::class) {
-                AuthResponse::class -> AuthResponse(success = false, message = fallbackMessage) as T
-                ApiResponse::class -> ApiResponse(success = false, message = fallbackMessage) as T
-                else -> null
-            }
+            "Operation failed (${response.code()})"
         }
     }
 
@@ -332,7 +176,7 @@ class ApiRepository(private val apiService: ApiService) {
             e is UnknownHostException -> {
                 "Unable to connect to server. Please check your internet connection."
             }
-            !e.localizedMessage.isNullOrBlank() -> e.localizedMessage
+            !e.localizedMessage.isNullOrBlank() -> e.localizedMessage!!
             else -> defaultMessage
         }
     }

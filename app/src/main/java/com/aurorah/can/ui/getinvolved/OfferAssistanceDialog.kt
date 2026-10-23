@@ -26,39 +26,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.aurorah.can.data.api.ApiRepository
+import com.aurorah.can.R
 import com.aurorah.can.data.model.CommunityNeed
-import com.aurorah.can.data.model.OfferAssistanceRequest
 import com.aurorah.can.ui.theme.BrandPrimary
 import com.aurorah.can.ui.theme.TextInk
-import kotlinx.coroutines.launch
 
 @Composable
 fun OfferAssistanceDialog(
     need: CommunityNeed,
-    repository: ApiRepository,
-    userEmail: String,
+    isSubmitting: Boolean = false,
+    errorMessage: String? = null,
     onDismiss: () -> Unit,
-    onSuccess: (String) -> Unit
+    onSubmit: (skill: String, notes: String) -> Unit
 ) {
     var skill by remember { mutableStateOf("") }
     var notes by remember { mutableStateOf("") }
     var skillError by remember { mutableStateOf<String?>(null) }
-    var isLoading by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
-
-    val coroutineScope = rememberCoroutineScope()
+    val emptyFieldErr = stringResource(R.string.error_empty_field)
 
     AlertDialog(
-        onDismissRequest = { if (!isLoading) onDismiss() },
+        onDismissRequest = { if (!isSubmitting) onDismiss() },
         title = {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -71,7 +66,7 @@ fun OfferAssistanceDialog(
                     modifier = Modifier.size(24.dp)
                 )
                 Text(
-                    text = "Offer Help",
+                    text = stringResource(R.string.offer_help_dialog_title),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     color = TextInk
@@ -86,7 +81,7 @@ fun OfferAssistanceDialog(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    text = "Assisting with: ${need.title}",
+                    text = stringResource(R.string.assisting_with_format, need.title),
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 14.sp,
                     color = BrandPrimary
@@ -98,8 +93,8 @@ fun OfferAssistanceDialog(
                         skill = it
                         skillError = null
                     },
-                    label = { Text("Your Skill or Specialty *") },
-                    placeholder = { Text("e.g. Driver, Logistics, Food Packing, Teaching") },
+                    label = { Text(stringResource(R.string.your_skill_label)) },
+                    placeholder = { Text(stringResource(R.string.your_skill_placeholder)) },
                     isError = skillError != null,
                     supportingText = skillError?.let { { Text(it, color = Color.Red) } },
                     modifier = Modifier.fillMaxWidth(),
@@ -110,8 +105,8 @@ fun OfferAssistanceDialog(
                 OutlinedTextField(
                     value = notes,
                     onValueChange = { notes = it },
-                    label = { Text("Additional Notes / Availability") },
-                    placeholder = { Text("e.g. Available Saturdays, have a pickup vehicle") },
+                    label = { Text(stringResource(R.string.additional_notes_label)) },
+                    placeholder = { Text(stringResource(R.string.additional_notes_placeholder)) },
                     modifier = Modifier.fillMaxWidth(),
                     minLines = 2,
                     maxLines = 4,
@@ -130,7 +125,7 @@ fun OfferAssistanceDialog(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(Icons.Filled.ErrorOutline, contentDescription = null, tint = Color(0xFFDC2626))
-                            Text(errorMessage!!, color = Color(0xFF991B1B), fontSize = 12.sp)
+                            Text(errorMessage, color = Color(0xFF991B1B), fontSize = 12.sp)
                         }
                     }
                 }
@@ -140,49 +135,31 @@ fun OfferAssistanceDialog(
             Button(
                 onClick = {
                     if (skill.isBlank()) {
-                        skillError = "Please enter your skill or specialty"
+                        skillError = emptyFieldErr
                         return@Button
                     }
-                    isLoading = true
-                    errorMessage = null
-                    coroutineScope.launch {
-                        val response = repository.offerAssistance(
-                            OfferAssistanceRequest(
-                                needId = need.needId,
-                                userEmail = userEmail,
-                                volunteerSkill = skill,
-                                notes = notes
-                            )
-                        )
-                        isLoading = false
-                        if (response.success) {
-                            onSuccess(response.message.ifBlank { "Offer submitted successfully!" })
-                            onDismiss()
-                        } else {
-                            errorMessage = response.message.ifBlank { "Failed to submit offer" }
-                        }
-                    }
+                    onSubmit(skill, notes)
                 },
-                enabled = !isLoading,
+                enabled = !isSubmitting,
                 colors = ButtonDefaults.buttonColors(containerColor = BrandPrimary)
             ) {
-                if (isLoading) {
+                if (isSubmitting) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(18.dp),
                         color = Color.White,
                         strokeWidth = 2.dp
                     )
                 } else {
-                    Text("Submit Offer")
+                    Text(stringResource(R.string.submit_offer))
                 }
             }
         },
         dismissButton = {
             OutlinedButton(
                 onClick = onDismiss,
-                enabled = !isLoading
+                enabled = !isSubmitting
             ) {
-                Text("Cancel")
+                Text(stringResource(R.string.btn_cancel))
             }
         },
         shape = RoundedCornerShape(20.dp)

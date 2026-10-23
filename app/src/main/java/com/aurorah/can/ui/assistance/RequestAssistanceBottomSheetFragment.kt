@@ -9,19 +9,27 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.aurorah.can.R
 import com.aurorah.can.data.api.ApiRepository
+import com.aurorah.can.data.api.NetworkResult
 import com.aurorah.can.data.local.SessionManager
 import com.aurorah.can.data.model.AssistanceRequest
 import com.aurorah.can.databinding.FragmentRequestAssistanceBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class RequestAssistanceBottomSheetFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentRequestAssistanceBinding? = null
     private val binding get() = _binding!!
 
-    private val repository by lazy { ApiRepository(requireContext()) }
+    @Inject
+    lateinit var repository: ApiRepository
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     private val categories = listOf("Food", "Clothing", "Education", "Healthcare")
     private val urgencies = listOf("Critical", "High", "Medium", "Low")
@@ -90,14 +98,13 @@ class RequestAssistanceBottomSheetFragment : BottomSheetDialogFragment() {
 
             if (!isValid) return@setOnClickListener
 
-            val sessionManager = SessionManager(requireContext())
             val userEmail = sessionManager.fetchUserEmail()
 
             binding.pbAssistance.visibility = View.VISIBLE
             binding.btnSubmitAssistance.isEnabled = false
 
             viewLifecycleOwner.lifecycleScope.launch {
-                val response = repository.requestAssistance(
+                val result = repository.requestAssistance(
                     AssistanceRequest(
                         category = category,
                         urgency = urgency,
@@ -115,17 +122,26 @@ class RequestAssistanceBottomSheetFragment : BottomSheetDialogFragment() {
                 }
 
                 if (isAdded) {
-                    if (response.success) {
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Request Submitted")
-                            .setMessage(response.message.ifBlank { "Your assistance request has been received and prioritized." })
-                            .setPositiveButton("OK") { dialog, _ ->
-                                dialog.dismiss()
-                                dismiss()
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val response = result.data
+                            if (response.success) {
+                                MaterialAlertDialogBuilder(requireContext())
+                                    .setTitle("Request Submitted")
+                                    .setMessage(response.message.ifBlank { "Your assistance request has been received and prioritized." })
+                                    .setPositiveButton("OK") { dialog, _ ->
+                                        dialog.dismiss()
+                                        dismiss()
+                                    }
+                                    .show()
+                            } else {
+                                Toast.makeText(requireContext(), response.message, Toast.LENGTH_LONG).show()
                             }
-                            .show()
-                    } else {
-                        Toast.makeText(requireContext(), response.message, Toast.LENGTH_LONG).show()
+                        }
+                        is NetworkResult.Error -> {
+                            Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show()
+                        }
+                        is NetworkResult.Loading -> {}
                     }
                 }
             }

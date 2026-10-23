@@ -24,79 +24,62 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.aurorah.can.data.api.ApiRepository
-import com.aurorah.can.data.model.CommunityNeed
+import com.aurorah.can.R
+import com.aurorah.can.ui.needs.NeedsViewModel
 import com.aurorah.can.ui.theme.BrandPrimary
 import com.aurorah.can.ui.theme.TextInk
 import com.aurorah.can.ui.theme.TextMuted
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CommunityNeedsSubTab(
-    repository: ApiRepository,
-    userEmail: String,
+    viewModel: NeedsViewModel,
     modifier: Modifier = Modifier
 ) {
-    var needsList by remember { mutableStateOf<List<CommunityNeed>>(emptyList()) }
-    var isLoading by remember { mutableStateOf(true) }
-    var selectedFilter by remember { mutableStateOf("All") }
-    val categories = listOf("All", "Food", "Clothing", "Education", "Healthcare")
+    val uiState by viewModel.uiState.collectAsState()
 
-    var selectedNeedForOffer by remember { mutableStateOf<CommunityNeed?>(null) }
-    var feedbackMessage by remember { mutableStateOf<String?>(null) }
+    val categories = listOf(
+        stringResource(R.string.filter_all),
+        stringResource(R.string.filter_food),
+        stringResource(R.string.filter_clothing),
+        stringResource(R.string.filter_education),
+        stringResource(R.string.filter_healthcare)
+    )
 
-    val coroutineScope = rememberCoroutineScope()
-
-    fun loadNeeds() {
-        isLoading = true
-        coroutineScope.launch {
-            needsList = repository.getNeeds()
-            isLoading = false
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        loadNeeds()
-    }
-
-    if (selectedNeedForOffer != null) {
+    if (uiState.selectedNeedForOffer != null) {
         OfferAssistanceDialog(
-            need = selectedNeedForOffer!!,
-            repository = repository,
-            userEmail = userEmail,
-            onDismiss = { selectedNeedForOffer = null },
-            onSuccess = { msg: String ->
-                feedbackMessage = msg
+            need = uiState.selectedNeedForOffer!!,
+            isSubmitting = uiState.isSubmittingOffer,
+            errorMessage = uiState.offerErrorMessage,
+            onDismiss = { viewModel.selectNeedForOffer(null) },
+            onSubmit = { skill, notes ->
+                viewModel.submitOffer(uiState.selectedNeedForOffer!!.needId, skill, notes)
             }
         )
     }
 
-    if (feedbackMessage != null) {
+    if (uiState.offerSuccessMessage != null) {
         AlertDialog(
-            onDismissRequest = { feedbackMessage = null },
+            onDismissRequest = { viewModel.clearFeedbackMessage() },
             confirmButton = {
                 Button(
-                    onClick = { feedbackMessage = null },
+                    onClick = { viewModel.clearFeedbackMessage() },
                     colors = ButtonDefaults.buttonColors(containerColor = BrandPrimary)
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.btn_ok))
                 }
             },
-            title = { Text("Offer Logged", fontWeight = FontWeight.Bold) },
-            text = { Text(feedbackMessage!!) },
+            title = { Text(stringResource(R.string.offer_logged_title), fontWeight = FontWeight.Bold) },
+            text = { Text(uiState.offerSuccessMessage!!) },
             shape = RoundedCornerShape(16.dp)
         )
     }
@@ -109,13 +92,13 @@ fun CommunityNeedsSubTab(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = "Current Community Needs",
+            text = stringResource(R.string.community_needs_title),
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
             color = TextInk
         )
         Text(
-            text = "Explore urgent needs identified across Kuils River communities and offer your time or skills to help.",
+            text = stringResource(R.string.community_needs_subtitle),
             fontSize = 14.sp,
             color = TextMuted,
             lineHeight = 20.sp
@@ -127,9 +110,14 @@ fun CommunityNeedsSubTab(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             categories.forEach { category ->
+                val isSelected = category.equals(uiState.selectedFilter, ignoreCase = true) ||
+                        (uiState.selectedFilter == "All" && category == stringResource(R.string.filter_all))
                 FilterChip(
-                    selected = selectedFilter == category,
-                    onClick = { selectedFilter = category },
+                    selected = isSelected,
+                    onClick = {
+                        val filterToUse = if (category == categories[0]) "All" else category
+                        viewModel.onFilterSelected(filterToUse)
+                    },
                     label = { Text(category) },
                     colors = FilterChipDefaults.filterChipColors(
                         selectedContainerColor = BrandPrimary,
@@ -139,13 +127,8 @@ fun CommunityNeedsSubTab(
             }
         }
 
-        val filteredNeeds = remember(needsList, selectedFilter) {
-            if (selectedFilter == "All") needsList
-            else needsList.filter { it.category.equals(selectedFilter, ignoreCase = true) }
-        }
-
         when {
-            isLoading -> {
+            uiState.isLoading -> {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -155,7 +138,7 @@ fun CommunityNeedsSubTab(
                     CircularProgressIndicator(color = BrandPrimary)
                 }
             }
-            filteredNeeds.isEmpty() -> {
+            uiState.filteredNeeds.isEmpty() -> {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
@@ -167,19 +150,19 @@ fun CommunityNeedsSubTab(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            text = "No community needs found for '$selectedFilter'",
+                            text = stringResource(R.string.no_needs_found_format, uiState.selectedFilter),
                             color = TextMuted,
                             fontSize = 14.sp
                         )
-                        OutlinedButton(onClick = { loadNeeds() }) {
-                            Text("Refresh List")
+                        OutlinedButton(onClick = { viewModel.loadNeeds() }) {
+                            Text(stringResource(R.string.btn_refresh_list))
                         }
                     }
                 }
             }
             else -> {
-                filteredNeeds.forEach { need ->
-                    NeedItemCard(need = need, onOfferHelp = { selectedNeedForOffer = need })
+                uiState.filteredNeeds.forEach { need ->
+                    NeedItemCard(need = need, onOfferHelp = { viewModel.selectNeedForOffer(need) })
                 }
             }
         }

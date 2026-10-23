@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
-    private const val BASE_URL = "https://aurorah-web-hub.onrender.com/"
+    private val BASE_URL = BuildConfig.BASE_URL
 
     @Volatile
     private var apiServiceInstance: ApiService? = null

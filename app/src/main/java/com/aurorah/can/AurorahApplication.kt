@@ -6,8 +6,10 @@ import coil.ImageLoaderFactory
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import coil.util.DebugLogger
+import dagger.hilt.android.HiltAndroidApp
 import okhttp3.OkHttpClient
 
+@HiltAndroidApp
 class AurorahApplication : Application(), ImageLoaderFactory {
 
     override fun newImageLoader(): ImageLoader {

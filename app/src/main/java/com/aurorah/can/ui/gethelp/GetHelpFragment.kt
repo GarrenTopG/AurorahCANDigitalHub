@@ -7,14 +7,19 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.aurorah.can.data.api.ApiRepository
 import com.aurorah.can.data.local.SessionManager
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class GetHelpFragment : Fragment() {
 
-    private val repository by lazy { ApiRepository(requireContext()) }
-    private val sessionManager by lazy { SessionManager(requireContext()) }
+    private val viewModel: GetHelpViewModel by viewModels()
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,7 +34,7 @@ class GetHelpFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 GetHelpScreen(
-                    repository = repository,
+                    viewModel = viewModel,
                     userEmail = userEmail,
                     userName = userName,
                     userPhone = userPhone,

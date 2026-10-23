@@ -2,9 +2,8 @@ package com.aurorah.can
 
 import com.aurorah.can.data.api.ApiRepository
 import com.aurorah.can.data.api.ApiService
-import com.aurorah.can.data.model.AuthResponse
+import com.aurorah.can.data.api.NetworkResult
 import com.aurorah.can.data.model.RegisterRequest
-import com.google.gson.Gson
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -65,7 +64,7 @@ class ApiRepositoryTest {
         }
 
         val repository = ApiRepository(apiService)
-        val response = repository.register(
+        val result = repository.register(
             RegisterRequest(
                 fullName = "Aubrey Graham",
                 email = "drake@aurorah.co.za",
@@ -74,6 +73,8 @@ class ApiRepositoryTest {
             )
         )
 
+        assertTrue(result is NetworkResult.Success)
+        val response = (result as NetworkResult.Success).data
         assertTrue(response.success)
         assertEquals("User registered successfully", response.message)
         assertEquals("test-jwt-token", response.token)
@@ -100,7 +101,7 @@ class ApiRepositoryTest {
         }
 
         val repository = ApiRepository(apiService)
-        val response = repository.register(
+        val result = repository.register(
             RegisterRequest(
                 fullName = "Aubrey Graham",
                 email = "drake@aurorah.co.za",
@@ -109,8 +110,8 @@ class ApiRepositoryTest {
             )
         )
 
-        assertFalse(response.success)
-        assertEquals("Email already registered", response.message)
+        assertTrue(result is NetworkResult.Error)
+        assertEquals("Email already registered", (result as NetworkResult.Error).message)
     }
 
     @Test
@@ -128,7 +129,7 @@ class ApiRepositoryTest {
         }
 
         val repository = ApiRepository(apiService)
-        val response = repository.register(
+        val result = repository.register(
             RegisterRequest(
                 fullName = "Aubrey Graham",
                 email = "drake@aurorah.co.za",
@@ -137,8 +138,8 @@ class ApiRepositoryTest {
             )
         )
 
-        assertFalse(response.success)
-        assertTrue(response.message.contains("500"))
+        assertTrue(result is NetworkResult.Error)
+        assertTrue((result as NetworkResult.Error).message.contains("500"))
     }
 
     @Test
@@ -156,7 +157,7 @@ class ApiRepositoryTest {
         }
 
         val repository = ApiRepository(apiService)
-        val response = repository.register(
+        val result = repository.register(
             RegisterRequest(
                 fullName = "Aubrey Graham",
                 email = "drake@aurorah.co.za",
@@ -165,8 +166,8 @@ class ApiRepositoryTest {
             )
         )
 
-        assertFalse(response.success)
-        assertEquals("User already exists", response.message)
+        assertTrue(result is NetworkResult.Error)
+        assertEquals("User already exists", (result as NetworkResult.Error).message)
     }
 
     @Test
@@ -176,7 +177,7 @@ class ApiRepositoryTest {
         }
 
         val repository = ApiRepository(apiService)
-        val response = repository.register(
+        val result = repository.register(
             RegisterRequest(
                 fullName = "Aubrey Graham",
                 email = "drake@aurorah.co.za",
@@ -185,8 +186,8 @@ class ApiRepositoryTest {
             )
         )
 
-        assertFalse(response.success)
-        assertTrue(response.message.contains("longer than expected", ignoreCase = true))
+        assertTrue(result is NetworkResult.Error)
+        assertTrue((result as NetworkResult.Error).message.contains("longer than expected", ignoreCase = true))
     }
 
     @Test
@@ -196,7 +197,7 @@ class ApiRepositoryTest {
         }
 
         val repository = ApiRepository(apiService)
-        val response = repository.register(
+        val result = repository.register(
             RegisterRequest(
                 fullName = "Aubrey Graham",
                 email = "drake@aurorah.co.za",
@@ -205,7 +206,7 @@ class ApiRepositoryTest {
             )
         )
 
-        assertFalse(response.success)
-        assertTrue(response.message.contains("Unable to connect", ignoreCase = true))
+        assertTrue(result is NetworkResult.Error)
+        assertTrue((result as NetworkResult.Error).message.contains("Unable to connect", ignoreCase = true))
     }
 }

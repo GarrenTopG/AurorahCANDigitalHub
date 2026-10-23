@@ -8,18 +8,26 @@ import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.aurorah.can.data.api.ApiRepository
+import com.aurorah.can.data.api.NetworkResult
 import com.aurorah.can.data.local.SessionManager
 import com.aurorah.can.data.model.OfferAssistanceRequest
 import com.aurorah.can.databinding.BottomSheetOfferAssistanceBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class OfferAssistanceBottomSheetFragment : BottomSheetDialogFragment() {
 
     private var _binding: BottomSheetOfferAssistanceBinding? = null
     private val binding get() = _binding!!
 
-    private val repository by lazy { ApiRepository(requireContext()) }
+    @Inject
+    lateinit var repository: ApiRepository
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     private var needId: Int = 0
     private var needTitle: String = ""
@@ -73,14 +81,13 @@ class OfferAssistanceBottomSheetFragment : BottomSheetDialogFragment() {
                 binding.tilSkill.error = null
             }
 
-            val sessionManager = SessionManager(requireContext())
             val userEmail = sessionManager.fetchUserEmail()
 
             binding.pbOffer.visibility = View.VISIBLE
             binding.btnSubmitOffer.isEnabled = false
 
             viewLifecycleOwner.lifecycleScope.launch {
-                val response = repository.offerAssistance(
+                val result = repository.offerAssistance(
                     OfferAssistanceRequest(
                         needId = needId,
                         userEmail = userEmail,
@@ -94,7 +101,12 @@ class OfferAssistanceBottomSheetFragment : BottomSheetDialogFragment() {
                 }
 
                 if (isAdded) {
-                    Toast.makeText(requireContext(), response.message, Toast.LENGTH_LONG).show()
+                    val msg = when (result) {
+                        is NetworkResult.Success -> result.data.message
+                        is NetworkResult.Error -> result.message
+                        is NetworkResult.Loading -> ""
+                    }
+                    Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
                     dismiss()
                 }
             }

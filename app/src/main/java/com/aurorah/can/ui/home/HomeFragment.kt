@@ -15,7 +15,9 @@ import com.aurorah.can.R
 import com.aurorah.can.data.model.CommunityNeed
 import com.aurorah.can.data.model.NewsItem
 import com.aurorah.can.ui.needs.OfferAssistanceBottomSheetFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private val viewModel: HomeViewModel by viewModels()

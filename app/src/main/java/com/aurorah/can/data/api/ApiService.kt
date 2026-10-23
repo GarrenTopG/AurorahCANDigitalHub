@@ -10,22 +10,22 @@ import retrofit2.http.PUT
 
 interface ApiService {
     @POST("api/auth/login")
-    suspend fun login(@Body request: LoginRequest): Response<AuthResponse>
+    suspend fun login(@Body request: LoginRequest): Response<AuthResponseDto>
 
     @POST("api/auth/register")
-    suspend fun register(@Body request: RegisterRequest): Response<AuthResponse>
+    suspend fun register(@Body request: RegisterRequest): Response<AuthResponseDto>
 
     @POST("api/auth/google-sso")
-    suspend fun googleSso(@Body request: GoogleSsoRequest): Response<AuthResponse>
+    suspend fun googleSso(@Body request: GoogleSsoRequest): Response<AuthResponseDto>
 
     @POST("api/auth/change-password")
     suspend fun changePassword(@Body request: ChangePasswordRequest): Response<ApiResponse>
 
     @PUT("api/auth/profile")
-    suspend fun updateProfile(@Body request: UpdateProfileRequest): Response<AuthResponse>
+    suspend fun updateProfile(@Body request: UpdateProfileRequest): Response<AuthResponseDto>
 
     @GET("api/auth/profile")
-    suspend fun getProfile(): Response<AuthResponse>
+    suspend fun getProfile(): Response<AuthResponseDto>
 
     @POST("api/auth/logout")
     suspend fun logout(): Response<ApiResponse>
@@ -34,10 +34,10 @@ interface ApiService {
     suspend fun deleteAccount(): Response<ApiResponse>
 
     @GET("api/news")
-    suspend fun getNews(): Response<List<NewsItem>>
+    suspend fun getNews(): Response<List<NewsItemDto>>
 
     @GET("api/needs")
-    suspend fun getNeeds(): Response<List<CommunityNeed>>
+    suspend fun getNeeds(): Response<List<CommunityNeedDto>>
 
     @POST("api/needs/offer-assistance")
     suspend fun offerAssistance(@Body request: OfferAssistanceRequest): Response<ApiResponse>
@@ -49,5 +49,5 @@ interface ApiService {
     suspend fun submitVolunteer(@Body request: VolunteerRequest): Response<ApiResponse>
 
     @POST("api/donations")
-    suspend fun submitDonation(@Body request: DonationRequest): Response<DonationResponse>
+    suspend fun submitDonation(@Body request: DonationRequest): Response<DonationResponseDto>
 }

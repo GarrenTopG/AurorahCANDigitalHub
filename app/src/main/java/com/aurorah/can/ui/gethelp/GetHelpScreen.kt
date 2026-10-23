@@ -1,6 +1,5 @@
 package com.aurorah.can.ui.gethelp
 
-import android.app.Application
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,13 +40,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aurorah.can.R
-import com.aurorah.can.data.api.ApiRepository
 import com.aurorah.can.ui.components.PrivacyDialog
 import com.aurorah.can.ui.theme.BrandPrimary
 import com.aurorah.can.ui.theme.PageBackground
@@ -55,16 +52,12 @@ import com.aurorah.can.ui.theme.TextMuted
 
 @Composable
 fun GetHelpScreen(
-    repository: ApiRepository,
+    viewModel: GetHelpViewModel,
     userEmail: String,
     userName: String = "",
     userPhone: String = "",
     onBackClick: (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
-    viewModel: GetHelpViewModel = run {
-        val context = LocalContext.current
-        remember { GetHelpViewModel(context.applicationContext as Application, repository) }
-    }
+    modifier: Modifier = Modifier
 ) {
     LaunchedEffect(userEmail, userName, userPhone) {
         viewModel.initUserInfo(userEmail, userName, userPhone)
