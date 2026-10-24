@@ -10,13 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -26,10 +26,10 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.aurorah.can.R
 import com.aurorah.can.data.model.NewsItem
-import com.aurorah.can.ui.theme.BrandPale
-import com.aurorah.can.ui.theme.BrandPrimary
-import com.aurorah.can.ui.theme.TextInk
-import com.aurorah.can.ui.theme.TextMuted
+import com.aurorah.can.ui.theme.AppBrandPale
+import com.aurorah.can.ui.theme.AppCardSurface
+import com.aurorah.can.ui.theme.AppTextInk
+import com.aurorah.can.ui.theme.AppTextMuted
 import com.aurorah.can.util.NewsUtils
 
 @Composable
@@ -43,7 +43,7 @@ fun FeaturedStoryCard(
             .fillMaxWidth()
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = AppCardSurface),
         elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
     ) {
         Column {
@@ -76,12 +76,12 @@ fun FeaturedStoryCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Surface(
-                        color = BrandPale,
+                        color = AppBrandPale,
                         shape = RoundedCornerShape(6.dp)
                     ) {
                         Text(
                             text = "FEATURED STORY  ·  ${story.category.uppercase()}",
-                            color = BrandPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
@@ -90,14 +90,14 @@ fun FeaturedStoryCard(
 
                     Text(
                         text = NewsUtils.formatNewsDate(story.timestamp),
-                        color = TextMuted,
+                        color = AppTextMuted,
                         fontSize = 12.sp
                     )
                 }
 
                 Text(
                     text = story.title,
-                    color = TextInk,
+                    color = AppTextInk,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold,
                     lineHeight = 26.sp
@@ -108,7 +108,7 @@ fun FeaturedStoryCard(
 
                 Text(
                     text = cleanSummary,
-                    color = TextMuted,
+                    color = AppTextMuted,
                     fontSize = 14.sp,
                     lineHeight = 21.sp
                 )
@@ -120,13 +120,13 @@ fun FeaturedStoryCard(
                 ) {
                     Text(
                         text = "By ${story.author.ifBlank { "Aurorah CAN Team" }}",
-                        color = TextMuted,
+                        color = AppTextMuted,
                         fontSize = 12.sp
                     )
 
                     Text(
                         text = stringResource(R.string.read_full_story),
-                        color = BrandPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
                     )

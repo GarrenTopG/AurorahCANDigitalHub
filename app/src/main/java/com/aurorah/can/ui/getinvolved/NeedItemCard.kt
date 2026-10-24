@@ -15,11 +15,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -27,9 +27,10 @@ import androidx.compose.ui.unit.sp
 import com.aurorah.can.R
 import com.aurorah.can.data.model.CommunityNeed
 import com.aurorah.can.ui.components.PriorityBadge
+import com.aurorah.can.ui.theme.AppCardSurface
+import com.aurorah.can.ui.theme.AppTextInk
+import com.aurorah.can.ui.theme.AppTextMuted
 import com.aurorah.can.ui.theme.BrandPrimary
-import com.aurorah.can.ui.theme.TextInk
-import com.aurorah.can.ui.theme.TextMuted
 
 @Composable
 fun NeedItemCard(
@@ -40,7 +41,7 @@ fun NeedItemCard(
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = AppCardSurface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
@@ -56,7 +57,7 @@ fun NeedItemCard(
                     text = need.title,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Bold,
-                    color = TextInk,
+                    color = AppTextInk,
                     modifier = Modifier.weight(1f)
                 )
                 PriorityBadge(priority = need.priority)
@@ -66,7 +67,7 @@ fun NeedItemCard(
                 Text(
                     text = need.description,
                     fontSize = 14.sp,
-                    color = TextMuted,
+                    color = AppTextMuted,
                     lineHeight = 20.sp
                 )
             }
@@ -79,10 +80,10 @@ fun NeedItemCard(
                     Icon(
                         imageVector = Icons.Filled.LocationOn,
                         contentDescription = null,
-                        tint = BrandPrimary,
+                        tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(16.dp)
                     )
-                    Text(text = need.location, fontSize = 13.sp, color = TextMuted)
+                    Text(text = need.location, fontSize = 13.sp, color = AppTextMuted)
                 }
             }
 

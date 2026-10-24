@@ -12,6 +12,8 @@ import com.aurorah.can.R
 import com.aurorah.can.data.model.NewsItem
 import com.aurorah.can.databinding.BottomSheetNewsDetailBinding
 import com.aurorah.can.util.NewsUtils
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class NewsDetailBottomSheetFragment : BottomSheetDialogFragment() {
@@ -136,6 +138,21 @@ class NewsDetailBottomSheetFragment : BottomSheetDialogFragment() {
 
         binding.btnCloseNewsDetail.setOnClickListener {
             dismissAllowingStateLoss()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val bottomSheetDialog = dialog as? BottomSheetDialog
+        bottomSheetDialog?.let { dialog ->
+            val sheet = dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            sheet?.let { bottomSheet ->
+                val behavior = BottomSheetBehavior.from(bottomSheet)
+                behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                behavior.skipCollapsed = true
+                behavior.isFitToContents = true
+                bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+            }
         }
     }
 

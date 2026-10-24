@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:fillViewport="true"
     android:background="?attr/colorSurface">
 
@@ -94,7 +94,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            app:cardBackgroundColor="#F5F5F5"
+            app:cardBackgroundColor="?attr/colorSurfaceVariant"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp">
 
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="Illustrative image &amp; consent notice — Aurorah CAN shares photos of community members only with written media consent."
-                android:textColor="#616161"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="11sp" />
         </com.google.android.material.card.MaterialCardView>
 
@@ -196,4 +196,4 @@
             app:cornerRadius="8dp" />
 
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

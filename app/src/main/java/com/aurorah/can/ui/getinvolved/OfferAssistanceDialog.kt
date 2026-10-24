@@ -17,6 +17,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -36,8 +37,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aurorah.can.R
 import com.aurorah.can.data.model.CommunityNeed
+import com.aurorah.can.ui.theme.AppCardSurface
+import com.aurorah.can.ui.theme.AppTextInk
 import com.aurorah.can.ui.theme.BrandPrimary
-import com.aurorah.can.ui.theme.TextInk
 
 @Composable
 fun OfferAssistanceDialog(
@@ -54,6 +56,7 @@ fun OfferAssistanceDialog(
 
     AlertDialog(
         onDismissRequest = { if (!isSubmitting) onDismiss() },
+        containerColor = AppCardSurface,
         title = {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -62,14 +65,14 @@ fun OfferAssistanceDialog(
                 Icon(
                     imageVector = Icons.Filled.Handshake,
                     contentDescription = null,
-                    tint = BrandPrimary,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(24.dp)
                 )
                 Text(
                     text = stringResource(R.string.offer_help_dialog_title),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
-                    color = TextInk
+                    color = AppTextInk
                 )
             }
         },
@@ -84,7 +87,7 @@ fun OfferAssistanceDialog(
                     text = stringResource(R.string.assisting_with_format, need.title),
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 14.sp,
-                    color = BrandPrimary
+                    color = MaterialTheme.colorScheme.primary
                 )
 
                 OutlinedTextField(
@@ -99,7 +102,7 @@ fun OfferAssistanceDialog(
                     supportingText = skillError?.let { { Text(it, color = Color.Red) } },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                 )
 
                 OutlinedTextField(
@@ -110,7 +113,7 @@ fun OfferAssistanceDialog(
                     modifier = Modifier.fillMaxWidth(),
                     minLines = 2,
                     maxLines = 4,
-                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                 )
 
                 if (errorMessage != null) {

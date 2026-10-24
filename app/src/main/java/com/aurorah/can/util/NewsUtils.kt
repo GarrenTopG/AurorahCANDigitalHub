@@ -77,14 +77,33 @@ object NewsUtils {
     fun parseHtmlContent(rawText: String?): CharSequence {
         if (rawText.isNullOrBlank()) return ""
         var textToParse = rawText.trim()
-        if (textToParse.contains("&lt;") && textToParse.contains("&gt;")) {
+
+        // Unescape double-escaped or entity-encoded HTML strings
+        while (textToParse.contains("&lt;") && textToParse.contains("&gt;")) {
+            val previous = textToParse
             textToParse = textToParse
                 .replace("&lt;", "<")
                 .replace("&gt;", ">")
                 .replace("&amp;", "&")
                 .replace("&quot;", "\"")
                 .replace("&#39;", "'")
+            if (previous == textToParse) break
         }
+
+        // If the text has no HTML paragraph or break tags, but contains newlines, convert to HTML paragraphs
+        if (!textToParse.contains("<p", ignoreCase = true) &&
+            !textToParse.contains("<br", ignoreCase = true) &&
+            !textToParse.contains("<div", ignoreCase = true) &&
+            textToParse.contains("\n")
+        ) {
+            val paragraphs = textToParse.split(Regex("\r?\n\r?\n"))
+                .filter { it.isNotBlank() }
+                .joinToString("") { "<p>${it.trim().replace("\n", "<br/>")}</p>" }
+            if (paragraphs.isNotBlank()) {
+                textToParse = paragraphs
+            }
+        }
+
         return try {
             HtmlCompat.fromHtml(textToParse, HtmlCompat.FROM_HTML_MODE_LEGACY)
         } catch (_: Throwable) {

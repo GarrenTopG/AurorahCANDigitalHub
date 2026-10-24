@@ -10,12 +10,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -25,10 +25,9 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.aurorah.can.R
 import com.aurorah.can.data.model.NewsItem
-import com.aurorah.can.ui.theme.BrandMid
-import com.aurorah.can.ui.theme.BrandPrimary
-import com.aurorah.can.ui.theme.TextInk
-import com.aurorah.can.ui.theme.TextMuted
+import com.aurorah.can.ui.theme.AppCardSurface
+import com.aurorah.can.ui.theme.AppTextInk
+import com.aurorah.can.ui.theme.AppTextMuted
 import com.aurorah.can.util.NewsUtils
 
 @Composable
@@ -42,7 +41,7 @@ fun StoryCard(
             .fillMaxWidth()
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = AppCardSurface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
@@ -53,7 +52,7 @@ fun StoryCard(
             val categoryStr = story.category.ifBlank { "Announcement" }
             Text(
                 text = "$categoryStr  ·  $dateStr".uppercase(),
-                color = BrandMid,
+                color = MaterialTheme.colorScheme.secondary,
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 0.7.sp
@@ -70,7 +69,7 @@ fun StoryCard(
                 ) {
                     Text(
                         text = story.title,
-                        color = TextInk,
+                        color = AppTextInk,
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
                         lineHeight = 22.sp
@@ -79,7 +78,7 @@ fun StoryCard(
                         .let { NewsUtils.parseHtmlContent(it).toString().trim() }
                     Text(
                         text = cleanSummary,
-                        color = TextMuted,
+                        color = AppTextMuted,
                         fontSize = 13.sp,
                         lineHeight = 19.sp
                     )
@@ -111,13 +110,13 @@ fun StoryCard(
             ) {
                 Text(
                     text = "By ${story.author.ifBlank { "Aurorah CAN Team" }}",
-                    color = TextMuted,
+                    color = AppTextMuted,
                     fontSize = 12.sp
                 )
 
                 Text(
                     text = stringResource(R.string.read_update),
-                    color = BrandPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.SemiBold
                 )

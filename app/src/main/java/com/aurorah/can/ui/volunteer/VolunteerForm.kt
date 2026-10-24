@@ -26,6 +26,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
@@ -39,9 +40,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aurorah.can.ui.components.CountryCodeDropdown
+import com.aurorah.can.ui.theme.AppCardSurface
+import com.aurorah.can.ui.theme.AppTextInk
+import com.aurorah.can.ui.theme.AppTextMuted
 import com.aurorah.can.ui.theme.BrandPrimary
-import com.aurorah.can.ui.theme.TextInk
-import com.aurorah.can.ui.theme.TextMuted
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -64,13 +66,13 @@ fun VolunteerForm(
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = AppCardSurface)
     ) {
         Column(
             modifier = Modifier.padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text("Personal Information", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = TextInk)
+            Text("Personal Information", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = AppTextInk)
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -85,7 +87,7 @@ fun VolunteerForm(
                     supportingText = uiState.firstNameError?.let { { Text(it, color = Color.Red) } },
                     modifier = Modifier.weight(1f),
                     singleLine = true,
-                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                 )
                 OutlinedTextField(
                     value = uiState.lastName,
@@ -96,7 +98,7 @@ fun VolunteerForm(
                     supportingText = uiState.lastNameError?.let { { Text(it, color = Color.Red) } },
                     modifier = Modifier.weight(1f),
                     singleLine = true,
-                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                 )
             }
 
@@ -108,11 +110,11 @@ fun VolunteerForm(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
-                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
             )
 
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("Phone Number *", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = TextInk)
+                Text("Phone Number *", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = AppTextInk)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -131,7 +133,7 @@ fun VolunteerForm(
                         supportingText = uiState.phoneError?.let { { Text(it, color = Color.Red) } },
                         modifier = Modifier.weight(1f),
                         singleLine = true,
-                        colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                        colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                     )
                 }
             }
@@ -145,16 +147,16 @@ fun VolunteerForm(
                     if (uiState.locationError != null) {
                         Text(uiState.locationError, color = Color.Red)
                     } else {
-                        Text("Volunteer roles are based in Kuils River and nearby communities.", fontSize = 12.sp, color = TextMuted)
+                        Text("Volunteer roles are based in Kuils River and nearby communities.", fontSize = 12.sp, color = AppTextMuted)
                     }
                 },
                 isError = uiState.locationError != null,
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
-                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
             )
 
-            Text("Your Skills & Availability", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = TextInk)
+            Text("Your Skills & Availability", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = AppTextInk)
 
             OutlinedTextField(
                 value = uiState.skills,
@@ -165,13 +167,13 @@ fun VolunteerForm(
                 supportingText = uiState.skillsError?.let { { Text(it, color = Color.Red) } },
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 3,
-                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
             )
 
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text("Days Available *", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = TextInk)
-                    Text("(Select at least one)", fontSize = 12.sp, color = TextMuted)
+                    Text("Days Available *", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = AppTextInk)
+                    Text("(Select at least one)", fontSize = 12.sp, color = AppTextMuted)
                 }
                 FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -199,7 +201,7 @@ fun VolunteerForm(
                 Text(
                     text = "Your name, suburb, phone number, skills and availability are required to assess and follow up on your application. Email is optional. If required information is missing, we may be unable to review your application.",
                     fontSize = 12.sp,
-                    color = TextMuted,
+                    color = AppTextMuted,
                     lineHeight = 17.sp
                 )
 
@@ -216,7 +218,7 @@ fun VolunteerForm(
                     Text(
                         text = "I have read the privacy information and agree that Aurorah NPC may use these details to review my volunteer application and contact me about it.",
                         fontSize = 13.sp,
-                        color = TextInk,
+                        color = AppTextInk,
                         lineHeight = 18.sp
                     )
                 }

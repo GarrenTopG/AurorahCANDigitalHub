@@ -28,6 +28,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
@@ -45,9 +46,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aurorah.can.ui.components.CountryCodeDropdown
+import com.aurorah.can.ui.theme.AppCardSurface
+import com.aurorah.can.ui.theme.AppTextInk
+import com.aurorah.can.ui.theme.AppTextMuted
 import com.aurorah.can.ui.theme.BrandPrimary
-import com.aurorah.can.ui.theme.TextInk
-import com.aurorah.can.ui.theme.TextMuted
 
 @Composable
 fun GetHelpForm(
@@ -79,13 +81,13 @@ fun GetHelpForm(
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = AppCardSurface)
     ) {
         Column(
             modifier = Modifier.padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text("Your Details", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = TextInk)
+            Text("Your Details", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = AppTextInk)
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -100,7 +102,7 @@ fun GetHelpForm(
                     supportingText = uiState.firstNameError?.let { { Text(it, color = Color.Red) } },
                     modifier = Modifier.weight(1f),
                     singleLine = true,
-                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                 )
                 OutlinedTextField(
                     value = uiState.lastName,
@@ -111,12 +113,12 @@ fun GetHelpForm(
                     supportingText = uiState.lastNameError?.let { { Text(it, color = Color.Red) } },
                     modifier = Modifier.weight(1f),
                     singleLine = true,
-                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                 )
             }
 
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("Phone Number *", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = TextInk)
+                Text("Phone Number *", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = AppTextInk)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -135,7 +137,7 @@ fun GetHelpForm(
                         supportingText = uiState.phoneError?.let { { Text(it, color = Color.Red) } },
                         modifier = Modifier.weight(1f),
                         singleLine = true,
-                        colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                        colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                     )
                 }
             }
@@ -149,20 +151,20 @@ fun GetHelpForm(
                     if (uiState.locationError != null) {
                         Text(uiState.locationError, color = Color.Red)
                     } else {
-                        Text("Requests are served within Kuils River and nearby communities.", fontSize = 12.sp, color = TextMuted)
+                        Text("Requests are served within Kuils River and nearby communities.", fontSize = 12.sp, color = AppTextMuted)
                     }
                 },
                 isError = uiState.locationError != null,
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
-                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
             )
 
-            Text("Assistance Details", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = TextInk)
+            Text("Assistance Details", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = AppTextInk)
 
             // Category Dropdown
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("Type of Support Needed *", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = TextInk)
+                Text("Type of Support Needed *", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = AppTextInk)
                 Box {
                     OutlinedTextField(
                         value = needTypes.find { it.first == uiState.selectedCategory }?.second ?: uiState.selectedCategory,
@@ -178,10 +180,10 @@ fun GetHelpForm(
                         enabled = false,
                         colors = OutlinedTextFieldDefaults.colors(
                             disabledBorderColor = if (uiState.categoryError != null) Color.Red else Color(0xFFD1D5DB),
-                            disabledTextColor = TextInk,
-                            disabledLabelColor = TextMuted,
-                            disabledPlaceholderColor = TextMuted,
-                            disabledTrailingIconColor = TextInk
+                            disabledTextColor = AppTextInk,
+                            disabledLabelColor = AppTextMuted,
+                            disabledPlaceholderColor = AppTextMuted,
+                            disabledTrailingIconColor = AppTextInk
                         )
                     )
                     Box(
@@ -216,12 +218,12 @@ fun GetHelpForm(
                 supportingText = uiState.descriptionError?.let { { Text(it, color = Color.Red) } },
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 3,
-                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
             )
 
             // Urgency Selector
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("Urgency Level", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = TextInk)
+                Text("Urgency Level", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = AppTextInk)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     urgencyOptions.forEach { option ->
                         val isSelected = uiState.selectedUrgency.equals(option, ignoreCase = true)
@@ -253,7 +255,7 @@ fun GetHelpForm(
                     Text(
                         text = "I have read the privacy information and agree that Aurorah NPC may record and use these details to evaluate my request and contact me about potential assistance.",
                         fontSize = 13.sp,
-                        color = TextInk,
+                        color = AppTextInk,
                         lineHeight = 18.sp
                     )
                 }

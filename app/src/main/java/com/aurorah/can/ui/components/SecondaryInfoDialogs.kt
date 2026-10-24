@@ -19,6 +19,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -31,14 +32,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aurorah.can.R
+import com.aurorah.can.ui.theme.AppCardSurface
+import com.aurorah.can.ui.theme.AppTextInk
+import com.aurorah.can.ui.theme.AppTextMuted
 import com.aurorah.can.ui.theme.BrandPrimary
-import com.aurorah.can.ui.theme.TextInk
-import com.aurorah.can.ui.theme.TextMuted
 
 @Composable
 fun AboutDialog(onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
+        containerColor = AppCardSurface,
         confirmButton = {
             Button(
                 onClick = onDismiss,
@@ -55,14 +58,14 @@ fun AboutDialog(onDismiss: () -> Unit) {
                 Icon(
                     imageVector = Icons.Filled.Info,
                     contentDescription = null,
-                    tint = BrandPrimary,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(24.dp)
                 )
                 Text(
                     text = stringResource(R.string.about_aurorah_title),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
-                    color = TextInk
+                    color = AppTextInk
                 )
             }
         },
@@ -77,7 +80,7 @@ fun AboutDialog(onDismiss: () -> Unit) {
                     text = stringResource(R.string.about_story),
                     fontSize = 14.sp,
                     lineHeight = 20.sp,
-                    color = TextInk
+                    color = AppTextInk
                 )
             }
         },
@@ -89,6 +92,7 @@ fun AboutDialog(onDismiss: () -> Unit) {
 fun ContactDialog(onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
+        containerColor = AppCardSurface,
         confirmButton = {
             Button(
                 onClick = onDismiss,
@@ -105,14 +109,14 @@ fun ContactDialog(onDismiss: () -> Unit) {
                 Icon(
                     imageVector = Icons.Filled.LocationOn,
                     contentDescription = null,
-                    tint = BrandPrimary,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(24.dp)
                 )
                 Text(
                     text = stringResource(R.string.find_us_title),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
-                    color = TextInk
+                    color = AppTextInk
                 )
             }
         },
@@ -162,12 +166,12 @@ private fun ContactDetailItem(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = BrandPrimary,
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(20.dp).padding(top = 2.dp)
         )
         Column {
-            Text(title, fontWeight = FontWeight.Bold, fontSize = 13.sp, color = TextInk)
-            Text(detail, fontSize = 13.sp, color = TextMuted, lineHeight = 18.sp)
+            Text(title, fontWeight = FontWeight.Bold, fontSize = 13.sp, color = AppTextInk)
+            Text(detail, fontSize = 13.sp, color = AppTextMuted, lineHeight = 18.sp)
         }
     }
 }
@@ -179,6 +183,7 @@ fun PrivacyDialog(onDismiss: () -> Unit) {
 
     AlertDialog(
         onDismissRequest = onDismiss,
+        containerColor = AppCardSurface,
         confirmButton = {
             Button(
                 onClick = onDismiss,
@@ -195,7 +200,7 @@ fun PrivacyDialog(onDismiss: () -> Unit) {
                     } catch (_: Exception) {}
                 }
             ) {
-                Text(stringResource(R.string.btn_view_full_policy), color = BrandPrimary, fontSize = 13.sp)
+                Text(stringResource(R.string.btn_view_full_policy), color = MaterialTheme.colorScheme.primary, fontSize = 13.sp)
             }
         },
         title = {
@@ -206,14 +211,14 @@ fun PrivacyDialog(onDismiss: () -> Unit) {
                 Icon(
                     imageVector = Icons.Filled.Security,
                     contentDescription = null,
-                    tint = BrandPrimary,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(24.dp)
                 )
                 Text(
                     text = stringResource(R.string.privacy_policy_title),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
-                    color = TextInk
+                    color = AppTextInk
                 )
             }
         },
@@ -228,21 +233,21 @@ fun PrivacyDialog(onDismiss: () -> Unit) {
                     text = "Aurorah NPC respects your personal information and complies with the Protection of Personal Information Act (POPIA).",
                     fontSize = 14.sp,
                     lineHeight = 20.sp,
-                    color = TextInk
+                    color = AppTextInk
                 )
                 Text(
                     text = "How your details are used:",
                     fontWeight = FontWeight.Bold,
                     fontSize = 13.sp,
-                    color = TextInk
+                    color = AppTextInk
                 )
                 Column(
                     modifier = Modifier.padding(start = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    Text("• Assistance Requests: Evaluated by team members to assess community needs and coordinate support.", fontSize = 13.sp, color = TextMuted)
-                    Text("• Volunteer Applications: Processed for background suitability, skill matching, and role placement.", fontSize = 13.sp, color = TextMuted)
-                    Text("• Donations: Pledges are recorded securely for organization records.", fontSize = 13.sp, color = TextMuted)
+                    Text("• Assistance Requests: Evaluated by team members to assess community needs and coordinate support.", fontSize = 13.sp, color = AppTextMuted)
+                    Text("• Volunteer Applications: Processed for background suitability, skill matching, and role placement.", fontSize = 13.sp, color = AppTextMuted)
+                    Text("• Donations: Pledges are recorded securely for organization records.", fontSize = 13.sp, color = AppTextMuted)
                 }
             }
         },

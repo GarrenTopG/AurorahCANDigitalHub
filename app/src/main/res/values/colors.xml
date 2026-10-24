@@ -9,6 +9,7 @@
     <color name="md_theme_primary">#D5105C</color>
     <color name="md_theme_secondary">#943D56</color>
     <color name="md_theme_background">#FAF8F9</color>
+    <color name="nav_active_indicator">#E0E0E0</color>
 
     <!-- Core Standard Design Token Aliases -->
     <color name="primary_blue">#D5105C</color>

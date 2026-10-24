@@ -21,6 +21,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,9 +36,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aurorah.can.R
 import com.aurorah.can.ui.needs.NeedsViewModel
+import com.aurorah.can.ui.theme.AppCardSurface
+import com.aurorah.can.ui.theme.AppTextInk
+import com.aurorah.can.ui.theme.AppTextMuted
 import com.aurorah.can.ui.theme.BrandPrimary
-import com.aurorah.can.ui.theme.TextInk
-import com.aurorah.can.ui.theme.TextMuted
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -95,12 +97,12 @@ fun CommunityNeedsSubTab(
             text = stringResource(R.string.community_needs_title),
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
-            color = TextInk
+            color = AppTextInk
         )
         Text(
             text = stringResource(R.string.community_needs_subtitle),
             fontSize = 14.sp,
-            color = TextMuted,
+            color = AppTextMuted,
             lineHeight = 20.sp
         )
 
@@ -135,14 +137,14 @@ fun CommunityNeedsSubTab(
                         .padding(32.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(color = BrandPrimary)
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
             }
             uiState.filteredNeeds.isEmpty() -> {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
+                    colors = CardDefaults.cardColors(containerColor = AppCardSurface)
                 ) {
                     Column(
                         modifier = Modifier.padding(24.dp),
@@ -151,7 +153,7 @@ fun CommunityNeedsSubTab(
                     ) {
                         Text(
                             text = stringResource(R.string.no_needs_found_format, uiState.selectedFilter),
-                            color = TextMuted,
+                            color = AppTextMuted,
                             fontSize = 14.sp
                         )
                         OutlinedButton(onClick = { viewModel.loadNeeds() }) {

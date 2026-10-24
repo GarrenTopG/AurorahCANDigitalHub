@@ -31,6 +31,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -51,11 +52,12 @@ import androidx.compose.ui.unit.sp
 import com.aurorah.can.R
 import com.aurorah.can.ui.components.PrivacyDialog
 import com.aurorah.can.ui.components.RoleCard
-import com.aurorah.can.ui.theme.BrandPale
+import com.aurorah.can.ui.theme.AppBackground
+import com.aurorah.can.ui.theme.AppBrandPale
+import com.aurorah.can.ui.theme.AppTextInk
+import com.aurorah.can.ui.theme.AppTextMuted
+import com.aurorah.can.ui.theme.AurorahTheme
 import com.aurorah.can.ui.theme.BrandPrimary
-import com.aurorah.can.ui.theme.PageBackground
-import com.aurorah.can.ui.theme.TextInk
-import com.aurorah.can.ui.theme.TextMuted
 
 @Composable
 fun VolunteerScreen(
@@ -73,252 +75,259 @@ fun VolunteerScreen(
     val uiState by viewModel.uiState.collectAsState()
     var showPrivacyDialog by remember { mutableStateOf(false) }
 
-    if (showPrivacyDialog) {
-        PrivacyDialog(onDismiss = { showPrivacyDialog = false })
-    }
-
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(PageBackground)
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp, vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        if (onBackClick != null) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onBackClick() }
-                    .padding(vertical = 4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = BrandPrimary,
-                    modifier = Modifier.size(22.dp)
-                )
-                Text(
-                    text = stringResource(R.string.back_to_home),
-                    color = BrandPrimary,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+    AurorahTheme {
+        if (showPrivacyDialog) {
+            PrivacyDialog(onDismiss = { showPrivacyDialog = false })
         }
 
-        // Header Banner
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = BrandPrimary)
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(AppBackground)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 20.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Column(
-                modifier = Modifier.padding(20.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
+            if (onBackClick != null) {
                 Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onBackClick() }
+                        .padding(vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.People,
-                        contentDescription = null,
-                        tint = Color(0xFFFCE7F3),
-                        modifier = Modifier.size(20.dp)
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(22.dp)
                     )
                     Text(
-                        text = stringResource(R.string.volunteer_header_tag),
-                        color = Color(0xFFFCE7F3),
-                        fontSize = 11.sp,
+                        text = stringResource(R.string.back_to_home),
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }
-                Text(
-                    text = stringResource(R.string.volunteer_header_title),
-                    color = Color.White,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Text(
-                    text = stringResource(R.string.volunteer_header_subtitle),
-                    color = Color.White.copy(alpha = 0.9f),
-                    fontSize = 14.sp
-                )
             }
-        }
 
-        if (uiState.isSuccess) {
-            // Success State
+            // Header Banner
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFECFDF5)),
-                border = BorderStroke(1.dp, Color(0xFFA7F3D0))
+                colors = CardDefaults.cardColors(containerColor = BrandPrimary)
             ) {
                 Column(
-                    modifier = Modifier.padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(14.dp)
+                    modifier = Modifier.padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Surface(
-                        color = Color(0xFF10B981),
-                        shape = RoundedCornerShape(28.dp),
-                        modifier = Modifier.size(56.dp)
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                imageVector = Icons.Filled.Check,
-                                contentDescription = null,
-                                tint = Color.White,
-                                modifier = Modifier.size(28.dp)
-                            )
-                        }
+                        Icon(
+                            imageVector = Icons.Filled.People,
+                            contentDescription = null,
+                            tint = Color(0xFFFCE7F3),
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Text(
+                            text = stringResource(R.string.volunteer_header_tag),
+                            color = Color(0xFFFCE7F3),
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                     Text(
-                        text = stringResource(R.string.volunteer_success_title, uiState.firstName.ifBlank { "Volunteer" }),
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF065F46)
+                        text = stringResource(R.string.volunteer_header_title),
+                        color = Color.White,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.ExtraBold
                     )
                     Text(
-                        text = stringResource(R.string.volunteer_success_body),
-                        fontSize = 14.sp,
-                        color = Color(0xFF047857),
-                        lineHeight = 20.sp
-                    )
-                    Button(
-                        onClick = { viewModel.resetSuccess() },
-                        colors = ButtonDefaults.buttonColors(containerColor = BrandPrimary),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(stringResource(R.string.submit_another_application), fontWeight = FontWeight.Bold)
-                    }
-                }
-            }
-        }
-
-        // Intro Callout Notice
-        Surface(
-            color = BrandPale,
-            shape = RoundedCornerShape(16.dp),
-            border = BorderStroke(1.dp, Color(0xFFFBCFE8)),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier.padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .width(4.dp)
-                        .height(48.dp)
-                        .background(color = BrandPrimary, shape = RoundedCornerShape(2.dp))
-                )
-                Text(
-                    text = stringResource(R.string.volunteer_callout_text),
-                    fontSize = 13.sp,
-                    color = TextInk,
-                    lineHeight = 19.sp
-                )
-            }
-        }
-
-        // Example Roles Section
-        Text(stringResource(R.string.volunteer_opportunities_title), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = TextInk)
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            RoleCard(
-                icon = Icons.AutoMirrored.Filled.MenuBook,
-                title = "Community library assistant",
-                description = "Support the Sunbird Park mini-library, with an example commitment of around four hours a week."
-            )
-            RoleCard(
-                icon = Icons.Filled.Inventory,
-                title = "Food distribution and logistics",
-                description = "Help sort and pack community food parcels, with weekend shifts as an example."
-            )
-            RoleCard(
-                icon = Icons.Filled.CalendarMonth,
-                title = "Events and fundraising",
-                description = "Contribute to planning and logistics for local community engagement activities."
-            )
-        }
-
-        // Onboarding and Safeguarding Box
-        Surface(
-            color = Color(0xFFFEF3C7),
-            shape = RoundedCornerShape(16.dp),
-            border = BorderStroke(1.dp, Color(0xFFFCD34D)),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Shield,
-                        contentDescription = null,
-                        tint = Color(0xFFB45309),
-                        modifier = Modifier.size(18.dp)
-                    )
-                    Text(
-                        text = "Onboarding and safeguarding:",
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF78350F),
+                        text = stringResource(R.string.volunteer_header_subtitle),
+                        color = Color.White.copy(alpha = 0.9f),
                         fontSize = 14.sp
                     )
                 }
-                Text(
-                    text = "Applications are reviewed before placement. Candidates may be invited to an interview and orientation. Roles involving direct contact with children require the applicable child-protection checks, including Child Protection Register vetting under the Children’s Act. Additional background checks may apply to a role.",
-                    fontSize = 13.sp,
-                    color = Color(0xFF78350F),
-                    lineHeight = 18.sp
+            }
+
+            if (uiState.isSuccess) {
+                // Success State
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFFECFDF5)),
+                    border = BorderStroke(1.dp, Color(0xFFA7F3D0))
+                ) {
+                    Column(
+                        modifier = Modifier.padding(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        Surface(
+                            color = Color(0xFF10B981),
+                            shape = RoundedCornerShape(28.dp),
+                            modifier = Modifier.size(56.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = Icons.Filled.Check,
+                                    contentDescription = null,
+                                    tint = Color.White,
+                                    modifier = Modifier.size(28.dp)
+                                )
+                            }
+                        }
+                        Text(
+                            text = stringResource(R.string.volunteer_success_title, uiState.firstName.ifBlank { "Volunteer" }),
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF065F46)
+                        )
+                        Text(
+                            text = stringResource(R.string.volunteer_success_body),
+                            fontSize = 14.sp,
+                            color = Color(0xFF047857),
+                            lineHeight = 20.sp
+                        )
+                        Button(
+                            onClick = { viewModel.resetSuccess() },
+                            colors = ButtonDefaults.buttonColors(containerColor = BrandPrimary),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(stringResource(R.string.submit_another_application), fontWeight = FontWeight.Bold)
+                        }
+                    }
+                }
+            }
+
+            // Intro Callout Notice
+            Surface(
+                color = AppBrandPale,
+                shape = RoundedCornerShape(16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .width(4.dp)
+                            .height(48.dp)
+                            .background(color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(2.dp))
+                    )
+                    Text(
+                        text = stringResource(R.string.volunteer_callout_text),
+                        fontSize = 13.sp,
+                        color = AppTextInk,
+                        lineHeight = 19.sp
+                    )
+                }
+            }
+
+            // Example Roles Section
+            Text(stringResource(R.string.volunteer_opportunities_title), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = AppTextInk)
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                RoleCard(
+                    icon = Icons.AutoMirrored.Filled.MenuBook,
+                    title = "Community library assistant",
+                    description = "Support the Sunbird Park mini-library, with an example commitment of around four hours a week."
+                )
+                RoleCard(
+                    icon = Icons.Filled.Inventory,
+                    title = "Food distribution and logistics",
+                    description = "Help sort and pack community food parcels, with weekend shifts as an example."
+                )
+                RoleCard(
+                    icon = Icons.Filled.CalendarMonth,
+                    title = "Events and fundraising",
+                    description = "Contribute to planning and logistics for local community engagement activities."
                 )
             }
-        }
 
-        // Privacy Data Notice
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "We use your name, area, phone number, skills and availability to review your application and contact you. Email is optional. ",
-                fontSize = 12.sp,
-                color = TextMuted,
-                lineHeight = 17.sp,
-                modifier = Modifier.weight(1f)
-            )
-            TextButton(
-                onClick = { showPrivacyDialog = true },
-                contentPadding = PaddingValues(0.dp)
+            // Onboarding and Safeguarding Box
+            Surface(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = RoundedCornerShape(16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text(stringResource(R.string.privacy_popia_link), fontSize = 12.sp, color = BrandPrimary, fontWeight = FontWeight.SemiBold)
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Shield,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Text(
+                            text = "Onboarding and safeguarding:",
+                            fontWeight = FontWeight.Bold,
+                            color = AppTextInk,
+                            fontSize = 14.sp
+                        )
+                    }
+                    Text(
+                        text = "Applications are reviewed before placement. Candidates may be invited to an interview and orientation. Roles involving direct contact with children require the applicable child-protection checks, including Child Protection Register vetting under the Children’s Act. Additional background checks may apply to a role.",
+                        fontSize = 13.sp,
+                        color = AppTextMuted,
+                        lineHeight = 18.sp
+                    )
+                }
             }
-        }
 
-        if (!uiState.isSuccess) {
-            VolunteerForm(
-                uiState = uiState,
-                onFirstNameChange = viewModel::onFirstNameChange,
-                onLastNameChange = viewModel::onLastNameChange,
-                onEmailChange = viewModel::onEmailChange,
-                onCountryCodeChange = viewModel::onCountryCodeChange,
-                onPhoneChange = viewModel::onPhoneChange,
-                onLocationChange = viewModel::onLocationChange,
-                onSkillsChange = viewModel::onSkillsChange,
-                onToggleDay = viewModel::toggleDay,
-                onPopiaConsentChange = viewModel::onPopiaConsentChange,
-                onSubmit = viewModel::submitApplication
-            )
-        }
+            // Privacy Data Notice
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "We use your name, area, phone number, skills and availability to review your application and contact you. Email is optional. ",
+                    fontSize = 12.sp,
+                    color = AppTextMuted,
+                    lineHeight = 17.sp,
+                    modifier = Modifier.weight(1f)
+                )
+                TextButton(
+                    onClick = { showPrivacyDialog = true },
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Text(
+                        stringResource(R.string.privacy_popia_link),
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            }
 
-        Spacer(Modifier.height(16.dp))
+            if (!uiState.isSuccess) {
+                VolunteerForm(
+                    uiState = uiState,
+                    onFirstNameChange = viewModel::onFirstNameChange,
+                    onLastNameChange = viewModel::onLastNameChange,
+                    onEmailChange = viewModel::onEmailChange,
+                    onCountryCodeChange = viewModel::onCountryCodeChange,
+                    onPhoneChange = viewModel::onPhoneChange,
+                    onLocationChange = viewModel::onLocationChange,
+                    onSkillsChange = viewModel::onSkillsChange,
+                    onToggleDay = viewModel::toggleDay,
+                    onPopiaConsentChange = viewModel::onPopiaConsentChange,
+                    onSubmit = viewModel::submitApplication
+                )
+            }
+
+            Spacer(Modifier.height(16.dp))
+        }
     }
 }

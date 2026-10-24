@@ -210,6 +210,42 @@ class ModelsSerializationTest {
     }
 
     @Test
+    fun newsItemDto_deserializesWordPressRenderedObjects() {
+        val wpJson = """
+            {
+                "id": 99,
+                "title": { "rendered": "A Win Worth Celebrating: Three More Youth Secure Full-Time Contracts" },
+                "excerpt": { "rendered": "Three more young people secured one-year full-time contracts in Aurorah's youth programme, bringing the number who had moved forward to eight." },
+                "content": { "rendered": "<p>Aurorah is celebrating three more young people who secured one-year full-time contracts.</p><p>The programme began with 50 young people on 15 July. With these contracts, eight had moved forward into employment opportunities, while 42 remained on the journey. The update celebrated each step and encouraged the young people still participating to keep showing up, learning and growing.</p><p>Congratulations to the three young people. Their progress shows what can happen when young people are given opportunities, support and a chance to believe in themselves.</p>" },
+                "author_name": "Aurorah CAN Team",
+                "date": "2026-10-18T11:59:00"
+            }
+        """.trimIndent()
+
+        val newsDto = gson.fromJson(wpJson, NewsItemDto::class.java)
+        val domain = newsDto.toDomain()
+
+        assertEquals("A Win Worth Celebrating: Three More Youth Secure Full-Time Contracts", domain.title)
+        assertTrue(domain.summary.contains("Three more young people secured one-year full-time contracts"))
+        assertTrue(domain.body.contains("Aurorah is celebrating three more young people"))
+        assertTrue(domain.body.contains("The programme began with 50 young people"))
+        assertTrue(domain.body.contains("Congratulations to the three young people"))
+
+        val parsedCharSequence = NewsUtils.parseHtmlContent(domain.body)
+        val parsedString = parsedCharSequence.toString()
+        assertTrue(parsedString.contains("Aurorah is celebrating"))
+        assertTrue(parsedString.contains("The programme began with 50 young people"))
+    }
+
+    @Test
+    fun newsItemUtils_formatsPlainTextParagraphsWithSpacing() {
+        val plainText = "Paragraph 1 is here.\n\nParagraph 2 is here."
+        val parsed = NewsUtils.parseHtmlContent(plainText).toString()
+        assertTrue(parsed.contains("Paragraph 1 is here."))
+        assertTrue(parsed.contains("Paragraph 2 is here."))
+    }
+
+    @Test
     fun newsItem_resolvesRelativeImageUrlsAndHttpToHttps() {
         val relativeLeadingSlash = "/static/images/news/example.png"
         assertEquals(

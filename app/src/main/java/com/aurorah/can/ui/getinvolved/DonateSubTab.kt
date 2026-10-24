@@ -34,6 +34,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -58,10 +59,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aurorah.can.R
 import com.aurorah.can.ui.donation.DonationViewModel
-import com.aurorah.can.ui.theme.BrandPale
+import com.aurorah.can.ui.theme.AppBrandPale
+import com.aurorah.can.ui.theme.AppCardSurface
+import com.aurorah.can.ui.theme.AppLineColor
+import com.aurorah.can.ui.theme.AppTextInk
+import com.aurorah.can.ui.theme.AppTextMuted
 import com.aurorah.can.ui.theme.BrandPrimary
-import com.aurorah.can.ui.theme.TextInk
-import com.aurorah.can.ui.theme.TextMuted
 import java.util.Locale
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
@@ -90,11 +93,11 @@ fun DonateSubTab(
             text = stringResource(R.string.donation_pledge_title),
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
-            color = TextInk
+            color = AppTextInk
         )
 
         Surface(
-            color = BrandPale,
+            color = AppBrandPale,
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -106,13 +109,13 @@ fun DonateSubTab(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Icon(Icons.Filled.Info, contentDescription = null, tint = BrandPrimary, modifier = Modifier.size(18.dp))
-                    Text(stringResource(R.string.donation_pledge_notice_title), fontWeight = FontWeight.Bold, color = BrandPrimary, fontSize = 14.sp)
+                    Icon(Icons.Filled.Info, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp))
+                    Text(stringResource(R.string.donation_pledge_notice_title), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary, fontSize = 14.sp)
                 }
                 Text(
                     text = stringResource(R.string.donation_pledge_notice_body),
                     fontSize = 13.sp,
-                    color = TextInk,
+                    color = AppTextInk,
                     lineHeight = 18.sp
                 )
             }
@@ -121,8 +124,8 @@ fun DonateSubTab(
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-            border = BorderStroke(1.dp, Color(0xFFE5E7EB))
+            colors = CardDefaults.cardColors(containerColor = AppCardSurface),
+            border = BorderStroke(1.dp, AppLineColor)
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
@@ -132,12 +135,12 @@ fun DonateSubTab(
                     text = stringResource(R.string.section_18a_title),
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
-                    color = TextInk
+                    color = AppTextInk
                 )
                 Text(
                     text = stringResource(R.string.section_18a_body),
                     fontSize = 13.sp,
-                    color = TextMuted,
+                    color = AppTextMuted,
                     lineHeight = 18.sp
                 )
                 OutlinedButton(
@@ -161,7 +164,7 @@ fun DonateSubTab(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+                colors = CardDefaults.cardColors(containerColor = AppCardSurface)
             ) {
                 Column(
                     modifier = Modifier.padding(24.dp),
@@ -173,21 +176,21 @@ fun DonateSubTab(
                         text = if (uiState.isMonetaryTab) stringResource(R.string.pledge_received_monetary) else stringResource(R.string.pledge_received_inkind),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = TextInk
+                        color = AppTextInk
                     )
                     val txRef = uiState.donationResponse?.transactionRef ?: ""
                     if (txRef.isNotBlank()) {
                         Text(
                             text = stringResource(R.string.pledge_reference_format, txRef),
                             fontWeight = FontWeight.Bold,
-                            color = BrandPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                             fontSize = 15.sp
                         )
                     }
                     Text(
                         text = stringResource(R.string.pledge_received_thank_you),
                         fontSize = 14.sp,
-                        color = TextMuted,
+                        color = AppTextMuted,
                         lineHeight = 20.sp
                     )
                     Button(
@@ -206,13 +209,13 @@ fun DonateSubTab(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+                colors = CardDefaults.cardColors(containerColor = AppCardSurface)
             ) {
                 Column(
                     modifier = Modifier.padding(20.dp),
                     verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
-                    Text(stringResource(R.string.review_donation_pledge), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = TextInk)
+                    Text(stringResource(R.string.review_donation_pledge), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = AppTextInk)
 
                     if (uiState.isMonetaryTab) {
                         ReviewItem(stringResource(R.string.review_donation_type), stringResource(R.string.review_monetary))
@@ -260,7 +263,7 @@ fun DonateSubTab(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+                colors = CardDefaults.cardColors(containerColor = AppCardSurface)
             ) {
                 Column(
                     modifier = Modifier.padding(20.dp),
@@ -326,7 +329,7 @@ fun DonateSubTab(
                                 isError = uiState.customAmountError != null,
                                 supportingText = uiState.customAmountError?.let { { Text(it, color = Color.Red) } },
                                 modifier = Modifier.fillMaxWidth(),
-                                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                             )
                         }
 
@@ -368,7 +371,7 @@ fun DonateSubTab(
                             supportingText = uiState.itemDescError?.let { { Text(it, color = Color.Red) } },
                             modifier = Modifier.fillMaxWidth(),
                             minLines = 3,
-                            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                         )
 
                         Text(stringResource(R.string.fulfillment_preference_label), fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
@@ -424,7 +427,7 @@ fun DonateSubTab(
 @Composable
 fun ReviewItem(label: String, value: String) {
     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-        Text(label.uppercase(), fontSize = 11.sp, color = TextMuted, fontWeight = FontWeight.Bold)
-        Text(value.ifBlank { "-" }, fontSize = 14.sp, color = TextInk, fontWeight = FontWeight.Medium)
+        Text(label.uppercase(), fontSize = 11.sp, color = AppTextMuted, fontWeight = FontWeight.Bold)
+        Text(value.ifBlank { "-" }, fontSize = 14.sp, color = AppTextInk, fontWeight = FontWeight.Medium)
     }
 }

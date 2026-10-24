@@ -3,6 +3,7 @@ package com.aurorah.can.ui.getinvolved
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
@@ -21,8 +22,8 @@ import androidx.compose.ui.unit.sp
 import com.aurorah.can.R
 import com.aurorah.can.ui.donation.DonationViewModel
 import com.aurorah.can.ui.needs.NeedsViewModel
-import com.aurorah.can.ui.theme.BrandPrimary
-import com.aurorah.can.ui.theme.TextMuted
+import com.aurorah.can.ui.theme.AppTextMuted
+import com.aurorah.can.ui.theme.AurorahTheme
 import com.aurorah.can.ui.volunteer.VolunteerScreen
 import com.aurorah.can.ui.volunteer.VolunteerViewModel
 
@@ -44,46 +45,48 @@ fun GetInvolvedScreen(
         stringResource(R.string.tab_volunteer)
     )
 
-    Column(modifier = modifier.fillMaxSize()) {
-        ScrollableTabRow(
-            selectedTabIndex = selectedTabIndex,
-            edgePadding = 16.dp,
-            indicator = { tabPositions ->
-                if (selectedTabIndex < tabPositions.size) {
-                    TabRowDefaults.SecondaryIndicator(
-                        Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
-                        color = BrandPrimary
-                    )
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            tabs.forEachIndexed { index, title ->
-                val isSelected = selectedTabIndex == index
-                Tab(
-                    selected = isSelected,
-                    onClick = { selectedTabIndex = index },
-                    text = {
-                        Text(
-                            text = title,
-                            color = if (isSelected) BrandPrimary else TextMuted,
-                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                            fontSize = 14.sp
+    AurorahTheme {
+        Column(modifier = modifier.fillMaxSize()) {
+            ScrollableTabRow(
+                selectedTabIndex = selectedTabIndex,
+                edgePadding = 16.dp,
+                indicator = { tabPositions ->
+                    if (selectedTabIndex < tabPositions.size) {
+                        TabRowDefaults.SecondaryIndicator(
+                            Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                tabs.forEachIndexed { index, title ->
+                    val isSelected = selectedTabIndex == index
+                    Tab(
+                        selected = isSelected,
+                        onClick = { selectedTabIndex = index },
+                        text = {
+                            Text(
+                                text = title,
+                                color = if (isSelected) MaterialTheme.colorScheme.primary else AppTextMuted,
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                                fontSize = 14.sp
+                            )
+                        }
+                    )
+                }
+            }
+
+            when (selectedTabIndex) {
+                0 -> CommunityNeedsSubTab(viewModel = needsViewModel)
+                1 -> DonateSubTab(viewModel = donationViewModel)
+                2 -> VolunteerScreen(
+                    viewModel = volunteerViewModel,
+                    userEmail = userEmail,
+                    userName = userName,
+                    userPhone = userPhone
                 )
             }
-        }
-
-        when (selectedTabIndex) {
-            0 -> CommunityNeedsSubTab(viewModel = needsViewModel)
-            1 -> DonateSubTab(viewModel = donationViewModel)
-            2 -> VolunteerScreen(
-                viewModel = volunteerViewModel,
-                userEmail = userEmail,
-                userName = userName,
-                userPhone = userPhone
-            )
         }
     }
 }

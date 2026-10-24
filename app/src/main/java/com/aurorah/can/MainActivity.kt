@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.core.os.LocaleListCompat
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
@@ -11,7 +12,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.aurorah.can.data.local.SessionManager
 import com.aurorah.can.databinding.ActivityMainBinding
 import com.aurorah.can.ui.auth.LoginActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -58,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         binding.bottomNavigation.itemIconTintList = null
+        binding.bottomNavigation.itemActiveIndicatorColor = ContextCompat.getColorStateList(this, R.color.nav_active_indicator)
         binding.bottomNavigation.setupWithNavController(navController)
 
         // Custom transition animations and clean backstack handling for bottom navigation

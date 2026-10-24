@@ -27,6 +27,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -46,9 +47,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aurorah.can.R
 import com.aurorah.can.ui.components.PrivacyDialog
+import com.aurorah.can.ui.theme.AppBackground
+import com.aurorah.can.ui.theme.AppTextMuted
+import com.aurorah.can.ui.theme.AurorahTheme
 import com.aurorah.can.ui.theme.BrandPrimary
-import com.aurorah.can.ui.theme.PageBackground
-import com.aurorah.can.ui.theme.TextMuted
 
 @Composable
 fun GetHelpScreen(
@@ -66,167 +68,174 @@ fun GetHelpScreen(
     val uiState by viewModel.uiState.collectAsState()
     var showPrivacyDialog by remember { mutableStateOf(false) }
 
-    if (showPrivacyDialog) {
-        PrivacyDialog(onDismiss = { showPrivacyDialog = false })
-    }
-
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(PageBackground)
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp, vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        if (onBackClick != null) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onBackClick() }
-                    .padding(vertical = 4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = BrandPrimary,
-                    modifier = Modifier.size(22.dp)
-                )
-                Text(
-                    text = stringResource(R.string.back_to_home),
-                    color = BrandPrimary,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+    AurorahTheme {
+        if (showPrivacyDialog) {
+            PrivacyDialog(onDismiss = { showPrivacyDialog = false })
         }
 
-        // Header Banner Section
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = BrandPrimary)
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(AppBackground)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 20.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Column(
-                modifier = Modifier.padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Surface(
-                    color = Color.White.copy(alpha = 0.15f),
-                    shape = CircleShape,
-                    modifier = Modifier.size(48.dp)
+            if (onBackClick != null) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onBackClick() }
+                        .padding(vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Icon(
-                            imageVector = Icons.Filled.Handshake,
-                            contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier.size(26.dp)
-                        )
-                    }
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(22.dp)
+                    )
+                    Text(
+                        text = stringResource(R.string.back_to_home),
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
-                Text(
-                    text = stringResource(R.string.request_assistance_title),
-                    color = Color.White,
-                    fontSize = 26.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Text(
-                    text = stringResource(R.string.get_help_header_subtitle),
-                    color = Color(0xFFFCE7F3),
-                    fontSize = 14.sp,
-                    lineHeight = 20.sp
-                )
             }
-        }
 
-        if (uiState.isSuccess) {
-            // Success State Box
+            // Header Banner Section
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFECFDF5)),
-                border = BorderStroke(1.dp, Color(0xFFA7F3D0))
+                colors = CardDefaults.cardColors(containerColor = BrandPrimary)
             ) {
                 Column(
                     modifier = Modifier.padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(14.dp)
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Surface(
-                        color = Color(0xFF10B981),
+                        color = Color.White.copy(alpha = 0.15f),
                         shape = CircleShape,
-                        modifier = Modifier.size(56.dp)
+                        modifier = Modifier.size(48.dp)
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Icon(
-                                imageVector = Icons.Filled.Check,
+                                imageVector = Icons.Filled.Handshake,
                                 contentDescription = null,
                                 tint = Color.White,
-                                modifier = Modifier.size(28.dp)
+                                modifier = Modifier.size(26.dp)
                             )
                         }
                     }
                     Text(
-                        text = stringResource(R.string.get_help_success_title),
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF065F46)
+                        text = stringResource(R.string.request_assistance_title),
+                        color = Color.White,
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.ExtraBold
                     )
                     Text(
-                        text = stringResource(R.string.get_help_success_body, uiState.submittedFullName.ifBlank { "Applicant" }),
+                        text = stringResource(R.string.get_help_header_subtitle),
+                        color = Color(0xFFFCE7F3),
                         fontSize = 14.sp,
-                        color = Color(0xFF047857),
                         lineHeight = 20.sp
                     )
-                    Button(
-                        onClick = { viewModel.resetSuccess() },
-                        colors = ButtonDefaults.buttonColors(containerColor = BrandPrimary),
-                        modifier = Modifier.fillMaxWidth()
+                }
+            }
+
+            if (uiState.isSuccess) {
+                // Success State Box
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFFECFDF5)),
+                    border = BorderStroke(1.dp, Color(0xFFA7F3D0))
+                ) {
+                    Column(
+                        modifier = Modifier.padding(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
-                        Text(stringResource(R.string.submit_another_request), fontWeight = FontWeight.Bold)
+                        Surface(
+                            color = Color(0xFF10B981),
+                            shape = CircleShape,
+                            modifier = Modifier.size(56.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = Icons.Filled.Check,
+                                    contentDescription = null,
+                                    tint = Color.White,
+                                    modifier = Modifier.size(28.dp)
+                                )
+                            }
+                        }
+                        Text(
+                            text = stringResource(R.string.get_help_success_title),
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF065F46)
+                        )
+                        Text(
+                            text = stringResource(R.string.get_help_success_body, uiState.submittedFullName.ifBlank { "Applicant" }),
+                            fontSize = 14.sp,
+                            color = Color(0xFF047857),
+                            lineHeight = 20.sp
+                        )
+                        Button(
+                            onClick = { viewModel.resetSuccess() },
+                            colors = ButtonDefaults.buttonColors(containerColor = BrandPrimary),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(stringResource(R.string.submit_another_request), fontWeight = FontWeight.Bold)
+                        }
                     }
                 }
             }
-        }
 
-        // Privacy & Transparency Notice
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = stringResource(R.string.privacy_notice_prefix),
-                fontSize = 12.sp,
-                color = TextMuted,
-                modifier = Modifier.weight(1f)
-            )
-            TextButton(
-                onClick = { showPrivacyDialog = true },
-                contentPadding = PaddingValues(0.dp)
+            // Privacy & Transparency Notice
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(stringResource(R.string.privacy_popia_link), fontSize = 12.sp, color = BrandPrimary, fontWeight = FontWeight.SemiBold)
+                Text(
+                    text = stringResource(R.string.privacy_notice_prefix),
+                    fontSize = 12.sp,
+                    color = AppTextMuted,
+                    modifier = Modifier.weight(1f)
+                )
+                TextButton(
+                    onClick = { showPrivacyDialog = true },
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Text(
+                        stringResource(R.string.privacy_popia_link),
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
             }
-        }
 
-        if (!uiState.isSuccess) {
-            GetHelpForm(
-                uiState = uiState,
-                onFirstNameChange = viewModel::onFirstNameChange,
-                onLastNameChange = viewModel::onLastNameChange,
-                onCountryCodeChange = viewModel::onCountryCodeChange,
-                onPhoneChange = viewModel::onPhoneChange,
-                onLocationChange = viewModel::onLocationChange,
-                onCategoryChange = viewModel::onCategoryChange,
-                onDescriptionChange = viewModel::onDescriptionChange,
-                onUrgencyChange = viewModel::onUrgencyChange,
-                onPopiaConsentChange = viewModel::onPopiaConsentChange,
-                onSubmit = viewModel::submitRequest
-            )
-        }
+            if (!uiState.isSuccess) {
+                GetHelpForm(
+                    uiState = uiState,
+                    onFirstNameChange = viewModel::onFirstNameChange,
+                    onLastNameChange = viewModel::onLastNameChange,
+                    onCountryCodeChange = viewModel::onCountryCodeChange,
+                    onPhoneChange = viewModel::onPhoneChange,
+                    onLocationChange = viewModel::onLocationChange,
+                    onCategoryChange = viewModel::onCategoryChange,
+                    onDescriptionChange = viewModel::onDescriptionChange,
+                    onUrgencyChange = viewModel::onUrgencyChange,
+                    onPopiaConsentChange = viewModel::onPopiaConsentChange,
+                    onSubmit = viewModel::submitRequest
+                )
+            }
 
-        Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
+        }
     }
 }

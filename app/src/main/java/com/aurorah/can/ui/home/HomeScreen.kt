@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -35,13 +36,14 @@ import com.aurorah.can.R
 import com.aurorah.can.data.model.CommunityNeed
 import com.aurorah.can.data.model.NewsItem
 import com.aurorah.can.ui.components.FeedError
+import com.aurorah.can.ui.theme.AppBackground
+import com.aurorah.can.ui.theme.AppBrandPale
+import com.aurorah.can.ui.theme.AppCardSurface
+import com.aurorah.can.ui.theme.AppLineColor
+import com.aurorah.can.ui.theme.AppTextInk
+import com.aurorah.can.ui.theme.AppTextMuted
 import com.aurorah.can.ui.theme.AurorahTheme
-import com.aurorah.can.ui.theme.BrandPale
 import com.aurorah.can.ui.theme.BrandPrimary
-import com.aurorah.can.ui.theme.LineColor
-import com.aurorah.can.ui.theme.PageBackground
-import com.aurorah.can.ui.theme.TextInk
-import com.aurorah.can.ui.theme.TextMuted
 
 data class HomeFeedState(
     val stories: List<NewsItem> = emptyList(),
@@ -73,7 +75,7 @@ fun AurorahHomeScreen(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .background(PageBackground)
+                .background(AppBackground)
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 20.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -84,12 +86,12 @@ fun AurorahHomeScreen(
             )
 
             Surface(
-                color = BrandPale,
+                color = AppBrandPale,
                 shape = RoundedCornerShape(14.dp)
             ) {
                 Text(
                     text = stringResource(R.string.home_banner_network),
-                    color = BrandPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 14.sp,
                     modifier = Modifier.padding(16.dp)
@@ -106,18 +108,18 @@ fun AurorahHomeScreen(
                         }
                     }
                     feedState.isLoading -> {
-                        Text(stringResource(R.string.home_loading_needs), color = TextMuted)
+                        Text(stringResource(R.string.home_loading_needs), color = AppTextMuted)
                     }
                     else -> {
                         Text(
                             stringResource(R.string.home_empty_needs),
-                            color = TextMuted,
+                            color = AppTextMuted,
                             fontSize = 14.sp
                         )
                         OutlinedButton(
                             onClick = onExploreNeeds,
                             modifier = Modifier.fillMaxWidth(),
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = BrandPrimary)
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
                         ) {
                             Text(stringResource(R.string.home_explore_ways))
                         }
@@ -130,7 +132,7 @@ fun AurorahHomeScreen(
                 SectionHeading(stringResource(R.string.home_stories_title))
                 Text(
                     text = stringResource(R.string.home_stories_subtitle),
-                    color = TextMuted,
+                    color = AppTextMuted,
                     fontSize = 14.sp,
                     lineHeight = 20.sp
                 )
@@ -146,16 +148,16 @@ fun AurorahHomeScreen(
                         val isSelected = cat.equals(selectedCategoryFilter, ignoreCase = true)
                         Surface(
                             shape = CircleShape,
-                            color = if (isSelected) BrandPrimary else Color.White,
+                            color = if (isSelected) MaterialTheme.colorScheme.primary else AppCardSurface,
                             border = BorderStroke(
                                 1.dp,
-                                if (isSelected) BrandPrimary else LineColor
+                                if (isSelected) MaterialTheme.colorScheme.primary else AppLineColor
                             ),
                             modifier = Modifier.clickable { selectedCategoryFilter = cat }
                         ) {
                             Text(
                                 text = cat,
-                                color = if (isSelected) Color.White else TextInk,
+                                color = if (isSelected) MaterialTheme.colorScheme.onPrimary else AppTextInk,
                                 fontSize = 13.sp,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                                 modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
@@ -168,6 +170,16 @@ fun AurorahHomeScreen(
                     listOf(
                         NewsItem(
                             id = 1,
+                            title = "A Win Worth Celebrating: Three More Youth Secure Full-Time Contracts",
+                            summary = "Three more young people secured one-year full-time contracts in Aurorah's youth programme, bringing the number who had moved forward to eight.",
+                            body = "Aurorah is celebrating three more young people who secured one-year full-time contracts.\n\nThe programme began with 50 young people on 15 July. With these contracts, eight had moved forward into employment opportunities, while 42 remained on the journey. The update celebrated each step and encouraged the young people still participating to keep showing up, learning and growing.\n\nCongratulations to the three young people. Their progress shows what can happen when young people are given opportunities, support and a chance to believe in themselves.",
+                            category = "Impact Update",
+                            timestamp = "18 Oct 2026",
+                            author = "Aurorah CAN Team",
+                            imageUrl = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80"
+                        ),
+                        NewsItem(
+                            id = 2,
                             title = "A place for young readers in Sunbird Park",
                             summary = "Aurorah CAN established a community mini-library in July 2022 as part of Nelson Mandela Day to promote literacy and provide a safe learning haven.",
                             body = "Aurorah CAN established a community mini-library in Sunbird Park in July 2022 as part of our Nelson Mandela Day initiative.\n\nThe mini-library provides local children and youth with open access to storybooks, educational resource materials, and a quiet, safe learning environment after school hours.\n\nThanks to generous book donations from local residents and community partners, the library collection now holds over 600 titles across multiple languages including English, Afrikaans, and isiXhosa.\n\nVolunteers host weekly reading circles and literacy sessions every Tuesday and Thursday afternoon, fostering a passion for lifelong learning in Kuils River and surrounding neighborhoods.",
@@ -177,7 +189,7 @@ fun AurorahHomeScreen(
                             imageUrl = "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800&q=80"
                         ),
                         NewsItem(
-                            id = 2,
+                            id = 3,
                             title = "Winter Relief Drive in Kuils River & Surrounds",
                             summary = "Providing blankets, warm clothing and warm soup packages to 150+ families across local sectors.",
                             body = "As winter weather fronts hit the Western Cape, Aurorah CAN launched its annual Winter Warmth Drive to assist vulnerable households across Sunbird Park, Happy Valley, and informal settlements nearby.\n\nThrough rapid community coordination, our teams distributed thermal blankets, winter jackets, rainproof boots, and emergency food parcels to more than 150 families.\n\nHot soup kitchens were also mobilized over three consecutive weekends, serving over 800 hot meals to elderly residents and young children.\n\nWe extend our deepest gratitude to all donors, driver volunteers, and neighborhood networks who made this rapid response possible.",
@@ -187,7 +199,7 @@ fun AurorahHomeScreen(
                             imageUrl = "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=800&q=80"
                         ),
                         NewsItem(
-                            id = 3,
+                            id = 4,
                             title = "Digital Hub Skills & Youth Training Workshop Launch",
                             summary = "Empowering local youth with computer literacy, digital CV preparation, and job application support.",
                             body = "Aurorah CAN is thrilled to announce the rollout of our new Community Digital Hub training sessions designed to empower local youth with digital literacy, CV creation, and online job application skills.\n\nThe initiative provides free access to internet-connected workstations, guided tutorials on mobile and desktop applications, and one-on-one mentorship for job seekers and aspiring entrepreneurs.\n\nWorkshops run weekly at the community hall. Registration is open to all community members via the Aurorah CAN Digital Hub app or in person.",
@@ -207,7 +219,7 @@ fun AurorahHomeScreen(
 
                 when {
                     feedState.isLoading -> {
-                        Text(stringResource(R.string.home_loading_stories), color = TextMuted)
+                        Text(stringResource(R.string.home_loading_stories), color = AppTextMuted)
                     }
                     feedState.newsError != null -> {
                         FeedError(
@@ -226,7 +238,7 @@ fun AurorahHomeScreen(
                     else -> {
                         Text(
                             text = "No active updates in this category.",
-                            color = TextMuted,
+                            color = AppTextMuted,
                             fontSize = 14.sp,
                             modifier = Modifier.padding(vertical = 12.dp)
                         )
@@ -234,13 +246,13 @@ fun AurorahHomeScreen(
                 }
 
                 Surface(
-                    color = Color.White,
+                    color = AppCardSurface,
                     shape = RoundedCornerShape(12.dp),
-                    border = BorderStroke(1.dp, LineColor)
+                    border = BorderStroke(1.dp, AppLineColor)
                 ) {
                     Text(
                         text = "Media Consent Notice: We share photos of identifiable community members, especially children, only with written media consent. Generic imagery is labelled as illustrative.",
-                        color = TextMuted,
+                        color = AppTextMuted,
                         fontSize = 12.sp,
                         lineHeight = 18.sp,
                         modifier = Modifier.padding(12.dp)
@@ -259,7 +271,7 @@ fun AurorahHomeScreen(
 fun SectionHeading(title: String) {
     Text(
         text = title,
-        color = TextInk,
+        color = AppTextInk,
         fontSize = 20.sp,
         fontWeight = FontWeight.Bold
     )
