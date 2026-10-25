@@ -83,6 +83,9 @@
     <!-- News Article Detail Reader -->
     <string name="news_detail_title">Inqaku Leendaba</string>
     <string name="author_format">Ngu-%1$s</string>
+    <string name="open_full_story_on_website">Jonga inguqulelo yewebhu</string>
+    <string name="share_article">Yabelana nge-atiki</string>
+    <string name="full_article_label">Ibali elizeleyo</string>
 
     <!-- Settings Fragment -->
     <string name="settings_profile_header">Iphrofayili Yomsebenzisi</string>
@@ -189,6 +192,19 @@
     <string name="select_amount_label">Khetha Isixa *</string>
     <string name="chip_custom_amount">Isixa Esikhethiweyo</string>
     <string name="custom_amount_label">Isixa Esikhethiweyo (ZAR) *</string>
+    <string name="fund_allocation_label">Isahlulo Sempahla *</string>
+    <string name="fund_general">Inkxaso Gabalala — apho kufuneka kakhulu</string>
+    <string name="need_specific_web_notice_title">Iminikelo Yemfuno Epheleleyo</string>
+    <string name="need_specific_web_notice_body">Ukuqinisekisa ukuba umnikelo wakho unxulumene ngqo nalena mfuno kule ndawo, nceda ugqibezele umnikelo wakho kwi-intanethi. App yenza izithembiso ezigabalala.</string>
+    <string name="btn_donate_need_website">Nikela kule Mfuno Kwi-intanethi</string>
+    <string name="dropoff_address_label">Indawo Yokushiya &amp; Iiyure</string>
+    <string name="dropoff_address_value">27 Lovebird Walk, Sunbird Park, Cape Town, 7580</string>
+    <string name="dropoff_hours_value">Mso–Somb 08:00–17:00; Mgq 09:00–14:00</string>
+    <string name="pickup_address_label">Idilesi Yokuthatha *</string>
+    <string name="pickup_address_placeholder">umz. 123 Main Road, Sunbird Park, Cape Town</string>
+    <string name="error_custom_amount_min">Isixa esisezantsi sokunikela ngu-R10</string>
+    <string name="error_pickup_address_required">Idilesi yokuthatha iyadingeka</string>
+    <string name="pledge_disclaimer_notice">Isaziso: I-app ibhalisa isithembiso somnikelo kuphela kwaye akayenzi intlawulo. Iqela lethu liya kuqhagamshelana nawe.</string>
     <string name="payment_method_label">Indlela Yokuhlawula</string>
     <string name="payment_card_ref">Inkomba Yekhadi</string>
     <string name="payment_eft_ref">EFT / Unyanzelo Lwebhanki</string>
@@ -201,6 +217,10 @@
     <!-- Community Needs -->
     <string name="community_needs_title">Iimfuno Zomphakathi Ezikhoyo</string>
     <string name="community_needs_subtitle">Hlola iimfuno ezifunekayo eKuils River kwaye ubonelele ngexesha okanye ngamakhono akho.</string>
+    <string name="community_needs_donate_subtitle">Ezi mfuno zabelwana liqela lethu. Izicelo zoncedo lobuqu zigcinwa iyimfihlo.</string>
+    <string name="btn_donate_this_need">Nikela kule Mfuno</string>
+    <string name="selected_for_donation">Ikelwe Umnikelo</string>
+    <string name="btn_clear_need_selection">Tshintshela kwiIngxowa Jikelele</string>
     <string name="no_needs_found_format">Akafumanekanga iimfuno zomphakathi ze \'%1$s\'</string>
     <string name="btn_refresh_list">Hlaziya Uluhlu</string>
     <string name="offer_logged_title">Isithembiso Sibhalisiwe</string>

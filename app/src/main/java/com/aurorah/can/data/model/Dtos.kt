@@ -46,6 +46,7 @@ data class NewsItemDto(
     @SerializedName(value = "id", alternate = ["news_id", "article_id", "articleId", "newsId", "story_id", "storyId"]) val id: Int = 0,
     @SerializedName(value = "title", alternate = ["headline", "subject", "name"]) val title: String = "",
     @SerializedName(value = "summary", alternate = ["description", "excerpt", "short_description", "shortDescription", "teaser", "snippet", "intro"]) val summary: String = "",
+    @SerializedName(value = "content", alternate = ["full_text", "fullText", "text", "article", "details", "full_content", "fullContent", "body_text", "bodyText", "body_html", "bodyHtml", "html_content", "htmlContent", "html", "message", "main_text", "mainText", "story"]) val content: String = "",
     @SerializedName(value = "body", alternate = ["content", "full_text", "fullText", "text", "article", "details", "full_content", "fullContent", "body_text", "bodyText", "body_html", "bodyHtml", "html_content", "htmlContent", "html", "message", "main_text", "mainText", "story"]) val body: String = "",
     @SerializedName(value = "author", alternate = ["by", "writer", "author_name", "authorName", "created_by", "createdBy", "publisher"]) val author: String = "Aurorah CAN Team",
     @SerializedName(value = "timestamp", alternate = ["created_at", "createdAt", "date", "published_at", "publishedAt", "created_date", "createdDate", "date_created", "dateCreated", "publish_date", "publishDate", "updated_at", "updatedAt"]) val timestamp: String = "",
@@ -53,17 +54,19 @@ data class NewsItemDto(
     @SerializedName(value = "image_url", alternate = ["imageUrl", "image", "media_url", "mediaUrl", "picture", "picture_url", "pictureUrl", "photo", "photo_url", "photoUrl", "cover_image", "coverImage", "featured_image", "featuredImage", "thumbnail", "thumbnail_url", "thumbnailUrl", "image_path", "imagePath", "url"]) val imageUrl: String? = null
 ) {
     fun toDomain(): NewsItem {
-        val resolvedBody = when {
+        val resolvedContent = when {
+            content.isNotBlank() -> content
             body.isNotBlank() -> body
             summary.isNotBlank() -> summary
             else -> title
         }
-        val resolvedSummary = summary.ifBlank { resolvedBody }
+        val resolvedSummary = summary.ifBlank { resolvedContent }
         return NewsItem(
             id = id,
             title = title,
             summary = resolvedSummary,
-            body = resolvedBody,
+            content = content.ifBlank { resolvedContent },
+            body = body.ifBlank { resolvedContent },
             author = author,
             timestamp = timestamp,
             category = category,
@@ -79,6 +82,7 @@ class NewsItemDtoAdapter : JsonDeserializer<NewsItemDto>, JsonSerializer<NewsIte
         obj.addProperty("id", src.id)
         obj.addProperty("title", src.title)
         obj.addProperty("summary", src.summary)
+        obj.addProperty("content", src.content)
         obj.addProperty("body", src.body)
         obj.addProperty("author", src.author)
         obj.addProperty("timestamp", src.timestamp)
@@ -173,8 +177,8 @@ class NewsItemDtoAdapter : JsonDeserializer<NewsItemDto>, JsonSerializer<NewsIte
         val summaryKeys = listOf("summary", "description", "excerpt", "short_description", "shortDescription", "teaser", "snippet", "intro")
         val candidateSummary = findValue(summaryKeys)
 
-        val bodyKeys = listOf(
-            "body", "content", "full_text", "fullText", "text", "article", "details",
+        val contentKeys = listOf(
+            "content", "body", "full_text", "fullText", "text", "article", "details",
             "full_content", "fullContent", "body_text", "bodyText", "body_html", "bodyHtml",
             "html_content", "htmlContent", "html", "message", "main_text", "mainText", "story",
             "post_content", "postContent", "article_content", "articleContent",
@@ -185,44 +189,37 @@ class NewsItemDtoAdapter : JsonDeserializer<NewsItemDto>, JsonSerializer<NewsIte
             "details_html", "full_details", "paragraphs", "content_rendered", "body_rendered"
         )
 
-        var candidateBody = ""
-        var maxBodyLength = -1
-
-        for (k in bodyKeys) {
-            if (obj.has(k)) {
-                val text = extractText(obj.get(k))
-                if (text.length > maxBodyLength) {
-                    maxBodyLength = text.length
-                    candidateBody = text
+        var candidateContent = findValue(listOf("content"))
+        if (candidateContent.isBlank()) {
+            var maxLen = -1
+            for (k in contentKeys) {
+                if (obj.has(k)) {
+                    val text = extractText(obj.get(k))
+                    if (text.length > maxLen) {
+                        maxLen = text.length
+                        candidateContent = text
+                    }
                 }
             }
         }
 
-        for (entry in obj.entrySet()) {
-            val key = entry.key
-            if (key in idKeys || key in authorKeys || key in timestampKeys || key in categoryKeys || key in imageKeys || key in titleKeys) {
-                continue
-            }
-            val text = extractText(entry.value)
-            if (text.length > maxBodyLength) {
-                maxBodyLength = text.length
-                candidateBody = text
-            }
+        var candidateBody = findValue(listOf("body"))
+        if (candidateBody.isBlank()) {
+            candidateBody = candidateContent
+        }
+        if (candidateContent.isBlank()) {
+            candidateContent = candidateBody
         }
 
         val finalSummary = candidateSummary
-        val finalBody = if (candidateBody.length >= candidateSummary.length && candidateBody.isNotBlank()) {
-            candidateBody
-        } else if (candidateSummary.isNotBlank()) {
-            candidateSummary
-        } else {
-            title
-        }
+        val finalContent = candidateContent
+        val finalBody = candidateBody
 
         return NewsItemDto(
             id = id,
             title = title,
             summary = finalSummary,
+            content = finalContent,
             body = finalBody,
             author = author,
             timestamp = timestamp,
@@ -234,13 +231,20 @@ class NewsItemDtoAdapter : JsonDeserializer<NewsItemDto>, JsonSerializer<NewsIte
 
 data class CommunityNeedDto(
     @SerializedName(value = "needId", alternate = ["need_id", "id"]) val needId: Int = 0,
-    @SerializedName(value = "title") val title: String = "",
-    @SerializedName(value = "description") val description: String = "",
-    @SerializedName(value = "location") val location: String = "",
-    @SerializedName(value = "priority") val priority: String = "Low",
+    @SerializedName(value = "title", alternate = ["anonymised_title", "anonymisedTitle", "name"]) val title: String = "",
+    @SerializedName(value = "description", alternate = ["details", "short_description"]) val description: String = "",
+    @SerializedName(value = "location", alternate = ["area", "area_location", "areaLocation"]) val location: String = "",
+    @SerializedName(value = "priority", alternate = ["urgency"]) val priority: String = "Low",
     @SerializedName(value = "category") val category: String = "General",
     @SerializedName(value = "status") val status: String = "Open",
-    @SerializedName(value = "createdAt", alternate = ["created_at", "date"]) val createdAt: String = ""
+    @SerializedName(value = "createdAt", alternate = ["created_at", "date"]) val createdAt: String = "",
+    @SerializedName(value = "targetAmount", alternate = ["target_amount", "target"]) val targetAmount: Double = 0.0,
+    @SerializedName(value = "currentAmount", alternate = ["current_amount", "current"]) val currentAmount: Double = 0.0,
+    @SerializedName(value = "imageUrl", alternate = ["image_url", "image"]) val imageUrl: String? = null,
+    @SerializedName(value = "imageAlt", alternate = ["image_alt"]) val imageAlt: String? = null,
+    @SerializedName(value = "article", alternate = ["article_body", "articleBody", "full_text", "content"]) val article: String? = null,
+    @SerializedName(value = "articleExcerpt", alternate = ["article_excerpt", "excerpt", "summary"]) val articleExcerpt: String? = null,
+    @SerializedName(value = "deadline", alternate = ["due_date", "dueDate"]) val deadline: String? = null
 ) {
     fun toDomain(): CommunityNeed = CommunityNeed(
         needId = needId,
@@ -250,7 +254,14 @@ data class CommunityNeedDto(
         priority = priority,
         category = category,
         status = status,
-        createdAt = createdAt
+        createdAt = createdAt,
+        targetAmount = targetAmount,
+        currentAmount = currentAmount,
+        imageUrl = imageUrl,
+        imageAlt = imageAlt,
+        article = article,
+        articleExcerpt = articleExcerpt,
+        deadline = deadline
     )
 }
 

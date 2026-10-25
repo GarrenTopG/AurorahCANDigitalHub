@@ -78,7 +78,13 @@ fun GetInvolvedScreen(
             }
 
             when (selectedTabIndex) {
-                0 -> CommunityNeedsSubTab(viewModel = needsViewModel)
+                0 -> CommunityNeedsSubTab(
+                    viewModel = needsViewModel,
+                    onNavigateToDonationPledge = { need ->
+                        donationViewModel.selectCommunityNeed(need)
+                        selectedTabIndex = 1
+                    }
+                )
                 1 -> DonateSubTab(viewModel = donationViewModel)
                 2 -> VolunteerScreen(
                     viewModel = volunteerViewModel,

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.aurorah.can.data.api.ApiRepository
 import com.aurorah.can.data.api.NetworkResult
 import com.aurorah.can.data.local.SessionManager
+import com.aurorah.can.data.model.CommunityNeed
 import com.aurorah.can.data.model.DonationRequest
 import com.aurorah.can.data.model.DonationResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,31 +17,32 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class DonationUiState(
+    val selectedFundCategory: String = "General fund — where most needed",
+    val communityNeeds: List<CommunityNeed> = emptyList(),
+    val selectedCommunityNeed: CommunityNeed? = null,
+    val isLoadingNeeds: Boolean = false,
     val isMonetaryTab: Boolean = true,
     val selectedCategory: String = "General fund — where most needed",
     val selectedAmount: Double = 200.0,
     val isCustomAmountSelected: Boolean = false,
     val customAmountText: String = "",
+    val requestTaxCertificate: Boolean = false,
+    val taxIdNumber: String = "",
+    val taxAddress: String = "",
+    val isAnonymous: Boolean = false,
     val donorName: String = "",
     val donorEmail: String = "",
     val phone: String = "",
     val countryCode: String = "+27",
     val message: String = "",
-    val isAnonymous: Boolean = false,
-    val isTaxCertRequested: Boolean = false,
-    val taxIdNumber: String = "",
-    val taxAddress: String = "",
     val inKindCategory: String = "Non-Perishable Food / Canned Goods",
     val itemDescription: String = "",
     val isPickup: Boolean = false,
     val pickupAddress: String = "",
     val popiaConsent: Boolean = true,
     val customAmountError: String? = null,
+    val taxError: String? = null,
     val itemDescError: String? = null,
-    val taxIdError: String? = null,
-    val taxAddressError: String? = null,
-    val donorNameError: String? = null,
-    val donorEmailError: String? = null,
     val pickupAddressError: String? = null,
     val isLoading: Boolean = false,
     val isSuccess: Boolean = false,
@@ -59,6 +61,7 @@ class DonationViewModel @Inject constructor(
 
     init {
         prefillUserInfo()
+        loadCommunityNeeds()
     }
 
     private fun prefillUserInfo() {
@@ -73,8 +76,139 @@ class DonationViewModel @Inject constructor(
         }
     }
 
+    private val defaultNeeds = listOf(
+        CommunityNeed(
+            needId = 1,
+            title = "Warm tracksuits and shoes for young athletes.",
+            category = "Clothing",
+            location = "Kuils River",
+            priority = "High",
+            description = "Empowering Kuils River's Youth: How Donating Tracksuits and Shoes Transforms Local Athletes.",
+            articleExcerpt = "In every community, sport serves as a powerful catalyst for growth, discipline, and unity. Many of our local youth athletes lack suitable sportswear and durable running shoes.",
+            article = "Empowering Kuils River's Youth: How Donating Tracksuits and Shoes Transforms Local Athletes.\n\nIn every community, sport serves as a powerful catalyst for growth, discipline, and unity. Many of our local youth athletes lack suitable sportswear and durable running shoes for training and competitions. By donating warm tracksuits and proper athletic shoes, you enable these young leaders to train with dignity, stay warm during cold morning practices, and perform at their best.",
+            targetAmount = 5000.0,
+            currentAmount = 3200.0,
+            imageUrl = "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=800&q=80",
+            imageAlt = "Tracksuits and sports shoes for youth athletes",
+            deadline = "2025-10-31"
+        ),
+        CommunityNeed(
+            needId = 2,
+            title = "Medical supplies and health kits for community clinic.",
+            category = "Healthcare",
+            location = "Kuils River",
+            priority = "High",
+            description = "Mobilising Support for Community Health: Essential Medical Supplies for Kuils River Clinic.",
+            articleExcerpt = "Access to reliable healthcare resources remains a foundational pillar for community well-being. Our volunteer health outreach team needs basic medical supplies.",
+            article = "Mobilising Support for Community Health: Essential Medical Supplies for Kuils River Clinic.\n\nAccess to reliable healthcare resources remains a foundational pillar for community well-being. Our volunteer health outreach team needs basic medical supplies including first-aid kits, blood pressure monitors, bandages, and antiseptic solutions to support home visits for elderly and vulnerable residents.",
+            targetAmount = 8500.0,
+            currentAmount = 8500.0,
+            imageUrl = "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80",
+            imageAlt = "Medical supplies and first aid kits",
+            deadline = "2025-11-15"
+        ),
+        CommunityNeed(
+            needId = 3,
+            title = "Science textbooks and lab goggles for high schoolers.",
+            category = "Education",
+            location = "Kuils River",
+            priority = "Medium",
+            description = "Empowering Future Scientists: Science Textbooks and Lab Goggles for Kuils River High Schoolers.",
+            articleExcerpt = "Quality STEM education relies heavily on access to real-world learning tools. We are gathering physical science textbooks and protective lab gear.",
+            article = "Empowering Future Scientists: Science Textbooks and Lab Goggles for Kuils River High Schoolers.\n\nQuality STEM education relies heavily on access to real-world learning tools. We are gathering physical science textbooks and protective lab gear to equip high school students preparing for matriculation exams.",
+            targetAmount = 12000.0,
+            currentAmount = 4500.0,
+            imageUrl = "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80",
+            imageAlt = "Science textbooks and laboratory equipment",
+            deadline = "2025-12-01"
+        )
+    )
+
+    fun loadCommunityNeeds() {
+        _uiState.update { it.copy(isLoadingNeeds = true) }
+        viewModelScope.launch {
+            val result = repository.getNeeds()
+            val list = when (result) {
+                is NetworkResult.Success -> if (result.data.isNotEmpty()) result.data else defaultNeeds
+                else -> defaultNeeds
+            }
+            _uiState.update { state ->
+                state.copy(
+                    communityNeeds = list,
+                    isLoadingNeeds = false
+                )
+            }
+        }
+    }
+
+    fun onFundCategorySelected(category: String) {
+        val needMatch = _uiState.value.communityNeeds.find { it.title.equals(category, ignoreCase = true) }
+        _uiState.update {
+            it.copy(
+                selectedFundCategory = category,
+                selectedCategory = category,
+                selectedCommunityNeed = needMatch,
+                errorMessage = null
+            )
+        }
+    }
+
+    fun selectNeedById(needId: Int) {
+        val match = _uiState.value.communityNeeds.find { it.needId == needId }
+        if (match != null) {
+            onFundCategorySelected(match.title)
+        }
+    }
+
+    fun selectCommunityNeed(need: CommunityNeed?) {
+        if (need == null) {
+            onFundCategorySelected("General fund — where most needed")
+        } else {
+            onFundCategorySelected(need.title)
+        }
+    }
+
     fun onTabSelected(isMonetary: Boolean) {
-        _uiState.update { it.copy(isMonetaryTab = isMonetary, errorMessage = null) }
+        _uiState.update {
+            val taxReq = if (!isMonetary) false else it.requestTaxCertificate
+            it.copy(
+                isMonetaryTab = isMonetary,
+                requestTaxCertificate = taxReq,
+                errorMessage = null
+            )
+        }
+    }
+
+    fun onRequestTaxCertificateToggled(checked: Boolean) {
+        _uiState.update { state ->
+            val isAnon = if (checked) false else state.isAnonymous
+            state.copy(
+                requestTaxCertificate = checked,
+                isAnonymous = isAnon,
+                taxError = null,
+                donorName = if (isAnon) "Anonymous Donor" else if (state.donorName == "Anonymous Donor") "" else state.donorName
+            )
+        }
+    }
+
+    fun onTaxIdNumberChanged(taxId: String) {
+        _uiState.update { it.copy(taxIdNumber = taxId, taxError = null) }
+    }
+
+    fun onTaxAddressChanged(address: String) {
+        _uiState.update { it.copy(taxAddress = address, taxError = null) }
+    }
+
+    fun onAnonymousToggled(isAnon: Boolean) {
+        _uiState.update { state ->
+            val name = if (isAnon) "Anonymous Donor" else if (state.donorName == "Anonymous Donor") "" else state.donorName
+            val taxReq = if (isAnon) false else state.requestTaxCertificate
+            state.copy(
+                isAnonymous = isAnon,
+                requestTaxCertificate = taxReq,
+                donorName = name
+            )
+        }
     }
 
     fun onMonetaryCategorySelected(category: String) {
@@ -97,21 +231,26 @@ class DonationViewModel @Inject constructor(
 
     fun onCustomAmountChanged(text: String) {
         val input = text.toDoubleOrNull()
+        val error = if (text.isNotBlank() && (input == null || input < 10.0)) {
+            "Minimum custom donation amount is R10"
+        } else {
+            null
+        }
         _uiState.update {
             it.copy(
                 customAmountText = text,
-                selectedAmount = if (input != null && input > 0.0) input else it.selectedAmount,
-                customAmountError = null
+                selectedAmount = if (input != null && input >= 10.0) input else 0.0,
+                customAmountError = error
             )
         }
     }
 
     fun onDonorNameChanged(name: String) {
-        _uiState.update { it.copy(donorName = name, donorNameError = null) }
+        _uiState.update { it.copy(donorName = name) }
     }
 
     fun onDonorEmailChanged(email: String) {
-        _uiState.update { it.copy(donorEmail = email, donorEmailError = null) }
+        _uiState.update { it.copy(donorEmail = email) }
     }
 
     fun onPhoneChanged(phone: String) {
@@ -122,33 +261,12 @@ class DonationViewModel @Inject constructor(
         _uiState.update { it.copy(countryCode = code) }
     }
 
-    fun onMessageChanged(message: String) {
-        _uiState.update { it.copy(message = message) }
+    fun onMessageChanged(msg: String) {
+        _uiState.update { it.copy(message = msg) }
     }
 
     fun onItemDescriptionChanged(desc: String) {
         _uiState.update { it.copy(itemDescription = desc, itemDescError = null) }
-    }
-
-    fun onTaxCertToggled(isChecked: Boolean) {
-        _uiState.update {
-            it.copy(
-                isTaxCertRequested = isChecked,
-                isAnonymous = if (isChecked) false else it.isAnonymous,
-                taxIdError = null,
-                taxAddressError = null,
-                donorNameError = null,
-                donorEmailError = null
-            )
-        }
-    }
-
-    fun onTaxIdChanged(taxId: String) {
-        _uiState.update { it.copy(taxIdNumber = taxId, taxIdError = null) }
-    }
-
-    fun onTaxAddressChanged(address: String) {
-        _uiState.update { it.copy(taxAddress = address, taxAddressError = null) }
     }
 
     fun onPickupToggled(isPickup: Boolean) {
@@ -157,16 +275,6 @@ class DonationViewModel @Inject constructor(
 
     fun onPickupAddressChanged(address: String) {
         _uiState.update { it.copy(pickupAddress = address, pickupAddressError = null) }
-    }
-
-    fun onAnonymousToggled(isChecked: Boolean) {
-        _uiState.update {
-            it.copy(
-                isAnonymous = isChecked,
-                donorName = if (isChecked) "Anonymous Donor" else "",
-                isTaxCertRequested = if (isChecked) false else it.isTaxCertRequested
-            )
-        }
     }
 
     fun onPopiaConsentChanged(isChecked: Boolean) {
@@ -181,94 +289,63 @@ class DonationViewModel @Inject constructor(
             return
         }
 
-        if (state.isTaxCertRequested) {
-            var hasTaxErr = false
-            var taxIdErr: String? = null
-            var taxAddrErr: String? = null
-            var nameErr: String? = null
-            var emailErr: String? = null
-
-            if (state.taxIdNumber.isBlank()) {
-                taxIdErr = "Tax reference / ID required for Section 18A certificate"
-                hasTaxErr = true
-            }
-
-            if (state.taxAddress.isBlank()) {
-                taxAddrErr = "Tax address required for Section 18A certificate"
-                hasTaxErr = true
-            }
-
-            if (state.donorName.isBlank() || state.isAnonymous) {
-                nameErr = "Your name is required for Section 18A certificate"
-                hasTaxErr = true
-            }
-
-            if (state.donorEmail.isBlank()) {
-                emailErr = "Email address is required for Section 18A certificate"
-                hasTaxErr = true
-            }
-
-            if (hasTaxErr) {
-                _uiState.update {
-                    it.copy(
-                        taxIdError = taxIdErr,
-                        taxAddressError = taxAddrErr,
-                        donorNameError = nameErr,
-                        donorEmailError = emailErr
-                    )
-                }
-                return
-            }
-        }
-
-        val nameToUse = state.donorName.trim().ifBlank {
-            if (state.isAnonymous) "Anonymous Donor" else "Friend of Aurorah"
-        }
-
         val request: DonationRequest
         if (state.isMonetaryTab) {
             if (state.isCustomAmountSelected) {
                 val parsed = state.customAmountText.toDoubleOrNull()
-                if (parsed == null || parsed <= 0.0) {
-                    _uiState.update { it.copy(customAmountError = "Please enter a valid donation amount") }
+                if (parsed == null || parsed < 10.0) {
+                    _uiState.update { it.copy(customAmountError = "Minimum custom donation amount is R10") }
+                    return
+                }
+            }
+
+            if (state.requestTaxCertificate) {
+                if (state.taxIdNumber.isBlank() || state.taxAddress.isBlank()) {
+                    _uiState.update { it.copy(taxError = "Tax reference ID and tax address are required for Section 18A receipt") }
+                    return
+                }
+                if (state.donorEmail.isBlank() || state.donorName.isBlank()) {
+                    _uiState.update { it.copy(errorMessage = "Name and Email are required to issue a Section 18A tax certificate.") }
                     return
                 }
             }
 
             request = DonationRequest(
                 donationType = "Monetary",
-                category = state.selectedCategory,
+                needId = state.selectedCommunityNeed?.needId,
+                category = state.selectedFundCategory,
                 amount = state.selectedAmount,
-                donorName = nameToUse,
+                donorName = state.donorName.ifBlank { "Friend of Aurorah" },
                 userEmail = state.donorEmail.trim(),
                 phone = state.phone.trim(),
                 countryCode = state.countryCode.takeLast(3).ifBlank { "+27" },
                 message = state.message.trim(),
                 isAnonymous = state.isAnonymous,
-                requestTaxCertificate = state.isTaxCertRequested,
-                taxIdNumber = if (state.isTaxCertRequested) state.taxIdNumber.trim() else null,
-                taxAddress = if (state.isTaxCertRequested) state.taxAddress.trim() else null,
+                requestTaxCertificate = state.requestTaxCertificate,
+                taxIdNumber = if (state.requestTaxCertificate) state.taxIdNumber.trim() else null,
+                taxAddress = if (state.requestTaxCertificate) state.taxAddress.trim() else null,
                 popiaConsent = state.popiaConsent
             )
         } else {
             if (state.itemDescription.isBlank()) {
-                _uiState.update { it.copy(itemDescError = "Field cannot be empty") }
+                _uiState.update { it.copy(itemDescError = "Item description and quantity required") }
                 return
             }
 
             if (state.isPickup && state.pickupAddress.isBlank()) {
-                _uiState.update { it.copy(pickupAddressError = "Collection address required") }
+                _uiState.update { it.copy(pickupAddressError = "Collection address is required for pickup") }
                 return
             }
 
             val preference = if (state.isPickup) "Request Collection" else "Drop-off at Hub"
             request = DonationRequest(
                 donationType = "In-Kind",
+                needId = state.selectedCommunityNeed?.needId,
                 category = state.inKindCategory,
                 itemDescription = state.itemDescription.trim(),
                 preference = preference,
                 pickupAddress = if (state.isPickup) state.pickupAddress.trim() else null,
-                donorName = nameToUse,
+                donorName = state.donorName.ifBlank { "Friend of Aurorah" },
                 userEmail = state.donorEmail.trim(),
                 phone = state.phone.trim(),
                 countryCode = state.countryCode.takeLast(3).ifBlank { "+27" },
@@ -278,7 +355,7 @@ class DonationViewModel @Inject constructor(
             )
         }
 
-        _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+        _uiState.update { it.copy(isLoading = true, errorMessage = null, taxError = null) }
 
         viewModelScope.launch {
             when (val result = repository.submitDonation(request)) {
@@ -320,11 +397,16 @@ class DonationViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 itemDescription = "",
+                pickupAddress = "",
+                customAmountText = "",
+                message = "",
                 taxIdNumber = "",
                 taxAddress = "",
-                pickupAddress = "",
-                message = "",
-                isTaxCertRequested = false,
+                requestTaxCertificate = false,
+                customAmountError = null,
+                taxError = null,
+                itemDescError = null,
+                pickupAddressError = null,
                 isSuccess = false,
                 donationResponse = null,
                 errorMessage = null

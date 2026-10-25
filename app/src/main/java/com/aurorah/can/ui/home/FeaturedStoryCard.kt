@@ -103,7 +103,7 @@ fun FeaturedStoryCard(
                     lineHeight = 26.sp
                 )
 
-                val cleanSummary = (if (story.summary.isNotBlank()) story.summary else story.body)
+                val cleanSummary = (if (story.summary.isNotBlank()) story.summary else story.content.ifBlank { story.body })
                     .let { NewsUtils.parseHtmlContent(it).toString().trim() }
 
                 Text(

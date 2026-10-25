@@ -23,6 +23,7 @@ data class NewsItem(
     val id: Int = 0,
     val title: String = "",
     val summary: String = "",
+    val content: String = "",
     val body: String = "",
     val author: String = "Aurorah CAN Team",
     val timestamp: String = "",
@@ -38,7 +39,14 @@ data class CommunityNeed(
     val priority: String = "Low",
     val category: String = "General",
     val status: String = "Open",
-    val createdAt: String = ""
+    val createdAt: String = "",
+    val targetAmount: Double = 0.0,
+    val currentAmount: Double = 0.0,
+    val imageUrl: String? = null,
+    val imageAlt: String? = null,
+    val article: String? = null,
+    val articleExcerpt: String? = null,
+    val deadline: String? = null
 )
 
 data class DonationResponse(
@@ -105,6 +113,7 @@ data class UpdateProfileRequest(
 
 data class DonationRequest(
     @SerializedName(value = "donationType", alternate = ["donation_type", "type"]) val donationType: String = "Monetary",
+    @SerializedName(value = "needId", alternate = ["need_id"]) val needId: Int? = null,
     @SerializedName(value = "category") val category: String,
     @SerializedName(value = "amount") val amount: Double? = null,
     @SerializedName(value = "paymentMethod", alternate = ["payment_method"]) val paymentMethod: String? = null,

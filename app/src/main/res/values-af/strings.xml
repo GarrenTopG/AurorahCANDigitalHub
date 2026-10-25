@@ -83,6 +83,9 @@
     <!-- News Article Detail Reader -->
     <string name="news_detail_title">Nuusartikel</string>
     <string name="author_format">Deur %1$s</string>
+    <string name="open_full_story_on_website">Sien webweergawe</string>
+    <string name="share_article">Deel artikel</string>
+    <string name="full_article_label">Volledige storie</string>
 
     <!-- Settings Fragment -->
     <string name="settings_profile_header">Gebruikersprofiel</string>
@@ -189,6 +192,19 @@
     <string name="select_amount_label">Kies Bedrag *</string>
     <string name="chip_custom_amount">Aangepaste Bedrag</string>
     <string name="custom_amount_label">Aangepaste Bedrag (ZAR) *</string>
+    <string name="fund_allocation_label">Fondsallokasie *</string>
+    <string name="fund_general">Algemene fonds — waar mees benodig</string>
+    <string name="need_specific_web_notice_title">Spesifieke Behoefte-skenkings</string>
+    <string name="need_specific_web_notice_body">Om te verseker dat jou skenking direk aan hierdie spesifieke gemeenskapsbehoefte gekoppel word, voltooi asseblief jou skenking op ons webportaal. Die mobiele toep neem Algemene Fonds-beloftes aan.</string>
+    <string name="btn_donate_need_website">Skenk vir hierdie Behoefte op Webwerf</string>
+    <string name="dropoff_address_label">Aflaaiplek &amp; Bedryfsure</string>
+    <string name="dropoff_address_value">Lovebird-staptog 27, Sunbird Park, Kaapstad, 7580</string>
+    <string name="dropoff_hours_value">Ma–Vr 08:00–17:00; Sa 09:00–14:00</string>
+    <string name="pickup_address_label">Opteladres *</string>
+    <string name="pickup_address_placeholder">bv. Hoofweg 123, Sunbird Park, Kaapstad</string>
+    <string name="error_custom_amount_min">Minimum aangepaste skenkingsbedrag is R10</string>
+    <string name="error_pickup_address_required">Opteladres word vereis vir afhaal</string>
+    <string name="pledge_disclaimer_notice">Kennisgewing: Die toep teken slegs \'n skenkingsbelofte-verwysing aan en verwerk nie betalings nie. Ons span sal kontak maak oor vervulling.</string>
     <string name="payment_method_label">Betalingsverwysingsmetode</string>
     <string name="payment_card_ref">Kredietkaartverwysing</string>
     <string name="payment_eft_ref">EFT / Direkte Oorplasing</string>
@@ -201,6 +217,10 @@
     <!-- Community Needs -->
     <string name="community_needs_title">Huidige Gemeenskapsbehoeftes</string>
     <string name="community_needs_subtitle">Verken dringende behoeftes in Kuilsrivier-gemeenskappe en bied jou tyd of vaardighede aan om te help.</string>
+    <string name="community_needs_donate_subtitle">Hierdie behoeftes word deur ons span gedeel. Persoonlike ondersteuningsversoeke word privaat gehou.</string>
+    <string name="btn_donate_this_need">Skenk vir hierdie Behoefte</string>
+    <string name="selected_for_donation">Gekies vir Skenking</string>
+    <string name="btn_clear_need_selection">Skakel oor na Algemene Fonds</string>
     <string name="no_needs_found_format">Geen gemeenskapsbehoeftes gevind vir \'%1$s\' nie</string>
     <string name="btn_refresh_list">Vervars Lys</string>
     <string name="offer_logged_title">Aanbod Aangeteken</string>

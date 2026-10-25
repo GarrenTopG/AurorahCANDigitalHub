@@ -21,6 +21,7 @@ data class NeedsUiState(
     val selectedFilter: String = "All",
     val isLoading: Boolean = true,
     val selectedNeedForOffer: CommunityNeed? = null,
+    val selectedNeedForDetail: CommunityNeed? = null,
     val isSubmittingOffer: Boolean = false,
     val offerSuccessMessage: String? = null,
     val offerErrorMessage: String? = null
@@ -35,6 +36,54 @@ class NeedsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(NeedsUiState())
     val uiState: StateFlow<NeedsUiState> = _uiState.asStateFlow()
 
+    private val defaultNeeds = listOf(
+        CommunityNeed(
+            needId = 1,
+            title = "Warm tracksuits and shoes for young athletes.",
+            category = "Clothing",
+            location = "Kuils River",
+            priority = "High",
+            description = "Empowering Kuils River's Youth: How Donating Tracksuits and Shoes Transforms Local Athletes.",
+            articleExcerpt = "In every community, sport serves as a powerful catalyst for growth, discipline, and unity. Many of our local youth athletes lack suitable sportswear and durable running shoes.",
+            article = "Empowering Kuils River's Youth: How Donating Tracksuits and Shoes Transforms Local Athletes.\n\nIn every community, sport serves as a powerful catalyst for growth, discipline, and unity. Many of our local youth athletes lack suitable sportswear and durable running shoes for training and competitions. By donating warm tracksuits and proper athletic shoes, you enable these young leaders to train with dignity, stay warm during cold morning practices, and perform at their best.",
+            targetAmount = 5000.0,
+            currentAmount = 3200.0,
+            imageUrl = "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=800&q=80",
+            imageAlt = "Tracksuits and sports shoes for youth athletes",
+            deadline = "2025-10-31"
+        ),
+        CommunityNeed(
+            needId = 2,
+            title = "Medical supplies and health kits for community clinic.",
+            category = "Healthcare",
+            location = "Kuils River",
+            priority = "High",
+            description = "Mobilising Support for Community Health: Essential Medical Supplies for Kuils River Clinic.",
+            articleExcerpt = "Access to reliable healthcare resources remains a foundational pillar for community well-being. Our volunteer health outreach team needs basic medical supplies.",
+            article = "Mobilising Support for Community Health: Essential Medical Supplies for Kuils River Clinic.\n\nAccess to reliable healthcare resources remains a foundational pillar for community well-being. Our volunteer health outreach team needs basic medical supplies including first-aid kits, blood pressure monitors, bandages, and antiseptic solutions to support home visits for elderly and vulnerable residents.",
+            targetAmount = 8500.0,
+            currentAmount = 8500.0,
+            imageUrl = "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80",
+            imageAlt = "Medical supplies and first aid kits",
+            deadline = "2025-11-15"
+        ),
+        CommunityNeed(
+            needId = 3,
+            title = "Science textbooks and lab goggles for high schoolers.",
+            category = "Education",
+            location = "Kuils River",
+            priority = "Medium",
+            description = "Empowering Future Scientists: Science Textbooks and Lab Goggles for Kuils River High Schoolers.",
+            articleExcerpt = "Quality STEM education relies heavily on access to real-world learning tools. We are gathering physical science textbooks and protective lab gear.",
+            article = "Empowering Future Scientists: Science Textbooks and Lab Goggles for Kuils River High Schoolers.\n\nQuality STEM education relies heavily on access to real-world learning tools. We are gathering physical science textbooks and protective lab gear to equip high school students preparing for matriculation exams.",
+            targetAmount = 12000.0,
+            currentAmount = 4500.0,
+            imageUrl = "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80",
+            imageAlt = "Science textbooks and laboratory equipment",
+            deadline = "2025-12-01"
+        )
+    )
+
     init {
         loadNeeds()
     }
@@ -44,8 +93,8 @@ class NeedsViewModel @Inject constructor(
         viewModelScope.launch {
             val result = repository.getNeeds()
             val list = when (result) {
-                is NetworkResult.Success -> result.data
-                else -> emptyList()
+                is NetworkResult.Success -> if (result.data.isNotEmpty()) result.data else defaultNeeds
+                else -> defaultNeeds
             }
             _uiState.update { state ->
                 val filtered = applyFilter(list, state.selectedFilter)
@@ -71,6 +120,10 @@ class NeedsViewModel @Inject constructor(
         } else {
             list.filter { it.category.equals(filter, ignoreCase = true) }
         }
+    }
+
+    fun selectNeedForDetail(need: CommunityNeed?) {
+        _uiState.update { it.copy(selectedNeedForDetail = need) }
     }
 
     fun selectNeedForOffer(need: CommunityNeed?) {

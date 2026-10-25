@@ -103,7 +103,7 @@ fun AurorahHomeScreen(
                 SectionHeading(stringResource(R.string.home_ways_to_help_title))
                 when {
                     feedState.needs.isNotEmpty() -> {
-                        feedState.needs.take(3).forEach { need ->
+                        feedState.needs.take(2).forEach { need ->
                             NeedCard(need = need, onClick = { onNeedClick(need) })
                         }
                     }
@@ -172,6 +172,7 @@ fun AurorahHomeScreen(
                             id = 1,
                             title = "A Win Worth Celebrating: Three More Youth Secure Full-Time Contracts",
                             summary = "Three more young people secured one-year full-time contracts in Aurorah's youth programme, bringing the number who had moved forward to eight.",
+                            content = "Aurorah is celebrating three more young people who secured one-year full-time contracts.\n\nThe programme began with 50 young people on 15 July. With these contracts, eight had moved forward into employment opportunities, while 42 remained on the journey. The update celebrated each step and encouraged the young people still participating to keep showing up, learning and growing.\n\nCongratulations to the three young people. Their progress shows what can happen when young people are given opportunities, support and a chance to believe in themselves.",
                             body = "Aurorah is celebrating three more young people who secured one-year full-time contracts.\n\nThe programme began with 50 young people on 15 July. With these contracts, eight had moved forward into employment opportunities, while 42 remained on the journey. The update celebrated each step and encouraged the young people still participating to keep showing up, learning and growing.\n\nCongratulations to the three young people. Their progress shows what can happen when young people are given opportunities, support and a chance to believe in themselves.",
                             category = "Impact Update",
                             timestamp = "18 Oct 2026",
@@ -182,6 +183,7 @@ fun AurorahHomeScreen(
                             id = 2,
                             title = "A place for young readers in Sunbird Park",
                             summary = "Aurorah CAN established a community mini-library in July 2022 as part of Nelson Mandela Day to promote literacy and provide a safe learning haven.",
+                            content = "Aurorah CAN established a community mini-library in Sunbird Park in July 2022 as part of our Nelson Mandela Day initiative.\n\nThe mini-library provides local children and youth with open access to storybooks, educational resource materials, and a quiet, safe learning environment after school hours.\n\nThanks to generous book donations from local residents and community partners, the library collection now holds over 600 titles across multiple languages including English, Afrikaans, and isiXhosa.\n\nVolunteers host weekly reading circles and literacy sessions every Tuesday and Thursday afternoon, fostering a passion for lifelong learning in Kuils River and surrounding neighborhoods.",
                             body = "Aurorah CAN established a community mini-library in Sunbird Park in July 2022 as part of our Nelson Mandela Day initiative.\n\nThe mini-library provides local children and youth with open access to storybooks, educational resource materials, and a quiet, safe learning environment after school hours.\n\nThanks to generous book donations from local residents and community partners, the library collection now holds over 600 titles across multiple languages including English, Afrikaans, and isiXhosa.\n\nVolunteers host weekly reading circles and literacy sessions every Tuesday and Thursday afternoon, fostering a passion for lifelong learning in Kuils River and surrounding neighborhoods.",
                             category = "Impact Update",
                             timestamp = "July 2022",
@@ -192,6 +194,7 @@ fun AurorahHomeScreen(
                             id = 3,
                             title = "Winter Relief Drive in Kuils River & Surrounds",
                             summary = "Providing blankets, warm clothing and warm soup packages to 150+ families across local sectors.",
+                            content = "As winter weather fronts hit the Western Cape, Aurorah CAN launched its annual Winter Warmth Drive to assist vulnerable households across Sunbird Park, Happy Valley, and informal settlements nearby.\n\nThrough rapid community coordination, our teams distributed thermal blankets, winter jackets, rainproof boots, and emergency food parcels to more than 150 families.\n\nHot soup kitchens were also mobilized over three consecutive weekends, serving over 800 hot meals to elderly residents and young children.\n\nWe extend our deepest gratitude to all donors, driver volunteers, and neighborhood networks who made this rapid response possible.",
                             body = "As winter weather fronts hit the Western Cape, Aurorah CAN launched its annual Winter Warmth Drive to assist vulnerable households across Sunbird Park, Happy Valley, and informal settlements nearby.\n\nThrough rapid community coordination, our teams distributed thermal blankets, winter jackets, rainproof boots, and emergency food parcels to more than 150 families.\n\nHot soup kitchens were also mobilized over three consecutive weekends, serving over 800 hot meals to elderly residents and young children.\n\nWe extend our deepest gratitude to all donors, driver volunteers, and neighborhood networks who made this rapid response possible.",
                             category = "Community Outreaches",
                             timestamp = "Recent Outreach",
@@ -202,6 +205,7 @@ fun AurorahHomeScreen(
                             id = 4,
                             title = "Digital Hub Skills & Youth Training Workshop Launch",
                             summary = "Empowering local youth with computer literacy, digital CV preparation, and job application support.",
+                            content = "Aurorah CAN is thrilled to announce the rollout of our new Community Digital Hub training sessions designed to empower local youth with digital literacy, CV creation, and online job application skills.\n\nThe initiative provides free access to internet-connected workstations, guided tutorials on mobile and desktop applications, and one-on-one mentorship for job seekers and aspiring entrepreneurs.\n\nWorkshops run weekly at the community hall. Registration is open to all community members via the Aurorah CAN Digital Hub app or in person.",
                             body = "Aurorah CAN is thrilled to announce the rollout of our new Community Digital Hub training sessions designed to empower local youth with digital literacy, CV creation, and online job application skills.\n\nThe initiative provides free access to internet-connected workstations, guided tutorials on mobile and desktop applications, and one-on-one mentorship for job seekers and aspiring entrepreneurs.\n\nWorkshops run weekly at the community hall. Registration is open to all community members via the Aurorah CAN Digital Hub app or in person.",
                             category = "Announcements",
                             timestamp = "Active Program",

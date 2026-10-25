@@ -166,14 +166,37 @@ class ModelsSerializationTest {
 
         val newsDto = gson.fromJson(json, NewsItemDto::class.java)
         assertEquals("Community Health Drive", newsDto.title)
+        assertEquals("Full detailed report on community health initiatives across sectors.", newsDto.content)
         assertEquals("Full detailed report on community health initiatives across sectors.", newsDto.body)
         assertEquals("Dr. Sarah Jenkins", newsDto.author)
         assertEquals("https://example.com/health.jpg", newsDto.imageUrl)
 
         val newsDomain = newsDto.toDomain()
         assertEquals("Community Health Drive", newsDomain.title)
+        assertEquals("Free wellness checks scheduled", newsDomain.summary)
+        assertEquals("Full detailed report on community health initiatives across sectors.", newsDomain.content)
         assertEquals("Full detailed report on community health initiatives across sectors.", newsDomain.body)
         assertEquals("Dr. Sarah Jenkins", newsDomain.author)
+    }
+
+    @Test
+    fun newsItemDto_handlesMissingContentSafelyWithFallbackToSummary() {
+        val json = """
+            {
+                "id": 8,
+                "title": "Short Notice",
+                "summary": "Brief summary only provided.",
+                "author": "Aurorah CAN Team"
+            }
+        """.trimIndent()
+
+        val newsDto = gson.fromJson(json, NewsItemDto::class.java)
+        val newsDomain = newsDto.toDomain()
+
+        assertEquals("Short Notice", newsDomain.title)
+        assertEquals("Brief summary only provided.", newsDomain.summary)
+        assertEquals("Brief summary only provided.", newsDomain.content)
+        assertEquals("Brief summary only provided.", newsDomain.body)
     }
 
     @Test

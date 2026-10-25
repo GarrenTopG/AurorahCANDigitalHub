@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import com.aurorah.can.data.api.ApiRepository
 import com.aurorah.can.data.api.NetworkResult
 import com.aurorah.can.data.local.SessionManager
+import com.aurorah.can.data.model.CommunityNeed
 import com.aurorah.can.data.model.DonationResponse
 import com.aurorah.can.util.MainDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,18 +33,38 @@ class DonationViewModelTest {
     private lateinit var viewModel: DonationViewModel
 
     @Before
-    fun setUp() {
+    fun setUp() = runTest {
         whenever(sessionManager.fetchUserEmail()).thenReturn("donor@aurorah.org")
         whenever(sessionManager.fetchUserName()).thenReturn("Donor Name")
+        whenever(repository.getNeeds()).thenReturn(
+            NetworkResult.Success(
+                listOf(
+                    CommunityNeed(needId = 1, title = "Winter Clothing Drive", location = "Kuils River", priority = "High")
+                )
+            )
+        )
         viewModel = DonationViewModel(repository, sessionManager)
     }
 
     @Test
-    fun `init prefills donor email and name from session`() = runTest {
+    fun `init prefills donor email and name and loads community needs`() = runTest {
         viewModel.uiState.test {
             val state = awaitItem()
             assertEquals("donor@aurorah.org", state.donorEmail)
             assertEquals("Donor Name", state.donorName)
+            assertEquals(1, state.communityNeeds.size)
+            assertEquals("Winter Clothing Drive", state.communityNeeds.first().title)
+        }
+    }
+
+    @Test
+    fun `onFundCategorySelected updates selected fund and matches community need`() = runTest {
+        viewModel.onFundCategorySelected("Winter Clothing Drive")
+        viewModel.uiState.test {
+            val state = awaitItem()
+            assertEquals("Winter Clothing Drive", state.selectedFundCategory)
+            assertNotNull(state.selectedCommunityNeed)
+            assertEquals(1, state.selectedCommunityNeed?.needId)
         }
     }
 
@@ -73,22 +94,33 @@ class DonationViewModelTest {
     }
 
     @Test
-    fun `onCustomAmountChanged parses numeric input`() = runTest {
-        viewModel.onCustomAmountChanged("750")
+    fun `onCustomAmountChanged parses numeric input and enforces minimum R10`() = runTest {
+        viewModel.onCustomAmountChanged("5")
         viewModel.uiState.test {
             val state = awaitItem()
-            assertEquals("750", state.customAmountText)
-            assertEquals(750.0, state.selectedAmount, 0.01)
+            assertEquals("5", state.customAmountText)
+            assertNotNull(state.customAmountError)
+        }
+
+        viewModel.onCustomAmountChanged("50")
+        viewModel.uiState.test {
+            val state = awaitItem()
+            assertEquals("50", state.customAmountText)
+            assertEquals(50.0, state.selectedAmount, 0.01)
+            assertNull(state.customAmountError)
         }
     }
 
     @Test
-    fun `onAnonymousToggled sets anonymous name`() = runTest {
-        viewModel.onAnonymousToggled(true)
+    fun `submitDonation with custom amount less than R10 sets error`() = runTest {
+        viewModel.onAmountSelected(0.0, isCustom = true)
+        viewModel.onCustomAmountChanged("5")
+        viewModel.submitDonation()
+
         viewModel.uiState.test {
             val state = awaitItem()
-            assertTrue(state.isAnonymous)
-            assertEquals("Anonymous Donor", state.donorName)
+            assertNotNull(state.customAmountError)
+            assertFalse(state.isLoading)
         }
     }
 

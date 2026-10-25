@@ -44,10 +44,20 @@ CREATE TABLE CommunityNeeds (
 );
 
 -- 5. Table: Donations
+-- Updated schema supports optional NeedID association for community need-linked pledges,
+-- as well as monetary and in-kind donation metadata.
 CREATE TABLE Donations (
     DonationID INT IDENTITY(1,1) PRIMARY KEY,
     UserID INT NULL,
-    Amount DECIMAL(18,2) NOT NULL,
+    NeedID INT NULL, -- Optional FK linking pledge directly to a specific CommunityNeed
+    Amount DECIMAL(18,2) NULL,
+    DonationType VARCHAR(50) DEFAULT 'Monetary', -- 'Monetary' or 'In-Kind'
+    Category VARCHAR(100) NULL,
+    ItemDescription VARCHAR(MAX) NULL,
+    Preference VARCHAR(100) NULL, -- 'Drop-off at Hub' or 'Request Collection'
+    PickupAddress VARCHAR(255) NULL,
+    TransactionRef VARCHAR(100) NULL,
     DonationDate DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE SET NULL
+    FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE SET NULL,
+    FOREIGN KEY (NeedID) REFERENCES CommunityNeeds(NeedID) ON DELETE SET NULL
 );

@@ -111,8 +111,17 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="12dp"
             android:background="@color/gray_200" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/full_article_label"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvNewsDetailBody"
@@ -120,7 +129,8 @@
             android:layout_height="wrap_content"
             android:lineSpacingExtra="6dp"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="15sp"
+            android:textSize="16sp"
+            android:textIsSelectable="true"
             tools:text="Detailed content of the news article goes here..." />
 
         <!-- CORRECTION & MEDIA CONTACT NOTE -->
@@ -186,12 +196,40 @@
                 app:cornerRadius="8dp" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnShareArticle"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="@string/share_article"
+                app:icon="@drawable/ic_share"
+                app:iconSize="18dp"
+                app:cornerRadius="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOpenFullStoryWebsite"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="@string/open_full_story_on_website"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCloseNewsDetail"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="12dp"
             android:text="@string/dismiss"
             app:cornerRadius="8dp" />
 

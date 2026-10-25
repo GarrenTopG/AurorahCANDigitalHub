@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
 import androidx.navigation.fragment.findNavController
 import coil.load
@@ -22,21 +23,27 @@ class NewsDetailBottomSheetFragment : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     companion object {
+        private const val ARG_ID = "arg_id"
         private const val ARG_TITLE = "arg_title"
         private const val ARG_CATEGORY = "arg_category"
         private const val ARG_DATE = "arg_date"
         private const val ARG_AUTHOR = "arg_author"
+        private const val ARG_CONTENT = "arg_content"
+        private const val ARG_SUMMARY = "arg_summary"
         private const val ARG_BODY = "arg_body"
         private const val ARG_IMAGE_URL = "arg_image_url"
 
         fun newInstance(newsItem: NewsItem): NewsDetailBottomSheetFragment {
             val fragment = NewsDetailBottomSheetFragment()
             val args = Bundle().apply {
+                putInt(ARG_ID, newsItem.id)
                 putString(ARG_TITLE, newsItem.title)
                 putString(ARG_CATEGORY, newsItem.category)
                 putString(ARG_DATE, newsItem.timestamp)
                 putString(ARG_AUTHOR, newsItem.author)
-                putString(ARG_BODY, newsItem.body.ifBlank { newsItem.summary })
+                putString(ARG_CONTENT, newsItem.content)
+                putString(ARG_SUMMARY, newsItem.summary)
+                putString(ARG_BODY, newsItem.body)
                 putString(ARG_IMAGE_URL, newsItem.imageUrl)
             }
             fragment.arguments = args
@@ -57,11 +64,14 @@ class NewsDetailBottomSheetFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val args = arguments
+        val newsId = args?.getInt(ARG_ID, 0) ?: 0
         val title = args?.getString(ARG_TITLE, "") ?: ""
         val category = args?.getString(ARG_CATEGORY, "General") ?: "General"
         val date = args?.getString(ARG_DATE, "") ?: ""
         val rawAuthor = args?.getString(ARG_AUTHOR, "Aurorah CAN Team") ?: "Aurorah CAN Team"
         val author = rawAuthor.ifBlank { "Aurorah CAN Team" }
+        val content = args?.getString(ARG_CONTENT, "") ?: ""
+        val summary = args?.getString(ARG_SUMMARY, "") ?: ""
         val body = args?.getString(ARG_BODY, "") ?: ""
         val imageUrl = args?.getString(ARG_IMAGE_URL)
 
@@ -70,7 +80,12 @@ class NewsDetailBottomSheetFragment : BottomSheetDialogFragment() {
         binding.tvNewsDetailDate.text = NewsUtils.formatNewsDate(date)
         binding.tvNewsDetailAuthor.text = getString(R.string.author_format, author)
 
-        val rawContent = if (body.isNotBlank()) body else title
+        val rawContent = when {
+            body.isNotBlank() -> body
+            content.isNotBlank() -> content
+            summary.isNotBlank() -> summary
+            else -> title
+        }
         binding.tvNewsDetailBody.text = NewsUtils.parseHtmlContent(rawContent)
 
         val resolvedImageUrl = NewsUtils.resolveImageUrl(imageUrl)
@@ -132,6 +147,43 @@ class NewsDetailBottomSheetFragment : BottomSheetDialogFragment() {
                     try {
                         navController.navigate(R.id.navigation_volunteer)
                     } catch (_: Exception) { }
+                }
+            }
+        }
+
+        val webUrl = if (newsId > 0) {
+            "https://aurorah-web-hub.onrender.com/news/$newsId"
+        } else {
+            "https://aurorah-web-hub.onrender.com/news"
+        }
+
+        binding.btnShareArticle.setOnClickListener {
+            try {
+                val shareText = "$title\n\nRead more on Aurorah CAN: $webUrl"
+                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_SUBJECT, title)
+                    putExtra(Intent.EXTRA_TEXT, shareText)
+                }
+                startActivity(Intent.createChooser(shareIntent, getString(R.string.share_article)))
+            } catch (_: Exception) {
+                // Fallback
+            }
+        }
+
+        binding.btnOpenFullStoryWebsite.setOnClickListener {
+            try {
+                val customTabsIntent = CustomTabsIntent.Builder()
+                    .setShowTitle(true)
+                    .setShareState(CustomTabsIntent.SHARE_STATE_ON)
+                    .build()
+                customTabsIntent.launchUrl(requireContext(), webUrl.toUri())
+            } catch (_: Exception) {
+                try {
+                    val intent = Intent(Intent.ACTION_VIEW, webUrl.toUri())
+                    startActivity(intent)
+                } catch (_: Exception) {
+                    // Fallback
                 }
             }
         }

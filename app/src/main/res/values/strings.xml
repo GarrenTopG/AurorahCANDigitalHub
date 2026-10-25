@@ -82,6 +82,9 @@
     <!-- News Article Detail Reader -->
     <string name="news_detail_title">News Article</string>
     <string name="author_format">By %1$s</string>
+    <string name="open_full_story_on_website">View Web Version</string>
+    <string name="share_article">Share Article</string>
+    <string name="full_article_label">Full Story</string>
 
     <!-- Settings Fragment -->
     <string name="settings_profile_header">User Profile</string>
@@ -188,6 +191,19 @@
     <string name="select_amount_label">Select Amount *</string>
     <string name="chip_custom_amount">Custom Amount</string>
     <string name="custom_amount_label">Custom Amount (ZAR) *</string>
+    <string name="fund_allocation_label">Fund Allocation *</string>
+    <string name="fund_general">General fund — where most needed</string>
+    <string name="need_specific_web_notice_title">Need-Specific Donations</string>
+    <string name="need_specific_web_notice_body">To ensure your contribution is directly linked and allocated to this specific community need, please complete your donation on our web portal. The mobile app currently records General Fund pledges.</string>
+    <string name="btn_donate_need_website">Donate for this Need on Website</string>
+    <string name="dropoff_address_label">Drop-off Location &amp; Operating Hours</string>
+    <string name="dropoff_address_value">27 Lovebird Walk, Sunbird Park, Cape Town, 7580</string>
+    <string name="dropoff_hours_value">Mon–Fri 08:00–17:00; Sat 09:00–14:00</string>
+    <string name="pickup_address_label">Collection Address *</string>
+    <string name="pickup_address_placeholder">e.g. 123 Main Road, Sunbird Park, Cape Town</string>
+    <string name="error_custom_amount_min">Minimum custom donation amount is R10</string>
+    <string name="error_pickup_address_required">Collection address is required for pickup</string>
+    <string name="pledge_disclaimer_notice">Notice: The app records a donation pledge reference only and does not process payments or money transfers. Our team will contact you regarding pledge fulfillment.</string>
     <string name="payment_method_label">Payment Reference Method</string>
     <string name="payment_card_ref">Credit Card Reference</string>
     <string name="payment_eft_ref">EFT / Direct Transfer</string>
@@ -200,6 +216,10 @@
     <!-- Community Needs -->
     <string name="community_needs_title">Current Community Needs</string>
     <string name="community_needs_subtitle">Explore urgent needs identified across Kuils River communities and offer your time or skills to help.</string>
+    <string name="community_needs_donate_subtitle">These needs are shared by our team. Personal assistance requests are kept private.</string>
+    <string name="btn_donate_this_need">Donate to this Need</string>
+    <string name="selected_for_donation">Selected for Donation</string>
+    <string name="btn_clear_need_selection">Switch to General Fund</string>
     <string name="no_needs_found_format">No community needs found for \'%1$s\'</string>
     <string name="btn_refresh_list">Refresh List</string>
     <string name="offer_logged_title">Offer Logged</string>

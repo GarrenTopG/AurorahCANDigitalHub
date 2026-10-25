@@ -36,7 +36,7 @@ class NewsAdapter(
 
         fun bind(item: NewsItem, onItemClick: (NewsItem) -> Unit) {
             binding.tvNewsTitle.text = item.title
-            val cleanSummary = (if (item.summary.isNotBlank()) item.summary else item.body)
+            val cleanSummary = (if (item.summary.isNotBlank()) item.summary else item.content.ifBlank { item.body })
                 .let { NewsUtils.parseHtmlContent(it).toString().trim() }
             binding.tvNewsSummary.text = cleanSummary
             binding.tvNewsTimestamp.text = NewsUtils.formatNewsDate(item.timestamp)
