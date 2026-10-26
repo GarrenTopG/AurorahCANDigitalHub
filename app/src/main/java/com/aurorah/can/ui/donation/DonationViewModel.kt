@@ -83,14 +83,9 @@ class DonationViewModel @Inject constructor(
             category = "Clothing",
             location = "Kuils River",
             priority = "High",
-            description = "Empowering Kuils River's Youth: How Donating Tracksuits and Shoes Transforms Local Athletes.",
-            articleExcerpt = "In every community, sport serves as a powerful catalyst for growth, discipline, and unity. Many of our local youth athletes lack suitable sportswear and durable running shoes.",
-            article = "Empowering Kuils River's Youth: How Donating Tracksuits and Shoes Transforms Local Athletes.\n\nIn every community, sport serves as a powerful catalyst for growth, discipline, and unity. Many of our local youth athletes lack suitable sportswear and durable running shoes for training and competitions. By donating warm tracksuits and proper athletic shoes, you enable these young leaders to train with dignity, stay warm during cold morning practices, and perform at their best.",
-            targetAmount = 5000.0,
-            currentAmount = 3200.0,
-            imageUrl = "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=800&q=80",
-            imageAlt = "Tracksuits and sports shoes for youth athletes",
-            deadline = "2025-10-31"
+            description = "Supporting youth sports development in Kuils River.",
+            articleExcerpt = "Supporting local youth athletes with sportswear and running shoes.",
+            article = "Supporting local youth athletes with sportswear and running shoes for training and competitions."
         ),
         CommunityNeed(
             needId = 2,
@@ -98,14 +93,9 @@ class DonationViewModel @Inject constructor(
             category = "Healthcare",
             location = "Kuils River",
             priority = "High",
-            description = "Mobilising Support for Community Health: Essential Medical Supplies for Kuils River Clinic.",
-            articleExcerpt = "Access to reliable healthcare resources remains a foundational pillar for community well-being. Our volunteer health outreach team needs basic medical supplies.",
-            article = "Mobilising Support for Community Health: Essential Medical Supplies for Kuils River Clinic.\n\nAccess to reliable healthcare resources remains a foundational pillar for community well-being. Our volunteer health outreach team needs basic medical supplies including first-aid kits, blood pressure monitors, bandages, and antiseptic solutions to support home visits for elderly and vulnerable residents.",
-            targetAmount = 8500.0,
-            currentAmount = 8500.0,
-            imageUrl = "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80",
-            imageAlt = "Medical supplies and first aid kits",
-            deadline = "2025-11-15"
+            description = "Basic medical supplies for home visits and clinic outreach.",
+            articleExcerpt = "Essential medical supplies for community clinic outreach.",
+            article = "Basic medical supplies to support home visits and clinic care for elderly and vulnerable residents."
         ),
         CommunityNeed(
             needId = 3,
@@ -113,14 +103,9 @@ class DonationViewModel @Inject constructor(
             category = "Education",
             location = "Kuils River",
             priority = "Medium",
-            description = "Empowering Future Scientists: Science Textbooks and Lab Goggles for Kuils River High Schoolers.",
-            articleExcerpt = "Quality STEM education relies heavily on access to real-world learning tools. We are gathering physical science textbooks and protective lab gear.",
-            article = "Empowering Future Scientists: Science Textbooks and Lab Goggles for Kuils River High Schoolers.\n\nQuality STEM education relies heavily on access to real-world learning tools. We are gathering physical science textbooks and protective lab gear to equip high school students preparing for matriculation exams.",
-            targetAmount = 12000.0,
-            currentAmount = 4500.0,
-            imageUrl = "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80",
-            imageAlt = "Science textbooks and laboratory equipment",
-            deadline = "2025-12-01"
+            description = "Learning tools for high school physical science students.",
+            articleExcerpt = "Physical science textbooks and lab safety gear for high schoolers.",
+            article = "Physical science textbooks and protective lab gear to equip high school students preparing for exams."
         )
     )
 
@@ -129,7 +114,7 @@ class DonationViewModel @Inject constructor(
         viewModelScope.launch {
             val result = repository.getNeeds()
             val list = when (result) {
-                is NetworkResult.Success -> if (result.data.isNotEmpty()) result.data else defaultNeeds
+                is NetworkResult.Success -> result.data ?: emptyList()
                 else -> defaultNeeds
             }
             _uiState.update { state ->
@@ -142,7 +127,8 @@ class DonationViewModel @Inject constructor(
     }
 
     fun onFundCategorySelected(category: String) {
-        val needMatch = _uiState.value.communityNeeds.find { it.title.equals(category, ignoreCase = true) }
+        val needs = _uiState.value.communityNeeds ?: emptyList()
+        val needMatch = needs.find { it.title.equals(category, ignoreCase = true) }
         _uiState.update {
             it.copy(
                 selectedFundCategory = category,
@@ -154,7 +140,8 @@ class DonationViewModel @Inject constructor(
     }
 
     fun selectNeedById(needId: Int) {
-        val match = _uiState.value.communityNeeds.find { it.needId == needId }
+        val needs = _uiState.value.communityNeeds ?: emptyList()
+        val match = needs.find { it.needId == needId }
         if (match != null) {
             onFundCategorySelected(match.title)
         }
@@ -358,7 +345,20 @@ class DonationViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true, errorMessage = null, taxError = null) }
 
         viewModelScope.launch {
-            when (val result = repository.submitDonation(request)) {
+            var result = repository.submitDonation(request)
+
+            // If request failed due to invalid/expired token or 401 error, clear stale session token and retry
+            if (result is NetworkResult.Error &&
+                (result.message.contains("token", ignoreCase = true) ||
+                 result.message.contains("expired", ignoreCase = true) ||
+                 result.message.contains("unauthorized", ignoreCase = true) ||
+                 result.message.contains("401", ignoreCase = true))
+            ) {
+                sessionManager.clearSession()
+                result = repository.submitDonation(request)
+            }
+
+            when (result) {
                 is NetworkResult.Success -> {
                     val response = result.data
                     if (response.success) {

@@ -47,6 +47,7 @@ import com.aurorah.can.ui.needs.NeedsViewModel
 import com.aurorah.can.ui.theme.AppCardSurface
 import com.aurorah.can.ui.theme.AppTextInk
 import com.aurorah.can.ui.theme.AppTextMuted
+import com.aurorah.can.ui.theme.AurorahTheme
 import com.aurorah.can.ui.theme.BrandPrimary
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -56,7 +57,8 @@ fun CommunityNeedsSubTab(
     onNavigateToDonationPledge: ((CommunityNeed) -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    AurorahTheme {
+        val uiState by viewModel.uiState.collectAsState()
 
     val categories = listOf(
         stringResource(R.string.filter_all),
@@ -77,8 +79,7 @@ fun CommunityNeedsSubTab(
                 }
             }
         )
-        return
-    }
+    } else {
 
     if (uiState.selectedNeedForOffer != null) {
         OfferAssistanceDialog(
@@ -98,7 +99,7 @@ fun CommunityNeedsSubTab(
             confirmButton = {
                 Button(
                     onClick = { viewModel.clearFeedbackMessage() },
-                    colors = ButtonDefaults.buttonColors(containerColor = BrandPrimary)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
                     Text(stringResource(R.string.btn_ok))
                 }
@@ -166,7 +167,7 @@ fun CommunityNeedsSubTab(
                     text = "LOCAL PRIORITIES",
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
-                    color = BrandPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                     letterSpacing = 1.sp
                 )
                 Text(
@@ -199,7 +200,7 @@ fun CommunityNeedsSubTab(
                         },
                         label = { Text(category) },
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = BrandPrimary,
+                            selectedContainerColor = MaterialTheme.colorScheme.primary,
                             selectedLabelColor = Color.White
                         )
                     )
@@ -243,7 +244,13 @@ fun CommunityNeedsSubTab(
                     uiState.filteredNeeds.forEach { need ->
                         NeedItemCard(
                             need = need,
-                            onViewDetail = { viewModel.selectNeedForDetail(need) },
+                            onViewDetail = {
+                                if (onNavigateToDonationPledge != null) {
+                                    onNavigateToDonationPledge(need)
+                                } else {
+                                    viewModel.selectNeedForDetail(need)
+                                }
+                            },
                             onOfferHelp = { viewModel.selectNeedForOffer(need) }
                         )
                     }
@@ -253,4 +260,6 @@ fun CommunityNeedsSubTab(
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
+}
+}
 }

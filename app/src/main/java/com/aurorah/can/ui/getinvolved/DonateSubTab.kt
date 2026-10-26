@@ -27,21 +27,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Launch
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Inventory
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import coil.compose.AsyncImage
 import com.aurorah.can.util.NewsUtils
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -50,6 +47,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -96,6 +94,7 @@ import com.aurorah.can.ui.theme.AppCardSurface
 import com.aurorah.can.ui.theme.AppLineColor
 import com.aurorah.can.ui.theme.AppTextInk
 import com.aurorah.can.ui.theme.AppTextMuted
+import com.aurorah.can.ui.theme.AurorahTheme
 import com.aurorah.can.ui.theme.BrandPrimary
 import java.util.Locale
 
@@ -105,25 +104,13 @@ fun DonateSubTab(
     viewModel: DonationViewModel,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
+    AurorahTheme {
+        val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
 
-    var selectedNeedForDetail by remember { mutableStateOf<CommunityNeed?>(null) }
-
-    if (selectedNeedForDetail != null) {
-        CommunityNeedDetailScreen(
-            need = selectedNeedForDetail!!,
-            onBack = { selectedNeedForDetail = null },
-            onContinueToDonation = { need ->
-                viewModel.onFundCategorySelected(need.title)
-                selectedNeedForDetail = null
-            }
-        )
-        return
-    }
 
     val generalFundOption = stringResource(R.string.fund_general)
-    val fundOptions = listOf(generalFundOption) + uiState.communityNeeds.map { it.title }
+    val fundOptions = listOf(generalFundOption) + (uiState.communityNeeds ?: emptyList()).map { it.title }
     val amountPresets = listOf(50.0, 200.0, 500.0, 1000.0)
     val inKindCategories = listOf(
         "Non-Perishable Food / Canned Goods",
@@ -195,7 +182,7 @@ fun DonateSubTab(
                     text = "LOCAL PRIORITIES",
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
-                    color = BrandPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                     letterSpacing = 1.sp
                 )
                 Text(
@@ -236,9 +223,6 @@ fun DonateSubTab(
                                     } else {
                                         viewModel.onFundCategorySelected(need.title)
                                     }
-                                },
-                                onViewDetail = {
-                                    selectedNeedForDetail = need
                                 }
                             )
                         }
@@ -263,7 +247,7 @@ fun DonateSubTab(
                             text = "MAKE A PLEDGE",
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
-                            color = BrandPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                             letterSpacing = 1.sp
                         )
                         Text(
@@ -278,42 +262,6 @@ fun DonateSubTab(
                             color = AppTextMuted,
                             lineHeight = 18.sp
                         )
-                    }
-
-                    // Error Alert Banner
-                    if (!uiState.errorMessage.isNullOrBlank()) {
-                        Surface(
-                            color = Color(0xFFFFF1F2),
-                            shape = RoundedCornerShape(12.dp),
-                            border = BorderStroke(1.dp, Color(0xFFFDA4AF))
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(14.dp),
-                                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                                verticalAlignment = Alignment.Top
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.ErrorOutline,
-                                    contentDescription = null,
-                                    tint = Color(0xFFE11D48),
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Column {
-                                    Text(
-                                        text = "We could not submit this pledge.",
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color(0xFF881337),
-                                        fontSize = 13.sp
-                                    )
-                                    Text(
-                                        text = uiState.errorMessage!!,
-                                        color = Color(0xFF9F1239),
-                                        fontSize = 12.sp,
-                                        modifier = Modifier.padding(top = 2.dp)
-                                    )
-                                }
-                            }
-                        }
                     }
 
                     // Success State Banner
@@ -375,7 +323,7 @@ fun DonateSubTab(
 
                                 if (uiState.requestTaxCertificate) {
                                     Surface(
-                                        color = Color.White,
+                                        color = AppCardSurface,
                                         shape = RoundedCornerShape(10.dp),
                                         border = BorderStroke(1.dp, Color(0xFFA7F3D0))
                                     ) {
@@ -422,9 +370,9 @@ fun DonateSubTab(
 
                     // Informational Note Banner
                     Surface(
-                        color = Color(0xFFFFFBEB),
+                        color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.35f),
                         shape = RoundedCornerShape(12.dp),
-                        border = BorderStroke(1.dp, Color(0xFFFDE68A))
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f))
                     ) {
                         Row(
                             modifier = Modifier.padding(14.dp),
@@ -434,13 +382,13 @@ fun DonateSubTab(
                             Icon(
                                 imageVector = Icons.Filled.Info,
                                 contentDescription = null,
-                                tint = Color(0xFFD97706),
+                                tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(18.dp)
                             )
                             Text(
                                 text = "This page records a donation pledge. Payments are not processed online, and any tax certificate is generated from the details you provide for your records.",
                                 fontSize = 12.sp,
-                                color = Color(0xFF78350F),
+                                color = AppTextInk,
                                 lineHeight = 17.sp
                             )
                         }
@@ -449,15 +397,16 @@ fun DonateSubTab(
                     // Mode Toggle Tabs
                     TabRow(
                         selectedTabIndex = if (uiState.isMonetaryTab) 0 else 1,
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
                         indicator = { tabPositions ->
                             TabRowDefaults.SecondaryIndicator(
                                 Modifier.tabIndicatorOffset(tabPositions[if (uiState.isMonetaryTab) 0 else 1]),
-                                color = BrandPrimary
+                                color = MaterialTheme.colorScheme.primary
                             )
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color(0xFFF3F4F6), RoundedCornerShape(12.dp))
+                            .clip(RoundedCornerShape(12.dp))
                     ) {
                         Tab(
                             selected = uiState.isMonetaryTab,
@@ -468,7 +417,7 @@ fun DonateSubTab(
                                     Text("Monetary Donation", fontWeight = FontWeight.Bold, fontSize = 13.sp)
                                 }
                             },
-                            selectedContentColor = BrandPrimary,
+                            selectedContentColor = MaterialTheme.colorScheme.primary,
                             unselectedContentColor = AppTextMuted
                         )
                         Tab(
@@ -480,7 +429,7 @@ fun DonateSubTab(
                                     Text("In-Kind Goods", fontWeight = FontWeight.Bold, fontSize = 13.sp)
                                 }
                             },
-                            selectedContentColor = BrandPrimary,
+                            selectedContentColor = MaterialTheme.colorScheme.primary,
                             unselectedContentColor = AppTextMuted
                         )
                     }
@@ -503,7 +452,7 @@ fun DonateSubTab(
                                         shape = RoundedCornerShape(12.dp),
                                         border = BorderStroke(
                                             width = if (isSelected) 2.dp else 1.dp,
-                                            color = if (isSelected) BrandPrimary else AppLineColor
+                                            color = if (isSelected) MaterialTheme.colorScheme.primary else AppLineColor
                                         ),
                                         colors = CardDefaults.outlinedCardColors(
                                             containerColor = if (isSelected) AppBrandPale else AppCardSurface
@@ -536,7 +485,7 @@ fun DonateSubTab(
                                     }
                                 },
                                 modifier = Modifier.fillMaxWidth(),
-                                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                             )
 
                             // Request Section 18A Tax Certificate Checkbox & Fields
@@ -558,7 +507,7 @@ fun DonateSubTab(
                                         Checkbox(
                                             checked = uiState.requestTaxCertificate,
                                             onCheckedChange = { viewModel.onRequestTaxCertificateToggled(it) },
-                                            colors = CheckboxDefaults.colors(checkedColor = BrandPrimary)
+                                            colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colorScheme.primary)
                                         )
                                         Text(
                                             text = "Request a Section 18A tax certificate (monetary pledges only)",
@@ -576,14 +525,14 @@ fun DonateSubTab(
                                                 onValueChange = { viewModel.onTaxIdNumberChanged(it) },
                                                 label = { Text("Tax reference / ID *") },
                                                 modifier = Modifier.fillMaxWidth(),
-                                                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                                                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                                             )
                                             OutlinedTextField(
                                                 value = uiState.taxAddress,
                                                 onValueChange = { viewModel.onTaxAddressChanged(it) },
                                                 label = { Text("Tax address *") },
                                                 modifier = Modifier.fillMaxWidth(),
-                                                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                                                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                                             )
                                             if (!uiState.taxError.isNullOrBlank()) {
                                                 Text(uiState.taxError!!, color = Color.Red, fontSize = 12.sp)
@@ -707,7 +656,7 @@ fun DonateSubTab(
                                 supportingText = uiState.itemDescError?.let { { Text(it, color = Color.Red, fontSize = 12.sp) } },
                                 modifier = Modifier.fillMaxWidth(),
                                 minLines = 3,
-                                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                             )
 
                             // Fulfillment Method Radio Options
@@ -720,7 +669,7 @@ fun DonateSubTab(
                                         shape = RoundedCornerShape(12.dp),
                                         border = BorderStroke(
                                             width = if (!uiState.isPickup) 2.dp else 1.dp,
-                                            color = if (!uiState.isPickup) BrandPrimary else AppLineColor
+                                            color = if (!uiState.isPickup) MaterialTheme.colorScheme.primary else AppLineColor
                                         )
                                     ) {
                                         Row(
@@ -731,7 +680,7 @@ fun DonateSubTab(
                                             RadioButton(
                                                 selected = !uiState.isPickup,
                                                 onClick = { viewModel.onPickupToggled(false) },
-                                                colors = RadioButtonDefaults.colors(selectedColor = BrandPrimary)
+                                                colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colorScheme.primary)
                                             )
                                             Text("I will drop off", fontSize = 13.sp, fontWeight = FontWeight.Bold, color = AppTextInk)
                                         }
@@ -743,7 +692,7 @@ fun DonateSubTab(
                                         shape = RoundedCornerShape(12.dp),
                                         border = BorderStroke(
                                             width = if (uiState.isPickup) 2.dp else 1.dp,
-                                            color = if (uiState.isPickup) BrandPrimary else AppLineColor
+                                            color = if (uiState.isPickup) MaterialTheme.colorScheme.primary else AppLineColor
                                         )
                                     ) {
                                         Row(
@@ -754,7 +703,7 @@ fun DonateSubTab(
                                             RadioButton(
                                                 selected = uiState.isPickup,
                                                 onClick = { viewModel.onPickupToggled(true) },
-                                                colors = RadioButtonDefaults.colors(selectedColor = BrandPrimary)
+                                                colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colorScheme.primary)
                                             )
                                             Text("Request collection", fontSize = 13.sp, fontWeight = FontWeight.Bold, color = AppTextInk)
                                         }
@@ -773,7 +722,7 @@ fun DonateSubTab(
                                         modifier = Modifier.padding(14.dp),
                                         verticalArrangement = Arrangement.spacedBy(4.dp)
                                     ) {
-                                        Text("Drop-off Location:", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = BrandPrimary)
+                                        Text("Drop-off Location:", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = MaterialTheme.colorScheme.primary)
                                         Text("Aurorah NPC, 27 Lovebird Walk, Sunbird Park, Cape Town, 7580.", fontSize = 13.sp, color = AppTextInk)
                                         Text("Hours: Monday–Friday, 08:00–17:00; Saturday, 09:00–14:00. Closed Sunday.", fontSize = 12.sp, color = AppTextMuted)
                                     }
@@ -787,7 +736,7 @@ fun DonateSubTab(
                                     isError = uiState.pickupAddressError != null,
                                     supportingText = uiState.pickupAddressError?.let { { Text(it, color = Color.Red, fontSize = 12.sp) } },
                                     modifier = Modifier.fillMaxWidth(),
-                                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                                 )
                             }
                         }
@@ -807,7 +756,7 @@ fun DonateSubTab(
                             Checkbox(
                                 checked = uiState.isAnonymous,
                                 onCheckedChange = { viewModel.onAnonymousToggled(it) },
-                                colors = CheckboxDefaults.colors(checkedColor = BrandPrimary)
+                                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colorScheme.primary)
                             )
                             Text(
                                 text = "I prefer to donate anonymously",
@@ -826,7 +775,7 @@ fun DonateSubTab(
                             placeholder = { Text("e.g. Jane Doe") },
                             enabled = !uiState.isAnonymous,
                             modifier = Modifier.fillMaxWidth(),
-                            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                         )
 
                         // Email Address Field
@@ -837,7 +786,7 @@ fun DonateSubTab(
                             placeholder = { Text("e.g. email@example.com") },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                             modifier = Modifier.fillMaxWidth(),
-                            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                         )
 
                         // Phone Number Field with Country Code
@@ -858,7 +807,7 @@ fun DonateSubTab(
                                     placeholder = { Text("82 123 4567") },
                                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                                     modifier = Modifier.weight(1f),
-                                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                                 )
                             }
                         }
@@ -871,7 +820,7 @@ fun DonateSubTab(
                             placeholder = { Text("Leave a message to inspire others...") },
                             modifier = Modifier.fillMaxWidth(),
                             minLines = 2,
-                            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = BrandPrimary)
+                            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)
                         )
                     }
 
@@ -893,7 +842,7 @@ fun DonateSubTab(
                             Checkbox(
                                 checked = uiState.popiaConsent,
                                 onCheckedChange = { viewModel.onPopiaConsentChanged(it) },
-                                colors = CheckboxDefaults.colors(checkedColor = BrandPrimary)
+                                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colorScheme.primary)
                             )
                             Text(
                                 text = "I have read the privacy information and agree that Aurorah NPC may use the details I provide to record and review this pledge or offer.",
@@ -907,7 +856,7 @@ fun DonateSubTab(
                         Button(
                             onClick = { viewModel.submitDonation() },
                             enabled = !uiState.isLoading,
-                            colors = ButtonDefaults.buttonColors(containerColor = BrandPrimary),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(52.dp),
@@ -924,6 +873,45 @@ fun DonateSubTab(
                                 )
                             }
                         }
+
+                        // Error Alert Banner displayed directly BELOW the Submit Button
+                        if (!uiState.errorMessage.isNullOrBlank()) {
+                            Surface(
+                                color = Color(0xFFFFF1F2),
+                                shape = RoundedCornerShape(12.dp),
+                                border = BorderStroke(1.dp, Color(0xFFFDA4AF)),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 4.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(14.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                                    verticalAlignment = Alignment.Top
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.ErrorOutline,
+                                        contentDescription = null,
+                                        tint = Color(0xFFE11D48),
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                    Column {
+                                        Text(
+                                            text = "We could not submit this pledge.",
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color(0xFF881337),
+                                            fontSize = 13.sp
+                                        )
+                                        Text(
+                                            text = uiState.errorMessage!!,
+                                            color = Color(0xFF9F1239),
+                                            fontSize = 12.sp,
+                                            modifier = Modifier.padding(top = 2.dp)
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -932,193 +920,182 @@ fun DonateSubTab(
         }
     }
 }
+}
 
 @Composable
 fun DonateNeedCard(
     need: CommunityNeed,
     isSelected: Boolean,
     onSelect: () -> Unit,
-    onViewDetail: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val resolvedImageUrl = NewsUtils.resolveImageUrl(need.imageUrl) ?: need.imageUrl
-
     Card(
         modifier = modifier
-            .width(280.dp),
+            .width(280.dp)
+            .clickable(onClick = onSelect),
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected) AppBrandPale else AppCardSurface
         ),
         border = BorderStroke(
             width = if (isSelected) 2.dp else 1.dp,
-            color = if (isSelected) BrandPrimary else AppLineColor
+            color = if (isSelected) MaterialTheme.colorScheme.primary else AppLineColor
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = if (isSelected) 4.dp else 2.dp)
     ) {
-        Column {
-            // Card Image Header
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp)
-                    .clickable(onClick = onViewDetail)
+        Column(
+            modifier = Modifier.padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                if (!resolvedImageUrl.isNullOrBlank()) {
-                    AsyncImage(
-                        model = resolvedImageUrl,
-                        contentDescription = need.imageAlt ?: need.title,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp))
+                Surface(
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Text(
+                        text = need.category.ifBlank { "General" },
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     )
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(AppBrandPale)
-                            .clip(RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)),
-                        contentAlignment = Alignment.Center
+                }
+
+                if (need.location.isNotBlank()) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                imageVector = Icons.Filled.Image,
-                                contentDescription = null,
-                                tint = BrandPrimary,
-                                modifier = Modifier.size(28.dp)
-                            )
-                            Spacer(modifier = Modifier.height(2.dp))
-                            Text(
-                                text = "Community Need",
-                                color = BrandPrimary,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 11.sp
-                            )
-                        }
+                        Icon(
+                            imageVector = Icons.Filled.LocationOn,
+                            contentDescription = null,
+                            tint = AppTextMuted,
+                            modifier = Modifier.size(14.dp)
+                        )
+                        Text(
+                            text = need.location,
+                            fontSize = 12.sp,
+                            color = AppTextMuted
+                        )
                     }
                 }
+
+                PriorityBadge(priority = need.priority)
             }
 
-            Column(
-                modifier = Modifier.padding(14.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Surface(
-                        color = BrandPrimary.copy(alpha = 0.12f),
-                        shape = RoundedCornerShape(8.dp)
+            Text(
+                text = need.title,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold,
+                color = AppTextInk,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            val rawExcerpt = need.articleExcerpt.takeIf { !it.isNullOrBlank() } ?: need.description
+            val excerpt = NewsUtils.parseHtmlContent(rawExcerpt).toString()
+            if (excerpt.isNotBlank()) {
+                Text(
+                    text = excerpt,
+                    fontSize = 13.sp,
+                    color = AppTextMuted,
+                    lineHeight = 18.sp,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            // Target Amount & Progress Bar
+            if (need.targetAmount > 0.0) {
+                val percent = ((need.currentAmount / need.targetAmount) * 100)
+                    .coerceIn(0.0, 100.0)
+
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = need.category.ifBlank { "General" },
+                            text = "R ${String.format(Locale.US, "%.2f", need.currentAmount)}",
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 13.sp,
+                            color = AppTextInk
+                        )
+                        Text(
+                            text = "of R ${String.format(Locale.US, "%.2f", need.targetAmount)} target",
                             fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = BrandPrimary,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                            color = AppTextMuted
                         )
                     }
 
-                    if (need.location.isNotBlank()) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.LocationOn,
-                                contentDescription = null,
-                                tint = AppTextMuted,
-                                modifier = Modifier.size(14.dp)
-                            )
-                            Text(
-                                text = need.location,
-                                fontSize = 12.sp,
-                                color = AppTextMuted
-                            )
-                        }
-                    }
-
-                    PriorityBadge(priority = need.priority)
-                }
-
-                Text(
-                    text = need.title,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = AppTextInk,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.clickable(onClick = onViewDetail)
-                )
-
-                val excerpt = need.articleExcerpt.takeIf { !it.isNullOrBlank() } ?: need.description
-                if (excerpt.isNotBlank()) {
-                    Text(
-                        text = excerpt,
-                        fontSize = 13.sp,
-                        color = AppTextMuted,
-                        lineHeight = 18.sp,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
+                    LinearProgressIndicator(
+                        progress = { (percent / 100f).toFloat() },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(6.dp)
+                            .clip(RoundedCornerShape(3.dp)),
+                        color = MaterialTheme.colorScheme.primary,
+                        trackColor = AppLineColor
                     )
                 }
+            }
 
+            // Need Deadline
+            if (!need.deadline.isNullOrBlank()) {
                 Row(
-                    modifier = Modifier
-                        .clickable(onClick = onViewDetail)
-                        .padding(vertical = 2.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Info,
+                        imageVector = Icons.Filled.CalendarToday,
                         contentDescription = null,
-                        tint = BrandPrimary,
-                        modifier = Modifier.size(14.dp)
+                        tint = AppTextMuted,
+                        modifier = Modifier.size(12.dp)
                     )
                     Text(
-                        text = "Read story & article",
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = BrandPrimary
+                        text = "Need deadline: ${need.deadline}",
+                        fontSize = 11.sp,
+                        color = AppTextMuted
                     )
                 }
+            }
 
-                Spacer(Modifier.height(2.dp))
+            Spacer(Modifier.height(2.dp))
 
-                if (isSelected) {
-                    Button(
-                        onClick = onSelect,
-                        colors = ButtonDefaults.buttonColors(containerColor = BrandPrimary),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.CheckCircle,
-                            contentDescription = null,
-                            modifier = Modifier.padding(end = 6.dp).size(16.dp)
-                        )
-                        Text(
-                            text = stringResource(R.string.selected_for_donation),
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                } else {
-                    OutlinedButton(
-                        onClick = onSelect,
-                        border = BorderStroke(1.dp, BrandPrimary),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = BrandPrimary),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = stringResource(R.string.btn_donate_this_need),
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+            if (isSelected) {
+                Button(
+                    onClick = onSelect,
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.CheckCircle,
+                        contentDescription = null,
+                        modifier = Modifier.padding(end = 6.dp).size(16.dp)
+                    )
+                    Text(
+                        text = stringResource(R.string.selected_for_donation),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            } else {
+                OutlinedButton(
+                    onClick = onSelect,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = stringResource(R.string.btn_donate_this_need),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
         }

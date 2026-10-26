@@ -37,12 +37,12 @@ class HomeViewModel @Inject constructor(
             isLoaded = true
 
             val storiesList = when (newsResult) {
-                is NetworkResult.Success -> newsResult.data
+                is NetworkResult.Success -> newsResult.data ?: emptyList()
                 else -> emptyList()
             }
 
             val needsList = when (needsResult) {
-                is NetworkResult.Success -> needsResult.data
+                is NetworkResult.Success -> needsResult.data ?: emptyList()
                 else -> emptyList()
             }
 

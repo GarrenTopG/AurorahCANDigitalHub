@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.aurorah.can.ui.getinvolved.DonateSubTab
+import com.aurorah.can.ui.theme.AurorahTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @Deprecated(
@@ -28,7 +29,9 @@ class DonationFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                DonateSubTab(viewModel = viewModel)
+                AurorahTheme {
+                    DonateSubTab(viewModel = viewModel)
+                }
             }
         }
     }

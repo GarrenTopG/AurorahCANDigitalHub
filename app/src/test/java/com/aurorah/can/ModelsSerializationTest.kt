@@ -65,7 +65,14 @@ class ModelsSerializationTest {
                 "priority": "High",
                 "category": "Food",
                 "status": "Open",
-                "created_at": "2026-03-30"
+                "created_at": "2026-03-30",
+                "targetAmount": 1500.0,
+                "currentAmount": 500.0,
+                "imageUrl": "/static/images/food.jpg",
+                "imageAlt": "Food parcel image",
+                "article": "Full story text for food parcel request.",
+                "articleExcerpt": "Short excerpt for food parcel.",
+                "deadline": "2026-11-30"
             }
         """.trimIndent()
 
@@ -78,6 +85,29 @@ class ModelsSerializationTest {
         val needDomain = needDto.toDomain()
         assertEquals(101, needDomain.needId)
         assertEquals("Food Parcel Request", needDomain.title)
+        assertEquals(1500.0, needDomain.targetAmount, 0.001)
+        assertEquals(500.0, needDomain.currentAmount, 0.001)
+        assertEquals("https://aurorah-web-hub.onrender.com/static/images/food.jpg", needDomain.imageUrl)
+        assertEquals("Food parcel image", needDomain.imageAlt)
+        assertEquals("Full story text for food parcel request.", needDomain.article)
+        assertEquals("Short excerpt for food parcel.", needDomain.articleExcerpt)
+        assertEquals("2026-11-30", needDomain.deadline)
+
+        // Minimal JSON without amounts/images maps real nulls/zeros without fake values
+        val minimalJson = """
+            {
+                "needId": 102,
+                "title": "Minimal Need"
+            }
+        """.trimIndent()
+        val minimalDomain = gson.fromJson(minimalJson, CommunityNeedDto::class.java).toDomain()
+        assertEquals(102, minimalDomain.needId)
+        assertEquals("Minimal Need", minimalDomain.title)
+        assertEquals(0.0, minimalDomain.targetAmount, 0.001)
+        assertEquals(0.0, minimalDomain.currentAmount, 0.001)
+        assertEquals(null, minimalDomain.imageUrl)
+        assertEquals(null, minimalDomain.article)
+        assertEquals(null, minimalDomain.deadline)
     }
 
     @Test

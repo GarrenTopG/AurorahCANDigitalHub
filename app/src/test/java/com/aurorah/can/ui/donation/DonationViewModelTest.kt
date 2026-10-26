@@ -192,4 +192,16 @@ class DonationViewModelTest {
             assertNull(state.errorMessage)
         }
     }
+
+    @Test
+    fun `loadCommunityNeeds on network error falls back to non-null default needs`() = runTest {
+        whenever(repository.getNeeds()).thenReturn(NetworkResult.Error("Network error"))
+        viewModel.loadCommunityNeeds()
+        viewModel.uiState.test {
+            val state = awaitItem()
+            assertNotNull(state.communityNeeds)
+            assertTrue(state.communityNeeds.isNotEmpty())
+            assertFalse(state.isLoadingNeeds)
+        }
+    }
 }

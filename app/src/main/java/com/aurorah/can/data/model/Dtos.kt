@@ -1,5 +1,6 @@
 package com.aurorah.can.data.model
 
+import com.aurorah.can.util.NewsUtils
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
@@ -229,40 +230,181 @@ class NewsItemDtoAdapter : JsonDeserializer<NewsItemDto>, JsonSerializer<NewsIte
     }
 }
 
+@JsonAdapter(CommunityNeedDtoAdapter::class)
 data class CommunityNeedDto(
-    @SerializedName(value = "needId", alternate = ["need_id", "id"]) val needId: Int = 0,
-    @SerializedName(value = "title", alternate = ["anonymised_title", "anonymisedTitle", "name"]) val title: String = "",
-    @SerializedName(value = "description", alternate = ["details", "short_description"]) val description: String = "",
-    @SerializedName(value = "location", alternate = ["area", "area_location", "areaLocation"]) val location: String = "",
-    @SerializedName(value = "priority", alternate = ["urgency"]) val priority: String = "Low",
-    @SerializedName(value = "category") val category: String = "General",
-    @SerializedName(value = "status") val status: String = "Open",
-    @SerializedName(value = "createdAt", alternate = ["created_at", "date"]) val createdAt: String = "",
-    @SerializedName(value = "targetAmount", alternate = ["target_amount", "target"]) val targetAmount: Double = 0.0,
-    @SerializedName(value = "currentAmount", alternate = ["current_amount", "current"]) val currentAmount: Double = 0.0,
-    @SerializedName(value = "imageUrl", alternate = ["image_url", "image"]) val imageUrl: String? = null,
-    @SerializedName(value = "imageAlt", alternate = ["image_alt"]) val imageAlt: String? = null,
-    @SerializedName(value = "article", alternate = ["article_body", "articleBody", "full_text", "content"]) val article: String? = null,
-    @SerializedName(value = "articleExcerpt", alternate = ["article_excerpt", "excerpt", "summary"]) val articleExcerpt: String? = null,
-    @SerializedName(value = "deadline", alternate = ["due_date", "dueDate"]) val deadline: String? = null
+    val needId: Int = 0,
+    val title: String = "",
+    val description: String = "",
+    val location: String = "",
+    val priority: String = "Low",
+    val category: String = "General",
+    val status: String = "Open",
+    val createdAt: String = "",
+    val targetAmount: Double = 0.0,
+    val currentAmount: Double = 0.0,
+    val imageUrl: String? = null,
+    val imageAlt: String? = null,
+    val article: String? = null,
+    val articleExcerpt: String? = null,
+    val deadline: String? = null
 ) {
-    fun toDomain(): CommunityNeed = CommunityNeed(
-        needId = needId,
-        title = title,
-        description = description,
-        location = location,
-        priority = priority,
-        category = category,
-        status = status,
-        createdAt = createdAt,
-        targetAmount = targetAmount,
-        currentAmount = currentAmount,
-        imageUrl = imageUrl,
-        imageAlt = imageAlt,
-        article = article,
-        articleExcerpt = articleExcerpt,
-        deadline = deadline
-    )
+    fun toDomain(): CommunityNeed {
+        val resolvedUrl = NewsUtils.resolveImageUrl(imageUrl)
+
+        return CommunityNeed(
+            needId = needId,
+            title = title,
+            description = description,
+            location = location.ifBlank { "Kuils River" },
+            priority = priority,
+            category = category,
+            status = status,
+            createdAt = createdAt,
+            targetAmount = targetAmount,
+            currentAmount = currentAmount,
+            imageUrl = resolvedUrl?.takeIf { it.isNotBlank() },
+            imageAlt = imageAlt?.takeIf { it.isNotBlank() } ?: title.takeIf { it.isNotBlank() },
+            article = article?.takeIf { it.isNotBlank() },
+            articleExcerpt = articleExcerpt?.takeIf { it.isNotBlank() } ?: description.takeIf { it.isNotBlank() },
+            deadline = deadline?.takeIf { it.isNotBlank() }
+        )
+    }
+}
+
+class CommunityNeedDtoAdapter : JsonDeserializer<CommunityNeedDto>, JsonSerializer<CommunityNeedDto> {
+    override fun serialize(src: CommunityNeedDto?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
+        if (src == null) return JsonNull.INSTANCE
+        val obj = JsonObject()
+        obj.addProperty("needId", src.needId)
+        obj.addProperty("title", src.title)
+        obj.addProperty("description", src.description)
+        obj.addProperty("location", src.location)
+        obj.addProperty("priority", src.priority)
+        obj.addProperty("category", src.category)
+        obj.addProperty("status", src.status)
+        obj.addProperty("createdAt", src.createdAt)
+        obj.addProperty("targetAmount", src.targetAmount)
+        obj.addProperty("currentAmount", src.currentAmount)
+        if (src.imageUrl != null) obj.addProperty("imageUrl", src.imageUrl)
+        if (src.imageAlt != null) obj.addProperty("imageAlt", src.imageAlt)
+        if (src.article != null) obj.addProperty("article", src.article)
+        if (src.articleExcerpt != null) obj.addProperty("articleExcerpt", src.articleExcerpt)
+        if (src.deadline != null) obj.addProperty("deadline", src.deadline)
+        return obj
+    }
+
+    override fun deserialize(
+        json: JsonElement,
+        typeOfT: Type,
+        context: JsonDeserializationContext
+    ): CommunityNeedDto {
+        if (!json.isJsonObject) {
+            return CommunityNeedDto()
+        }
+        val obj = json.asJsonObject
+
+        fun extractText(element: JsonElement?): String {
+            if (element == null || element.isJsonNull) return ""
+            if (element.isJsonPrimitive) return element.asString.trim()
+            if (element.isJsonObject) {
+                val o = element.asJsonObject
+                val candidate = o.get("rendered")
+                    ?: o.get("value")
+                    ?: o.get("text")
+                    ?: o.get("content")
+                    ?: o.get("html")
+                    ?: o.get("raw")
+                if (candidate != null && !candidate.isJsonNull) {
+                    return extractText(candidate)
+                }
+            }
+            return ""
+        }
+
+        fun findValue(keys: List<String>): String {
+            for (k in keys) {
+                if (obj.has(k)) {
+                    val text = extractText(obj.get(k))
+                    if (text.isNotBlank()) return text
+                }
+            }
+            return ""
+        }
+
+        fun findDouble(keys: List<String>): Double {
+            for (k in keys) {
+                if (obj.has(k)) {
+                    val el = obj.get(k)
+                    if (el != null && el.isJsonPrimitive && el.asJsonPrimitive.isNumber) {
+                        return el.asDouble
+                    } else if (el != null && el.isJsonPrimitive && el.asJsonPrimitive.isString) {
+                        val parsed = el.asString.toDoubleOrNull()
+                        if (parsed != null) return parsed
+                    }
+                }
+            }
+            return 0.0
+        }
+
+        var needId = 0
+        val idKeys = listOf("needId", "need_id", "id")
+        for (k in idKeys) {
+            if (obj.has(k)) {
+                val el = obj.get(k)
+                if (el != null && el.isJsonPrimitive && el.asJsonPrimitive.isNumber) {
+                    needId = el.asInt
+                    break
+                } else if (el != null && el.isJsonPrimitive && el.asJsonPrimitive.isString) {
+                    needId = el.asString.toIntOrNull() ?: 0
+                    if (needId != 0) break
+                }
+            }
+        }
+
+        val title = findValue(listOf("title", "anonymised_title", "anonymisedTitle", "name", "headline"))
+        val description = findValue(listOf("description", "details", "short_description", "summary", "details_text"))
+        val location = findValue(listOf("location", "area", "area_location", "areaLocation"))
+        val priority = findValue(listOf("priority", "urgency")).ifBlank { "Low" }
+        val category = findValue(listOf("category", "category_name")).ifBlank { "General" }
+        val status = findValue(listOf("status", "state")).ifBlank { "Open" }
+        val createdAt = findValue(listOf("createdAt", "created_at", "date"))
+        val targetAmount = findDouble(listOf("targetAmount", "target_amount", "target"))
+        val currentAmount = findDouble(listOf("currentAmount", "current_amount", "current"))
+
+        val imageKeys = listOf("imageUrl", "image_url", "image", "image_path", "imagePath", "media_url", "mediaUrl", "picture", "picture_url", "pictureUrl", "photo", "photo_url", "photoUrl", "cover_image", "coverImage", "featured_image", "featuredImage", "thumbnail", "thumbnail_url", "thumbnailUrl", "url")
+        val rawImageUrl = findValue(imageKeys)
+        val imageUrl = if (rawImageUrl.isNotBlank()) rawImageUrl else null
+
+        val imageAltStr = findValue(listOf("imageAlt", "image_alt"))
+        val imageAlt = if (imageAltStr.isNotBlank()) imageAltStr else null
+
+        val articleStr = findValue(listOf("article", "article_body", "articleBody", "full_text", "fullText", "content", "story", "body", "details_html", "full_content", "fullContent", "article_content", "articleContent"))
+        val article = if (articleStr.isNotBlank()) articleStr else null
+
+        val excerptStr = findValue(listOf("articleExcerpt", "article_excerpt", "excerpt", "summary", "short_description", "shortDescription", "teaser"))
+        val articleExcerpt = if (excerptStr.isNotBlank()) excerptStr else null
+
+        val deadlineStr = findValue(listOf("deadline", "due_date", "dueDate"))
+        val deadline = if (deadlineStr.isNotBlank()) deadlineStr else null
+
+        return CommunityNeedDto(
+            needId = needId,
+            title = title,
+            description = description,
+            location = location,
+            priority = priority,
+            category = category,
+            status = status,
+            createdAt = createdAt,
+            targetAmount = targetAmount,
+            currentAmount = currentAmount,
+            imageUrl = imageUrl,
+            imageAlt = imageAlt,
+            article = article,
+            articleExcerpt = articleExcerpt,
+            deadline = deadline
+        )
+    }
 }
 
 data class DonationResponseDto(

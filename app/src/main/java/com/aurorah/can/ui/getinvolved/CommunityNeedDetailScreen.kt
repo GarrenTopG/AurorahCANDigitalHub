@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -53,6 +54,7 @@ import com.aurorah.can.ui.theme.AppLineColor
 import com.aurorah.can.ui.theme.AppTextInk
 import com.aurorah.can.ui.theme.AppTextMuted
 import com.aurorah.can.ui.theme.BrandPrimary
+import com.aurorah.can.util.NewsUtils
 import java.util.Locale
 
 @Composable
@@ -145,11 +147,14 @@ fun CommunityNeedDetailScreen(
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Column {
-                    if (!need.imageUrl.isNullOrBlank()) {
+                    val resolvedImageUrl = NewsUtils.resolveImageUrl(need.imageUrl) ?: need.imageUrl
+                    if (!resolvedImageUrl.isNullOrBlank()) {
                         AsyncImage(
-                            model = need.imageUrl,
+                            model = resolvedImageUrl,
                             contentDescription = need.imageAlt ?: need.title,
                             contentScale = ContentScale.Crop,
+                            placeholder = painterResource(R.drawable.ic_news_placeholder),
+                            error = painterResource(R.drawable.ic_news_placeholder),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(220.dp)
@@ -167,13 +172,13 @@ fun CommunityNeedDetailScreen(
                                 Icon(
                                     imageVector = Icons.Filled.Image,
                                     contentDescription = null,
-                                    tint = BrandPrimary,
+                                    tint = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.size(40.dp)
                                 )
                                 Spacer(modifier = Modifier.height(6.dp))
                                 Text(
                                     text = "Community Need",
-                                    color = BrandPrimary,
+                                    color = MaterialTheme.colorScheme.primary,
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 14.sp
                                 )
@@ -243,7 +248,7 @@ fun CommunityNeedDetailScreen(
                                         .fillMaxWidth()
                                         .height(8.dp)
                                         .clip(RoundedCornerShape(4.dp)),
-                                    color = BrandPrimary,
+                                    color = MaterialTheme.colorScheme.primary,
                                     trackColor = AppLineColor
                                 )
 
@@ -271,11 +276,12 @@ fun CommunityNeedDetailScreen(
                             color = AppTextInk
                         )
 
-                        val storyText = when {
+                        val rawStory = when {
                             !need.article.isNullOrBlank() -> need.article
                             need.description.isNotBlank() -> need.description
                             else -> "More details for this community need will be updated shortly."
                         }
+                        val storyText = NewsUtils.parseHtmlContent(rawStory).toString()
 
                         Text(
                             text = storyText,
@@ -292,7 +298,7 @@ fun CommunityNeedDetailScreen(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = AppCardSurface),
-                border = BorderStroke(1.dp, BrandPrimary.copy(alpha = 0.3f)),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Column(
@@ -303,7 +309,7 @@ fun CommunityNeedDetailScreen(
                         text = "SUPPORT THIS NEED",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
-                        color = BrandPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                         letterSpacing = 1.sp
                     )
 

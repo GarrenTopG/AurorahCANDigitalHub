@@ -25,6 +25,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -34,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -49,6 +51,7 @@ import com.aurorah.can.ui.theme.AppLineColor
 import com.aurorah.can.ui.theme.AppTextInk
 import com.aurorah.can.ui.theme.AppTextMuted
 import com.aurorah.can.ui.theme.BrandPrimary
+import com.aurorah.can.util.NewsUtils
 import java.util.Locale
 
 @Composable
@@ -69,11 +72,14 @@ fun NeedItemCard(
     ) {
         Column {
             // Card Image or Banner
-            if (!need.imageUrl.isNullOrBlank()) {
+            val resolvedImageUrl = NewsUtils.resolveImageUrl(need.imageUrl) ?: need.imageUrl
+            if (!resolvedImageUrl.isNullOrBlank()) {
                 AsyncImage(
-                    model = need.imageUrl,
+                    model = resolvedImageUrl,
                     contentDescription = need.imageAlt ?: need.title,
                     contentScale = ContentScale.Crop,
+                    placeholder = painterResource(R.drawable.ic_news_placeholder),
+                    error = painterResource(R.drawable.ic_news_placeholder),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(180.dp)
@@ -91,13 +97,13 @@ fun NeedItemCard(
                         Icon(
                             imageVector = Icons.Filled.Image,
                             contentDescription = null,
-                            tint = BrandPrimary,
+                            tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.size(32.dp)
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = "Community need",
-                            color = BrandPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold,
                             fontSize = 13.sp
                         )
@@ -127,7 +133,7 @@ fun NeedItemCard(
                                 text = need.category.ifBlank { "General" },
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = BrandPrimary,
+                                color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                             )
                         }
@@ -165,11 +171,12 @@ fun NeedItemCard(
                 )
 
                 // Excerpt
-                val excerpt = when {
+                val rawExcerpt = when {
                     !need.articleExcerpt.isNullOrBlank() -> need.articleExcerpt
                     need.description.isNotBlank() -> need.description
                     else -> "See how you can support this priority in our community."
                 }
+                val excerpt = NewsUtils.parseHtmlContent(rawExcerpt).toString()
 
                 Text(
                     text = excerpt,
@@ -210,7 +217,7 @@ fun NeedItemCard(
                                 .fillMaxWidth()
                                 .height(6.dp)
                                 .clip(RoundedCornerShape(3.dp)),
-                            color = BrandPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                             trackColor = AppLineColor
                         )
 
@@ -272,17 +279,17 @@ fun NeedItemCard(
                         onClick = onOfferHelp,
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(10.dp),
-                        border = BorderStroke(1.dp, BrandPrimary)
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Handshake,
                             contentDescription = null,
-                            tint = BrandPrimary,
+                            tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(end = 4.dp).size(14.dp)
                         )
                         Text(
                             text = stringResource(R.string.offer_assistance),
-                            color = BrandPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold,
                             fontSize = 13.sp
                         )

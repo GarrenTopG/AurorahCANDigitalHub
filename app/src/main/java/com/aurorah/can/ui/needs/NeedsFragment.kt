@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.aurorah.can.ui.getinvolved.CommunityNeedsSubTab
+import com.aurorah.can.ui.theme.AurorahTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @Deprecated(
@@ -28,7 +29,9 @@ class NeedsFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                CommunityNeedsSubTab(viewModel = viewModel)
+                AurorahTheme {
+                    CommunityNeedsSubTab(viewModel = viewModel)
+                }
             }
         }
     }
