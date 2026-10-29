@@ -281,6 +281,7 @@
     <string name="view_ways_to_help">View ways to help  →</string>
     <string name="featured_story_tag_format">FEATURED STORY  ·  %1$s</string>
 
-    <!-- Default Web Client ID for Google Sign In placeholder -->
-    <string name="default_web_client_id" translatable="false">YOUR_GOOGLE_WEB_CLIENT_ID.apps.googleusercontent.com</string>
+    <!-- Default Web Client ID for Google Sign In -->
+    <!-- Default Web Client ID for Google Sign In (Firebase Web Client ID) -->
+    <string name="default_web_client_id" translatable="false">1028194155145-2j22mt6485nmbpoe0pvs9tfd7j2dtujb.apps.googleusercontent.com</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.aurorah.can.ui.auth
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aurorah.can.data.api.ApiRepository
@@ -7,12 +8,16 @@ import com.aurorah.can.data.api.NetworkResult
 import com.aurorah.can.data.local.SessionManager
 import com.aurorah.can.data.model.RegisterRequest
 import com.aurorah.can.util.InputValidator
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 
 data class RegisterUiState(
@@ -168,4 +173,85 @@ class RegisterViewModel @Inject constructor(
             }
         }
     }
+
+    fun registerWithGoogle(email: String, name: String, idToken: String? = null) {
+        if (email.isBlank()) {
+            _uiState.update { it.copy(errorMessage = "Could not retrieve email from Google Account.") }
+            return
+        }
+
+        _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+
+        viewModelScope.launch {
+            var tokenToSend = idToken
+
+            // Exchange Google OAuth ID Token for a Firebase ID Token expected by /api/auth/google-sso (mobile_auth.py)
+            if (!idToken.isNullOrBlank()) {
+                try {
+                    val credential = GoogleAuthProvider.getCredential(idToken, null)
+                    val authResult = FirebaseAuth.getInstance().signInWithCredential(credential).awaitTask()
+                    val firebaseUser = authResult.user
+                    if (firebaseUser != null) {
+                        val tokenResult = firebaseUser.getIdToken(true).awaitTask()
+                        if (!tokenResult.token.isNullOrBlank()) {
+                            tokenToSend = tokenResult.token
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.w("RegisterViewModel", "Firebase token exchange warning: ${e.localizedMessage}")
+                }
+            }
+
+            when (val result = repository.googleSso(email = email, name = name, idToken = tokenToSend)) {
+                is NetworkResult.Success -> {
+                    val response = result.data
+                    if (response.success && response.user != null) {
+                        sessionManager.saveSession(
+                            token = response.token ?: "authenticated-jwt-token",
+                            email = response.user.email,
+                            name = response.user.fullName,
+                            role = response.user.role
+                        )
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                isSuccess = true
+                            )
+                        }
+                    } else {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                errorMessage = response.message.ifBlank { "Google Sign-In failed." }
+                            )
+                        }
+                    }
+                }
+                is NetworkResult.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = result.message
+                        )
+                    }
+                }
+                is NetworkResult.Loading -> {
+                    _uiState.update { it.copy(isLoading = true) }
+                }
+            }
+        }
+    }
+
+    private suspend fun <T> Task<T>.awaitTask(): T =
+        suspendCancellableCoroutine { continuation ->
+            addOnSuccessListener { result ->
+                if (continuation.isActive) continuation.resumeWith(Result.success(result))
+            }
+            addOnFailureListener { exception ->
+                if (continuation.isActive) continuation.resumeWith(Result.failure(exception))
+            }
+            addOnCanceledListener {
+                if (continuation.isActive) continuation.cancel()
+            }
+        }
 }

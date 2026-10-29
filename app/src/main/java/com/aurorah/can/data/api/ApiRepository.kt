@@ -34,9 +34,9 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         )
     }
 
-    suspend fun googleSso(email: String, name: String): NetworkResult<AuthResponse> {
+    suspend fun googleSso(email: String, name: String, idToken: String? = null): NetworkResult<AuthResponse> {
         return safeApiCall(
-            apiCall = { apiService.googleSso(GoogleSsoRequest(email = email, name = name)) },
+            apiCall = { apiService.googleSso(GoogleSsoRequest(email = email, name = name, idToken = idToken)) },
             transform = { it.toDomain() }
         )
     }

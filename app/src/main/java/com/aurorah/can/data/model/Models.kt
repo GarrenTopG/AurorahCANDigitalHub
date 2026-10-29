@@ -69,7 +69,11 @@ data class LoginRequest(
 
 data class GoogleSsoRequest(
     @SerializedName(value = "email") val email: String,
-    @SerializedName(value = "name", alternate = ["full_name"]) val name: String
+    @SerializedName(value = "name", alternate = ["full_name"]) val name: String,
+    @SerializedName(value = "idToken") val idToken: String? = null,
+    @SerializedName(value = "id_token") val idTokenSnake: String? = idToken,
+    @SerializedName(value = "token") val token: String? = idToken,
+    @SerializedName(value = "credential") val credential: String? = idToken
 )
 
 data class RegisterRequest(
