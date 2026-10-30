@@ -16,6 +16,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * Represents the comprehensive UI state for the Donation and Get Involved screens.
+ *
+ * This data class encapsulates all required parameters for processing both monetary and
+ * in-kind donations. It maintains validation states, loading indicators, and API responses,
+ * ensuring a single source of truth for the UI layer.
+ */
 data class DonationUiState(
     val selectedFundCategory: String = "General fund — where most needed",
     val communityNeeds: List<CommunityNeed> = emptyList(),
@@ -50,6 +57,15 @@ data class DonationUiState(
     val errorMessage: String? = null
 )
 
+/**
+ * ViewModel responsible for managing donation workflows and community needs.
+ *
+ * This ViewModel performs several key tasks:
+ * 1. Coordinates with [ApiRepository] to load dynamic community needs and submit donation forms.
+ * 2. Pre-fills user information asynchronously from [SessionManager] to streamline checkout.
+ * 3. Validates inputs before network submission to prevent API errors.
+ * 4. Scopes all network calls to `viewModelScope` to ensure they are cancelled gracefully if the user leaves the screen, preventing memory leaks.
+ */
 @HiltViewModel
 class DonationViewModel @Inject constructor(
     private val repository: ApiRepository,

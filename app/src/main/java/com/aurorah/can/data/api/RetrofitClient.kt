@@ -9,6 +9,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+/**
+ * Singleton factory providing thread-safe instantiation of Retrofit [ApiService] instances.
+ *
+ * Configures the underlying [OkHttpClient] with [AuthInterceptor] for dynamic JWT bearer token
+ * injection, [HttpLoggingInterceptor] for debug logging, and connection timeouts optimized
+ * for mobile network connectivity.
+ */
 object RetrofitClient {
 
     private val BASE_URL = BuildConfig.BASE_URL
@@ -16,6 +23,7 @@ object RetrofitClient {
     @Volatile
     private var apiServiceInstance: ApiService? = null
 
+    /** Retrieves or initializes the singleton [ApiService] using an application [Context]. */
     fun getApiService(context: Context): ApiService {
         return apiServiceInstance ?: synchronized(this) {
             apiServiceInstance ?: createApiService(SessionManager(context.applicationContext)).also {
@@ -24,6 +32,7 @@ object RetrofitClient {
         }
     }
 
+    /** Retrieves or initializes the singleton [ApiService] using a [SessionManager]. */
     fun getApiService(sessionManager: SessionManager): ApiService {
         return apiServiceInstance ?: synchronized(this) {
             apiServiceInstance ?: createApiService(sessionManager).also {
@@ -32,6 +41,7 @@ object RetrofitClient {
         }
     }
 
+    /** Constructs the underlying Retrofit client instance. */
     private fun createApiService(sessionManager: SessionManager): ApiService {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE

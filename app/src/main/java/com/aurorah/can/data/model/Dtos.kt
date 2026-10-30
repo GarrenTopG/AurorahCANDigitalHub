@@ -12,6 +12,9 @@ import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
 import java.lang.reflect.Type
 
+/**
+ * Data transfer object representing user authentication profile information from REST API endpoints.
+ */
 data class UserDto(
     @SerializedName(value = "userId", alternate = ["user_id", "id"]) val userId: Int = 1,
     @SerializedName(value = "fullName", alternate = ["full_name", "name"]) val fullName: String = "User",
@@ -19,6 +22,7 @@ data class UserDto(
     @SerializedName(value = "role", alternate = ["user_role"]) val role: String = "Volunteer",
     @SerializedName(value = "token", alternate = ["access_token", "jwt"]) val token: String? = null
 ) {
+    /** Maps raw API network DTO to clean domain model [User]. */
     fun toDomain(): User = User(
         userId = userId,
         fullName = fullName,
@@ -28,12 +32,16 @@ data class UserDto(
     )
 }
 
+/**
+ * Data transfer object wrapping authentication API responses and bearer tokens.
+ */
 data class AuthResponseDto(
     @SerializedName(value = "success") val success: Boolean = true,
     @SerializedName(value = "message", alternate = ["error", "detail", "reason", "error_message", "description"]) val message: String = "",
     @SerializedName(value = "token", alternate = ["access_token", "jwt"]) val token: String? = null,
     @SerializedName(value = "user") val user: UserDto? = null
 ) {
+    /** Maps raw API response DTO to domain model [AuthResponse]. */
     fun toDomain(): AuthResponse = AuthResponse(
         success = success,
         message = message,

@@ -12,10 +12,15 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * Hilt Dependency Injection module providing local storage components, including secure
+ * encrypted preferences and [SessionManager].
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object StorageModule {
 
+    /** Provides encrypted shared preferences with AES-256 encryption or unencrypted fallback. */
     @Provides
     @Singleton
     fun provideEncryptedSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
@@ -35,6 +40,7 @@ object StorageModule {
         }
     }
 
+    /** Provides singleton [SessionManager] injected with application context. */
     @Provides
     @Singleton
     fun provideSessionManager(@ApplicationContext context: Context): SessionManager {

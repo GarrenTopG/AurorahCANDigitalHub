@@ -9,6 +9,16 @@ import coil.util.DebugLogger
 import dagger.hilt.android.HiltAndroidApp
 import okhttp3.OkHttpClient
 
+/**
+ * The core application class for Aurorah CAN Digital Hub.
+ *
+ * This class serves as the entry point for application-level configurations and dependency injection.
+ * It is annotated with [@HiltAndroidApp] to trigger Hilt's code generation, providing a base application
+ * class that serves as the application-level dependency container.
+ *
+ * Additionally, it implements [ImageLoaderFactory] to configure Coil for optimal image loading
+ * performance, including memory/disk caching and cross-fade animations, to ensure a smooth user experience.
+ */
 @HiltAndroidApp
 class AurorahApplication : Application(), ImageLoaderFactory {
 

@@ -12,14 +12,32 @@ import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Single source of truth repository managing network requests, response transformations,
+ * exception handling, and error payload parsing across the Aurorah CAN platform.
+ *
+ * Employs generic [safeApiCall] execution to wrap Retrofit responses into strongly typed
+ * [NetworkResult] instances, shielding domain logic and ViewModels from raw HTTP primitives.
+ *
+ * @property apiService Underlying Retrofit service abstraction for backend endpoint invocations.
+ */
 @Singleton
 class ApiRepository @Inject constructor(private val apiService: ApiService) {
 
+    /** Secondary constructor allowing legacy direct instantiation with Application [Context]. */
     constructor(context: Context) : this(RetrofitClient.getApiService(context))
+
+    /** Secondary constructor allowing direct instantiation with [SessionManager]. */
     constructor(sessionManager: SessionManager) : this(RetrofitClient.getApiService(sessionManager))
 
     private val gson = Gson()
 
+    /**
+     * Authenticates a user using email and password credentials.
+     *
+     * @param request [LoginRequest] object containing credentials.
+     * @return [NetworkResult] wrapping the domain [AuthResponse] model.
+     */
     suspend fun login(request: LoginRequest): NetworkResult<AuthResponse> {
         return safeApiCall(
             apiCall = { apiService.login(request) },
@@ -27,6 +45,12 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         )
     }
 
+    /**
+     * Registers a new community account.
+     *
+     * @param request [RegisterRequest] payload with user registration details.
+     * @return [NetworkResult] containing registration outcome and auth session.
+     */
     suspend fun register(request: RegisterRequest): NetworkResult<AuthResponse> {
         return safeApiCall(
             apiCall = { apiService.register(request) },
@@ -34,6 +58,14 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         )
     }
 
+    /**
+     * Performs Google Single Sign-On authentication using Google OAuth credentials.
+     *
+     * @param email User's Google email address.
+     * @param name User's display name from Google OAuth profile.
+     * @param idToken Optional ID token retrieved from Google Credential Manager.
+     * @return [NetworkResult] containing session tokens and profile.
+     */
     suspend fun googleSso(email: String, name: String, idToken: String? = null): NetworkResult<AuthResponse> {
         return safeApiCall(
             apiCall = { apiService.googleSso(GoogleSsoRequest(email = email, name = name, idToken = idToken)) },
@@ -41,6 +73,7 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         )
     }
 
+    /** Updates the password for the currently authenticated user. */
     suspend fun changePassword(request: ChangePasswordRequest): NetworkResult<ApiResponse> {
         return safeApiCall(
             apiCall = { apiService.changePassword(request) },
@@ -48,6 +81,7 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         )
     }
 
+    /** Fetches published community news articles and impact stories. */
     suspend fun getNews(): NetworkResult<List<NewsItem>> {
         return safeApiCall(
             apiCall = { apiService.getNews() },
@@ -55,6 +89,7 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         )
     }
 
+    /** Fetches active community needs and outreach initiatives. */
     suspend fun getNeeds(): NetworkResult<List<CommunityNeed>> {
         return safeApiCall(
             apiCall = { apiService.getNeeds() },
@@ -62,6 +97,7 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         )
     }
 
+    /** Submits an offer to assist with a specific community need. */
     suspend fun offerAssistance(request: OfferAssistanceRequest): NetworkResult<ApiResponse> {
         return safeApiCall(
             apiCall = { apiService.offerAssistance(request) },
@@ -69,6 +105,7 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         )
     }
 
+    /** Submits a community assistance request. */
     suspend fun requestAssistance(request: AssistanceRequest): NetworkResult<ApiResponse> {
         return safeApiCall(
             apiCall = { apiService.requestAssistance(request) },
@@ -76,6 +113,7 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         )
     }
 
+    /** Updates the authenticated user's profile information. */
     suspend fun updateProfile(request: UpdateProfileRequest): NetworkResult<AuthResponse> {
         return safeApiCall(
             apiCall = { apiService.updateProfile(request) },
@@ -83,6 +121,7 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         )
     }
 
+    /** Fetches profile information for the authenticated user. */
     suspend fun getProfile(): NetworkResult<AuthResponse> {
         return safeApiCall(
             apiCall = { apiService.getProfile() },
@@ -90,6 +129,7 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         )
     }
 
+    /** Logs out the user session on the backend. Always guarantees local logout success. */
     suspend fun logout(): NetworkResult<ApiResponse> {
         return try {
             val response = apiService.logout()
@@ -103,6 +143,7 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         }
     }
 
+    /** Requests permanent account deletion. */
     suspend fun deleteAccount(): NetworkResult<ApiResponse> {
         return safeApiCall(
             apiCall = { apiService.deleteAccount() },
@@ -110,6 +151,7 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         )
     }
 
+    /** Submits a volunteer application form. */
     suspend fun submitVolunteer(request: VolunteerRequest): NetworkResult<ApiResponse> {
         return safeApiCall(
             apiCall = { apiService.submitVolunteer(request) },
@@ -117,6 +159,7 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         )
     }
 
+    /** Submits a monetary or in-kind donation pledge. */
     suspend fun submitDonation(request: DonationRequest): NetworkResult<DonationResponse> {
         return safeApiCall(
             apiCall = { apiService.submitDonation(request) },
@@ -124,6 +167,16 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         )
     }
 
+    /**
+     * Executes a Retrofit network call safely, converting success states into domain models
+     * and mapping non-2xx HTTP error codes or network exceptions into structured [NetworkResult.Error].
+     *
+     * @param T Raw response type returned by Retrofit service endpoint.
+     * @param R Target domain type after applying [transform].
+     * @param apiCall Suspend lambda invoking the Retrofit endpoint.
+     * @param transform Mapping function converting DTO/data models into domain entities.
+     * @return [NetworkResult] wrapping domain model [R] or descriptive error string.
+     */
     private suspend fun <T, R> safeApiCall(
         apiCall: suspend () -> Response<T>,
         transform: (T) -> R
@@ -141,6 +194,10 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         }
     }
 
+    /**
+     * Extracts readable human-friendly error messages from backend HTTP error response bodies.
+     * Inspects common REST JSON fields including `detail`, `error`, `message`, `reason`, etc.
+     */
     private fun parseErrorMessage(response: Response<*>): String {
         return try {
             val errorJson = response.errorBody()?.string()
@@ -168,6 +225,10 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         }
     }
 
+    /**
+     * Maps thrown network exceptions (e.g. timeouts, host lookup failures) into helpful
+     * user-facing messages.
+     */
     private fun resolveNetworkErrorMessage(e: Exception, defaultMessage: String = "Network connection error"): String {
         return when {
             e is SocketTimeoutException || e is InterruptedIOException || e.message?.contains("timeout", ignoreCase = true) == true -> {

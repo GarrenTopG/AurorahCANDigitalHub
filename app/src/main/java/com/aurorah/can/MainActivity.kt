@@ -14,6 +14,17 @@ import com.aurorah.can.databinding.ActivityMainBinding
 import com.aurorah.can.ui.auth.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * Main entry point for the Aurorah CAN Digital Hub application.
+ *
+ * This activity handles foundational setup including:
+ * 1. Theming: Applies night mode preferences synchronously before layout inflation.
+ * 2. Localization: Checks and sets the preferred app language to support diverse user bases.
+ * 3. Authentication Routing: Verifies session state and redirects to [LoginActivity] if the user is unauthenticated.
+ * 4. Navigation: Configures the main `BottomNavigationView` with a Jetpack Navigation component `NavHostFragment`.
+ *
+ * It is annotated with [@AndroidEntryPoint] to allow Hilt to provide dependencies like `SessionManager`.
+ */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 

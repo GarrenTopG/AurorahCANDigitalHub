@@ -8,6 +8,16 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Manages local session persistence and user preference storage.
+ *
+ * Employs [EncryptedSharedPreferences] with AES256 encryption to securely store sensitive
+ * auth tokens, user roles, and profile information. Maintains a separate unencrypted
+ * [SharedPreferences] store for non-sensitive app settings (dark mode, notifications, language)
+ * to ensure rapid UI synchronization on app startup.
+ *
+ * @param context Application context injected via Hilt.
+ */
 @Singleton
 class SessionManager @Inject constructor(@ApplicationContext context: Context) {
     private val appContext = context.applicationContext
@@ -50,6 +60,7 @@ class SessionManager @Inject constructor(@ApplicationContext context: Context) {
         private const val KEY_DATA_SAVER = "data_saver"
     }
 
+    /** Saves authenticated user session tokens and profile parameters to encrypted storage. */
     fun saveSession(token: String, email: String, name: String, role: String, phone: String? = null) {
         try {
             prefs.edit().apply {
@@ -65,6 +76,7 @@ class SessionManager @Inject constructor(@ApplicationContext context: Context) {
         } catch (_: Exception) { }
     }
 
+    /** Updates local profile details for the currently logged in user. */
     fun updateUserProfile(name: String, phone: String) {
         try {
             prefs.edit().apply {
@@ -75,6 +87,7 @@ class SessionManager @Inject constructor(@ApplicationContext context: Context) {
         } catch (_: Exception) { }
     }
 
+    /** Fetches stored JWT authentication token, or `null` if unauthenticated. */
     fun fetchAuthToken(): String? {
         return try {
             prefs.getString(KEY_TOKEN, null)
@@ -83,6 +96,7 @@ class SessionManager @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
+    /** Fetches stored user email address, defaulting to a guest fallback. */
     fun fetchUserEmail(): String {
         return try {
             prefs.getString(KEY_EMAIL, "guest@aurorahcan.org") ?: "guest@aurorahcan.org"
@@ -91,6 +105,7 @@ class SessionManager @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
+    /** Fetches stored user full name, defaulting to "Guest User". */
     fun fetchUserName(): String {
         return try {
             prefs.getString(KEY_NAME, "Guest User") ?: "Guest User"
@@ -99,6 +114,7 @@ class SessionManager @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
+    /** Fetches stored user phone number. */
     fun fetchUserPhone(): String {
         return try {
             prefs.getString(KEY_PHONE, "+27 82 000 0000") ?: "+27 82 000 0000"
@@ -107,6 +123,7 @@ class SessionManager @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
+    /** Fetches stored user security role (e.g., Volunteer, Admin). */
     fun fetchUserRole(): String {
         return try {
             prefs.getString(KEY_ROLE, "Volunteer") ?: "Volunteer"
@@ -115,8 +132,10 @@ class SessionManager @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
+    /** Returns `true` if a valid non-empty auth token is present in encrypted storage. */
     fun isLoggedIn(): Boolean = !fetchAuthToken().isNullOrBlank()
 
+    /** Checks whether night/dark theme preference is enabled. */
     fun isNightModeEnabled(): Boolean {
         return try {
             settingsPrefs.getBoolean(KEY_NIGHT_MODE, false)
@@ -125,12 +144,14 @@ class SessionManager @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
+    /** Updates night/dark theme preference. */
     fun setNightModeEnabled(enabled: Boolean) {
         try {
             settingsPrefs.edit().putBoolean(KEY_NIGHT_MODE, enabled).commit()
         } catch (_: Exception) { }
     }
 
+    /** Checks whether push notification preference is enabled. */
     fun areNotificationsEnabled(): Boolean {
         return try {
             settingsPrefs.getBoolean(KEY_NOTIFICATIONS, true)
@@ -139,12 +160,14 @@ class SessionManager @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
+    /** Updates push notification preference. */
     fun setNotificationsEnabled(enabled: Boolean) {
         try {
             settingsPrefs.edit().putBoolean(KEY_NOTIFICATIONS, enabled).commit()
         } catch (_: Exception) { }
     }
 
+    /** Fetches preferred search filter radius string. */
     fun getSearchRadius(): String {
         return try {
             settingsPrefs.getString(KEY_SEARCH_RADIUS, "10 km") ?: "10 km"
@@ -153,12 +176,14 @@ class SessionManager @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
+    /** Updates preferred search filter radius. */
     fun setSearchRadius(radius: String) {
         try {
             settingsPrefs.edit().putString(KEY_SEARCH_RADIUS, radius).commit()
         } catch (_: Exception) { }
     }
 
+    /** Fetches preferred app UI display language. */
     fun getAppLanguage(): String {
         return try {
             settingsPrefs.getString(KEY_APP_LANGUAGE, "English") ?: "English"
@@ -167,12 +192,14 @@ class SessionManager @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
+    /** Updates preferred app UI display language. */
     fun setAppLanguage(language: String) {
         try {
             settingsPrefs.edit().putString(KEY_APP_LANGUAGE, language).commit()
         } catch (_: Exception) { }
     }
 
+    /** Checks whether data saver mode is enabled. */
     fun isDataSaverEnabled(): Boolean {
         return try {
             settingsPrefs.getBoolean(KEY_DATA_SAVER, false)
@@ -181,12 +208,14 @@ class SessionManager @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
+    /** Updates data saver mode preference. */
     fun setDataSaverEnabled(enabled: Boolean) {
         try {
             settingsPrefs.edit().putBoolean(KEY_DATA_SAVER, enabled).commit()
         } catch (_: Exception) { }
     }
 
+    /** Clears active user tokens and profile data from encrypted preferences upon logout. */
     fun clearSession() {
         try {
             prefs.edit().apply {

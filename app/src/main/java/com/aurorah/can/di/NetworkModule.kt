@@ -15,10 +15,15 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
+/**
+ * Hilt Dependency Injection module providing application-wide networking dependencies,
+ * including [OkHttpClient], [Retrofit], [AuthInterceptor], and [ApiService].
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
+    /** Provides the HTTP logging interceptor with level configured per build type. */
     @Provides
     @Singleton
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
@@ -31,12 +36,14 @@ object NetworkModule {
         }
     }
 
+    /** Provides the authentication interceptor for injecting bearer tokens. */
     @Provides
     @Singleton
     fun provideAuthInterceptor(sessionManager: SessionManager): AuthInterceptor {
         return AuthInterceptor(sessionManager)
     }
 
+    /** Configures and provides the singleton [OkHttpClient] with timeouts and interceptors. */
     @Provides
     @Singleton
     fun provideOkHttpClient(
@@ -53,6 +60,7 @@ object NetworkModule {
             .build()
     }
 
+    /** Provides the Retrofit builder instance configured with Gson converters. */
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
@@ -63,6 +71,7 @@ object NetworkModule {
             .build()
     }
 
+    /** Provides the Retrofit [ApiService] implementation. */
     @Provides
     @Singleton
     fun provideApiService(retrofit: Retrofit): ApiService {

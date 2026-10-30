@@ -45,6 +45,10 @@ import com.aurorah.can.ui.theme.AppTextMuted
 import com.aurorah.can.ui.theme.AurorahTheme
 import com.aurorah.can.ui.theme.BrandPrimary
 
+/**
+ * Encapsulates the UI state for the Home Feed, comprising news stories, community needs,
+ * loading indicator state, and error messages.
+ */
 data class HomeFeedState(
     val stories: List<NewsItem> = emptyList(),
     val needs: List<CommunityNeed> = emptyList(),
@@ -53,6 +57,18 @@ data class HomeFeedState(
     val needsError: String? = null
 )
 
+/**
+ * Primary home screen composable rendering hero banners, quick assistance callouts, nearby
+ * community needs, and categorised news/impact stories.
+ *
+ * @param feedState Current [HomeFeedState] snapshot.
+ * @param onRefresh Callback to refresh home feed content.
+ * @param onRequestAssistance Navigation callback triggering assistance request flow.
+ * @param onExploreNeeds Navigation callback navigating to community needs exploration tab.
+ * @param onNeedClick Callback triggered when selecting a specific community need.
+ * @param onNewsClick Callback triggered when clicking a news story card.
+ * @param modifier Optional layout [Modifier].
+ */
 @Composable
 fun AurorahHomeScreen(
     feedState: HomeFeedState,
