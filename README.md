@@ -147,17 +147,17 @@ Below are the key application screens demonstrating the user interface and featu
 
 | 1. Home Dashboard | 2. Request Help / Get Assistance | 3. Volunteer Application |
 | :---: | :---: | :---: |
-| <img src="docs/screenshots/01_home_screen.png" width="260" alt="Home Screen"/> | <img src="docs/screenshots/02_request_help_screen.png" width="260" alt="Request Help Screen"/> | <img src="docs/screenshots/03_volunteer_screen.png" width="260" alt="Volunteer Form Screen"/> |
+| <img src="docs/screenshots/01_home_screen.jpeg" width="260" alt="Home Screen"/> | <img src="docs/screenshots/02_request_help_screen.jpeg" width="260" alt="Request Help Screen"/> | <img src="docs/screenshots/03_volunteer_screen.jpeg" width="260" alt="Volunteer Form Screen"/> |
 | *Local Needs & Action Buttons* | *POPIA-Compliant Help Request* | *Skills & Availability Matrix* |
 
 | 4. Community Needs Feed | 5. Monetary & In-Kind Pledge | 6. User Profile & Dark Mode |
 | :---: | :---: | :---: |
-| <img src="docs/screenshots/04_community_needs_screen.png" width="260" alt="Community Needs Screen"/> | <img src="docs/screenshots/05_monetary_pledge_screen.png" width="260" alt="Donation Pledge Screen"/> | <img src="docs/screenshots/06_profile_dark_mode_screen.png" width="260" alt="Profile Screen"/> |
+| <img src="docs/screenshots/04_community_needs_screen.jpeg" width="260" alt="Community Needs Screen"/> | <img src="docs/screenshots/05_monetary_pledge_screen.jpeg" width="260" alt="Donation Pledge Screen"/> | <img src="docs/screenshots/06_profile_dark_mode_screen.jpeg" width="260" alt="Profile Screen"/> |
 | *Live Progress & Priority Badges* | *Preset & Custom ZAR Amounts* | *Role Badges & Night Theme Toggle* |
 
 | 7. Create Account & Google SSO |
 | :---: |
-| <img src="docs/screenshots/07_create_account_sso_screen.png" width="260" alt="Create Account Screen"/> |
+| <img src="docs/screenshots/07_create_account_sso_screen.jpeg" width="260" alt="Create Account Screen"/> |
 | *Role Selection & Google Sign-In* |
 
 ---
