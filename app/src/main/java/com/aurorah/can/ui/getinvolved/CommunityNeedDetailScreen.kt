@@ -36,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -48,11 +49,11 @@ import com.aurorah.can.R
 import com.aurorah.can.data.model.CommunityNeed
 import com.aurorah.can.ui.components.PriorityBadge
 import com.aurorah.can.ui.theme.AppBackground
-import com.aurorah.can.ui.theme.AppBrandPale
 import com.aurorah.can.ui.theme.AppCardSurface
 import com.aurorah.can.ui.theme.AppLineColor
 import com.aurorah.can.ui.theme.AppTextInk
 import com.aurorah.can.ui.theme.AppTextMuted
+import com.aurorah.can.ui.theme.BrandMid
 import com.aurorah.can.ui.theme.BrandPrimary
 import com.aurorah.can.util.NewsUtils
 import java.util.Locale
@@ -138,7 +139,7 @@ fun CommunityNeedDetailScreen(
             modifier = Modifier.padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            // Need Image or Styled Placeholder Card
+            // Need Image or Styled Placeholder Card with Square Image Blend
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
@@ -147,43 +148,68 @@ fun CommunityNeedDetailScreen(
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Column {
-                    val resolvedImageUrl = NewsUtils.resolveImageUrl(need.imageUrl) ?: need.imageUrl
-                    if (!resolvedImageUrl.isNullOrBlank()) {
-                        AsyncImage(
-                            model = resolvedImageUrl,
-                            contentDescription = need.imageAlt ?: need.title,
-                            contentScale = ContentScale.Crop,
-                            placeholder = painterResource(R.drawable.ic_news_placeholder),
-                            error = painterResource(R.drawable.ic_news_placeholder),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(220.dp)
-                                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                        )
-                    } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(240.dp)
+                            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+                    ) {
+                        val resolvedImageUrl = NewsUtils.resolveImageUrl(need.imageUrl) ?: need.imageUrl
+                        if (!resolvedImageUrl.isNullOrBlank()) {
+                            AsyncImage(
+                                model = resolvedImageUrl,
+                                contentDescription = need.imageAlt ?: need.title,
+                                contentScale = ContentScale.Crop,
+                                placeholder = painterResource(R.drawable.ic_news_placeholder),
+                                error = painterResource(R.drawable.ic_news_placeholder),
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        } else {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(
+                                        brush = Brush.linearGradient(
+                                            listOf(BrandPrimary, BrandMid)
+                                        )
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Image,
+                                        contentDescription = null,
+                                        tint = Color.White.copy(alpha = 0.85f),
+                                        modifier = Modifier.size(48.dp)
+                                    )
+                                    Spacer(modifier = Modifier.height(6.dp))
+                                    Text(
+                                        text = "COMMUNITY NEED",
+                                        color = Color.White,
+                                        fontWeight = FontWeight.Bold,
+                                        letterSpacing = 1.sp,
+                                        fontSize = 14.sp
+                                    )
+                                }
+                            }
+                        }
+
+                        // Bottom Gradient Fade Blend to AppCardSurface
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(160.dp)
-                                .background(AppBrandPale),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Icon(
-                                    imageVector = Icons.Filled.Image,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.size(40.dp)
+                                .height(90.dp)
+                                .align(Alignment.BottomCenter)
+                                .background(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(
+                                            Color.Transparent,
+                                            AppCardSurface.copy(alpha = 0.65f),
+                                            AppCardSurface
+                                        )
+                                    )
                                 )
-                                Spacer(modifier = Modifier.height(6.dp))
-                                Text(
-                                    text = "Community Need",
-                                    color = MaterialTheme.colorScheme.primary,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 14.sp
-                                )
-                            }
-                        }
+                        )
                     }
 
                     Column(

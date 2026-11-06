@@ -34,11 +34,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.background
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.aurorah.can.R
 import com.aurorah.can.data.model.CommunityNeed
 import com.aurorah.can.ui.components.PriorityBadge
@@ -47,6 +53,8 @@ import com.aurorah.can.ui.theme.AppCardSurface
 import com.aurorah.can.ui.theme.AppLineColor
 import com.aurorah.can.ui.theme.AppTextInk
 import com.aurorah.can.ui.theme.AppTextMuted
+import com.aurorah.can.ui.theme.BrandMid
+import com.aurorah.can.ui.theme.BrandPrimary
 import com.aurorah.can.util.NewsUtils
 import java.util.Locale
 
@@ -139,42 +147,107 @@ fun DonateNeedCard(
     onSelect: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val containerBg = if (isSelected) AppBrandPale else AppCardSurface
+
     Card(
         modifier = modifier
             .width(280.dp)
             .clickable(onClick = onSelect),
         shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) AppBrandPale else AppCardSurface
-        ),
+        colors = CardDefaults.cardColors(containerColor = containerBg),
         border = BorderStroke(
             width = if (isSelected) 2.dp else 1.dp,
             color = if (isSelected) MaterialTheme.colorScheme.primary else AppLineColor
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = if (isSelected) 4.dp else 2.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(14.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+        Column {
+            // Square Image Blend Header Container
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(130.dp)
+                    .clip(RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp))
             ) {
-                Surface(
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
-                    shape = RoundedCornerShape(8.dp)
-                ) {
-                    Text(
-                        text = need.category.ifBlank { "General" },
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                val resolvedImageUrl = NewsUtils.resolveImageUrl(need.imageUrl) ?: need.imageUrl
+                if (!resolvedImageUrl.isNullOrBlank()) {
+                    AsyncImage(
+                        model = resolvedImageUrl,
+                        contentDescription = need.imageAlt ?: need.title,
+                        contentScale = ContentScale.Crop,
+                        placeholder = painterResource(R.drawable.ic_news_placeholder),
+                        error = painterResource(R.drawable.ic_news_placeholder),
+                        modifier = Modifier.fillMaxWidth().height(130.dp)
                     )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(130.dp)
+                            .background(
+                                brush = Brush.linearGradient(
+                                    listOf(BrandPrimary, BrandMid)
+                                )
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = need.category.ifBlank { "COMMUNITY NEED" }.uppercase(Locale.getDefault()),
+                            color = Color.White.copy(alpha = 0.9f),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 12.sp,
+                            letterSpacing = 1.sp
+                        )
+                    }
                 }
 
+                // Square Vertical Gradient Blend overlay
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(55.dp)
+                        .align(Alignment.BottomCenter)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    containerBg.copy(alpha = 0.7f),
+                                    containerBg
+                                )
+                            )
+                        )
+                )
+
+                // Overlay Chips
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                        .align(Alignment.TopStart),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Surface(
+                        color = Color.Black.copy(alpha = 0.55f),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            text = need.category.ifBlank { "General" }.uppercase(Locale.getDefault()),
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                        )
+                    }
+
+                    PriorityBadge(priority = need.priority)
+                }
+            }
+
+            Column(
+                modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 if (need.location.isNotBlank()) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -184,18 +257,15 @@ fun DonateNeedCard(
                             imageVector = Icons.Filled.LocationOn,
                             contentDescription = null,
                             tint = AppTextMuted,
-                            modifier = Modifier.size(14.dp)
+                            modifier = Modifier.size(13.dp)
                         )
                         Text(
                             text = need.location,
-                            fontSize = 12.sp,
+                            fontSize = 11.sp,
                             color = AppTextMuted
                         )
                     }
                 }
-
-                PriorityBadge(priority = need.priority)
-            }
 
             Text(
                 text = need.title,
@@ -310,4 +380,5 @@ fun DonateNeedCard(
             }
         }
     }
+}
 }

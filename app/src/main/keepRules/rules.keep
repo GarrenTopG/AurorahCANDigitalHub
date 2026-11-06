@@ -1,22 +1,19 @@
-# Add project specific R8 rules here.
-# AGP will combine all keep rule files in src/main/keepRules to pass to R8
-#
-# For more details, see
-#   https://d.android.com/r/tools/r8/keep-rules
-
 # Preserve generic type signatures and inner class metadata for Retrofit, Gson, and Kotlin Coroutines
 -keepattributes Signature, InnerClasses, EnclosingMethod
--keepattributes RuntimeVisibleAnnotations, RuntimeInvisibleAnnotations
--keepattributes RuntimeVisibleParameterAnnotations, RuntimeInvisibleParameterAnnotations
--keepattributes AnnotationDefault
+-keepattributes *Annotation*, RuntimeVisibleAnnotations, RuntimeInvisibleAnnotations, RuntimeVisibleParameterAnnotations, RuntimeInvisibleParameterAnnotations, AnnotationDefault
 
 # Keep Data Models and their fields for Gson serialization/deserialization
 -keep class com.aurorah.can.data.model.** { *; }
 -keepclassmembers class com.aurorah.can.data.model.** { *; }
 
-# Keep Retrofit API interfaces and their methods
+# Keep Retrofit API interfaces, methods, and generic parameter types
+-keep class com.aurorah.can.data.api.** { *; }
 -keep interface com.aurorah.can.data.api.** { *; }
+-keepclassmembers class com.aurorah.can.data.api.** { *; }
 -keepclassmembers interface com.aurorah.can.data.api.** { *; }
+-keepclassmembers,allowobfuscation interface * {
+    @retrofit2.http.* <methods>;
+}
 
 # Gson rules
 -dontwarn sun.misc.Unsafe
@@ -26,12 +23,25 @@
 # Retrofit rules
 -dontwarn retrofit2.**
 -keep class retrofit2.** { *; }
--keepclasseswithmembers class * {
-    @retrofit2.http.* <methods>;
-}
+-keepclassmembers class retrofit2.** { *; }
 
 # OkHttp rules
 -dontwarn okhttp3.**
 
-# Kotlin Coroutines Continuation signatures
--keepclassmembers class kotlin.coroutines.Continuation { *; }
+# Kotlin Coroutines
+-keep class kotlin.coroutines.** { *; }
+-keepclassmembers class kotlin.coroutines.** { *; }
+-keep class kotlinx.coroutines.** { *; }
+-keepclassmembers class kotlinx.coroutines.** { *; }
+
+# Google Play Services & Google Sign-In
+-keep class com.google.android.gms.auth.api.signin.** { *; }
+-keepclassmembers class com.google.android.gms.auth.api.signin.** { *; }
+-keep class com.google.android.gms.common.** { *; }
+-keepclassmembers class com.google.android.gms.common.** { *; }
+-dontwarn com.google.android.gms.**
+
+# Firebase Auth
+-keep class com.google.firebase.** { *; }
+-keepclassmembers class com.google.firebase.** { *; }
+-dontwarn com.google.firebase.**

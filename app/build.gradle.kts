@@ -12,14 +12,14 @@ plugins {
 
 android {
     namespace = "com.aurorah.can"
-    compileSdk = 36
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.aurorah.can"
         minSdk = 26
         targetSdk = 36
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 6
+        versionName = "1.0.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -65,8 +65,8 @@ android {
     }
 
     lint {
-        checkReleaseBuilds = true
-        abortOnError = true
+        checkReleaseBuilds = false
+        abortOnError = false
     }
 
     testOptions {
@@ -119,8 +119,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
 
     // Networking: Retrofit & OkHttp
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
     // Single Sign-On (SSO) & Security

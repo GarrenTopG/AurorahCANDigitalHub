@@ -1,9 +1,12 @@
 package com.aurorah.can.ui.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,6 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -26,7 +31,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.aurorah.can.R
 import com.aurorah.can.data.model.NewsItem
-import com.aurorah.can.ui.theme.AppBrandPale
 import com.aurorah.can.ui.theme.AppCardSurface
 import com.aurorah.can.ui.theme.AppTextInk
 import com.aurorah.can.ui.theme.AppTextMuted
@@ -54,46 +58,80 @@ fun FeaturedStoryCard(
                 R.drawable.ic_news_placeholder
             }
 
-            AsyncImage(
-                model = imageSource,
-                contentDescription = story.title,
+            // Square Image Blend Header
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(180.dp)
-                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
-                contentScale = ContentScale.Crop,
-                placeholder = painterResource(R.drawable.ic_news_placeholder),
-                error = painterResource(R.drawable.ic_news_placeholder)
-            )
-
-            Column(
-                modifier = Modifier.padding(20.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                    .height(220.dp)
+                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
             ) {
+                AsyncImage(
+                    model = imageSource,
+                    contentDescription = story.title,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                    placeholder = painterResource(R.drawable.ic_news_placeholder),
+                    error = painterResource(R.drawable.ic_news_placeholder)
+                )
+
+                // Vertical gradient blend fading smoothly to AppCardSurface
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(85.dp)
+                        .align(Alignment.BottomCenter)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    AppCardSurface.copy(alpha = 0.65f),
+                                    AppCardSurface
+                                )
+                            )
+                        )
+                )
+
+                // Floating Overlay Chips
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(14.dp)
+                        .align(Alignment.TopStart),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Surface(
-                        color = AppBrandPale,
-                        shape = RoundedCornerShape(6.dp)
+                        color = Color.Black.copy(alpha = 0.55f),
+                        shape = RoundedCornerShape(8.dp)
                     ) {
                         Text(
                             text = "FEATURED STORY  ·  ${story.category.uppercase()}",
-                            color = MaterialTheme.colorScheme.primary,
+                            color = Color.White,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                            modifier = Modifier.padding(horizontal = 9.dp, vertical = 4.dp)
                         )
                     }
 
-                    Text(
-                        text = NewsUtils.formatNewsDate(story.timestamp),
-                        color = AppTextMuted,
-                        fontSize = 12.sp
-                    )
+                    Surface(
+                        color = Color.Black.copy(alpha = 0.45f),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            text = NewsUtils.formatNewsDate(story.timestamp),
+                            color = Color.White,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Medium,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                        )
+                    }
                 }
+            }
+
+            Column(
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 14.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
 
                 Text(
                     text = story.title,
